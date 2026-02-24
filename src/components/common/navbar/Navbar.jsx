@@ -43,7 +43,7 @@ function Navbar() {
   const navLinks = [
     { to: "/home", label: "Kezdőlap", show: true },
     { to: "/rooms", label: "Szobák", show: true },
-    { to: "/find-booking", label: "Foglalásaim", show: true },
+    { to: "/find-booking", label: "Foglalásaim", show: authenticated },
     { to: "/profile", label: "Fiók", show: !!user },
     { to: "/admin", label: "Admin", show: !!admin },
     { to: "/login", label: "Bejelentkezés", show: !authenticated },
@@ -57,29 +57,30 @@ function Navbar() {
           sx={{
             display: "flex",
             alignItems: "center",
-            textAlign: "center",
             width: "100%",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
           }}
         >
-          {/* ASZTALI NÉZET */}
+          {/* LOGO - bal oldalt */}
+          <Typography sx={{ minWidth: 100 }}>
+            <NavLink to="/home" activeClass="active">
+              GRAND HOTEL OHIO
+            </NavLink>
+          </Typography>
+
+          {/* ASZTALI NÉZET - jobb oldalt */}
           {!isMobile && (
-            <>
-              <Typography sx={{ minWidth: 100 }}>
-                <NavLink to="/home"  activeClass="active">
-                  GRAND HOTEL OHIO
-                </NavLink>
-              </Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography sx={{ minWidth: 100 }}>
                 <NavLink to="/rooms" activeClass="active">
                   Szobák
                 </NavLink>
               </Typography>
-              <Typography sx={{ minWidth: 100 }}>
+              {authenticated && (<Typography sx={{ minWidth: 100 }}>
                 <NavLink to="/find-booking" activeClass="active">
                   Foglalásaim
                 </NavLink>
-              </Typography>
+              </Typography>)}
               {user && (
                 <Typography sx={{ minWidth: 100 }}>
                   <NavLink to="/profile" activeClass="active">
@@ -127,17 +128,16 @@ function Navbar() {
                   </IconButton>
                 </Tooltip>
               )}
-            </>
+            </Box>
           )}
 
-          {/* HAMBURGER */}
+          {/* HAMBURGER - mobil */}
           {isMobile && (
             <IconButton
               onClick={toggleDrawer(true)}
               size="large"
               edge="end"
               aria-label="menu"
-              sx={{ ml: "auto" }}
             >
               <MenuIcon />
             </IconButton>
@@ -198,17 +198,8 @@ function Navbar() {
 
         {/* Mobile Drawer */}
         <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-          <Box
-            sx={{ width: 260 }}
-            role="presentation"
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                p: 1,
-              }}
-            >
+          <Box sx={{ width: 260 }} role="presentation">
+            <Box sx={{ display: "flex", justifyContent: "flex-end", p: 1 }}>
               <IconButton onClick={toggleDrawer(false)}>
                 <CloseIcon />
               </IconButton>
