@@ -1,0 +1,257 @@
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import Logout from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate, NavLink } from "react-router-dom";
+import { isAuthenticated, isAdmin, isUser } from "../../../service/ApiService";
+import style from "./Navbar.module.css";
+
+function Navbar() {
+  const authenticated = isAuthenticated();
+  const admin = isAdmin();
+  const user = isUser();
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+
+  const toggleDrawer = (open) => () => setDrawerOpen(open);
+
+  const navLinks = [
+    { to: "/home", label: "Kezdőlap", show: true },
+    { to: "/rooms", label: "Szobák", show: true },
+    { to: "/find-booking", label: "Foglalásaim", show: true },
+    { to: "/profile", label: "Fiók", show: !!user },
+    { to: "/admin", label: "Admin", show: !!admin },
+    { to: "/login", label: "Bejelentkezés", show: !authenticated },
+    { to: "/register", label: "Regisztráció", show: !authenticated },
+  ].filter((link) => link.show);
+
+  return (
+    <nav>
+      <React.Fragment>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            textAlign: "center",
+            width: "100%",
+            justifyContent: "flex-end",
+          }}
+        >
+          {/* ASZTALI NÉZET */}
+          {!isMobile && (
+            <>
+              <Typography sx={{ minWidth: 100 }}>
+                <NavLink to="/home"  activeClass="active">
+                  GRAND HOTEL OHIO
+                </NavLink>
+              </Typography>
+              <Typography sx={{ minWidth: 100 }}>
+                <NavLink to="/rooms" activeClass="active">
+                  Szobák
+                </NavLink>
+              </Typography>
+              <Typography sx={{ minWidth: 100 }}>
+                <NavLink to="/find-booking" activeClass="active">
+                  Foglalásaim
+                </NavLink>
+              </Typography>
+              {user && (
+                <Typography sx={{ minWidth: 100 }}>
+                  <NavLink to="/profile" activeClass="active">
+                    Fiók
+                  </NavLink>
+                </Typography>
+              )}
+              {admin && (
+                <Typography sx={{ minWidth: 100 }}>
+                  <NavLink to="/admin" activeClass="active">
+                    Admin
+                  </NavLink>
+                </Typography>
+              )}
+              {!authenticated && (
+                <Typography sx={{ minWidth: 100 }}>
+                  <NavLink to="/login" activeClass="active">
+                    Bejelentkezés
+                  </NavLink>
+                </Typography>
+              )}
+              {!authenticated && (
+                <Typography sx={{ minWidth: 100 }}>
+                  <NavLink to="/register" activeClass="active">
+                    Regisztráció
+                  </NavLink>
+                </Typography>
+              )}
+              <Typography sx={{ minWidth: 100 }}>
+                <NavLink to="/home" activeClass="active">
+                  Kezdőlap
+                </NavLink>
+              </Typography>
+              {authenticated && (
+                <Tooltip title="Fiókom">
+                  <IconButton
+                    onClick={handleClick}
+                    size="small"
+                    sx={{ ml: 2 }}
+                    aria-controls={open ? "account-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                  >
+                    <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                  </IconButton>
+                </Tooltip>
+              )}
+            </>
+          )}
+
+          {/* HAMBURGER */}
+          {isMobile && (
+            <IconButton
+              onClick={toggleDrawer(true)}
+              size="large"
+              edge="end"
+              aria-label="menu"
+              sx={{ ml: "auto" }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+        </Box>
+
+        {/* Desktop account menu */}
+        {authenticated && !isMobile && (
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={open}
+            onClose={handleClose}
+            onClick={handleClose}
+            slotProps={{
+              paper: {
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
+                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  mt: 1.5,
+                  "& .MuiAvatar-root": {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  "&::before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "background.paper",
+                    transform: "translateY(-50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
+                },
+              },
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          >
+            <MenuItem onClick={handleClose}>
+              <Avatar /> Fiókom
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <Logout fontSize="small" />
+              </ListItemIcon>
+              Kilépés
+            </MenuItem>
+          </Menu>
+        )}
+
+        {/* Mobile Drawer */}
+        <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+          <Box
+            sx={{ width: 260 }}
+            role="presentation"
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                p: 1,
+              }}
+            >
+              <IconButton onClick={toggleDrawer(false)}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+
+            <List>
+              {navLinks.map((link) => (
+                <ListItem key={link.to} disablePadding>
+                  <ListItemButton
+                    component={NavLink}
+                    to={link.to}
+                    onClick={toggleDrawer(false)}
+                  >
+                    <ListItemText primary={link.label} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+
+              {authenticated && (
+                <>
+                  <Divider sx={{ my: 1 }} />
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={toggleDrawer(false)}>
+                      <Avatar sx={{ width: 28, height: 28, mr: 1 }}>M</Avatar>
+                      <ListItemText primary="Fiókom" />
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={toggleDrawer(false)}>
+                      <ListItemIcon>
+                        <Logout fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Kilépés" />
+                    </ListItemButton>
+                  </ListItem>
+                </>
+              )}
+            </List>
+          </Box>
+        </Drawer>
+      </React.Fragment>
+    </nav>
+  );
+}
+
+export default Navbar;
