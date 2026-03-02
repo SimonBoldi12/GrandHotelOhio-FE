@@ -1,0 +1,237 @@
+.home {
+    margin-bottom: 100px;
+}
+
+/* The header banner */
+.headerBanner {
+    background-image: url("../../assets/images/hotel.jpg");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    height: 80vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Dark overlay réteg */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
+/* Középre igazított szöveg tartalom */
+.overlayContent {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    color: #fff;
+    padding: 0 16px;
+}
+
+.headerBanner h1 {
+    font-size: 60px;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.headerBanner h3 {
+    color: #f0f0f0;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 32px;
+}
+
+.exploreBtn {
+    background-color: #111;
+    color: #fff;
+    border: none;
+    padding: 14px 48px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.exploreBtn:hover {
+    background-color: #333;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem 1rem;
+}
+
+/* Feature Cards Grid */
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 768px) {
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cardContent {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.iconStar {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1rem;
+  color: #eab308;
+}
+
+.iconMap {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1rem;
+  color: #2563eb;
+}
+
+.iconClock {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1rem;
+  color: #16a34a;
+}
+
+.cardTitle {
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.cardText {
+  color: #4b5563;
+}
+
+/* About Section */
+.aboutGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 768px) {
+  .aboutGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.aboutTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.aboutText {
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.aboutTextLast {
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}
+
+.viewRoomsBtn {
+  display: inline-block;
+  padding: 0.625rem 1.25rem;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.viewRoomsBtn:hover {
+  background-color: #1d4ed8;
+}
+
+/* Image Gallery */
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.hotelImage {
+  width: 100%;
+  height: 12rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.imageOffsetDown {
+  margin-top: 2rem;
+}
+
+.imageOffsetUp {
+  margin-top: -2rem;
+}
+
+/* CTA Section */
+.cta {
+  background-color: #2563eb;
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 3rem;
+  text-align: center;
+}
+
+.ctaTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.ctaSubtitle {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.ctaBtn {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background-color: #fff;
+  color: #2563eb;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ctaBtn:hover {
+  background-color: #f1f5f9;
+}
+

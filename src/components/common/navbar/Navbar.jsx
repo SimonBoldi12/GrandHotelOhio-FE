@@ -19,8 +19,10 @@ import Logout from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate, NavLink } from "react-router-dom";
-import { isAuthenticated, isAdmin, isUser } from "../../../service/ApiService";
+import { isAuthenticated, isAdmin, isUser, logout,  } from "../../../service/ApiService";
 import style from "./Navbar.module.css";
+import hotel_svg from "../../../assets/hotel-svg.svg";
+
 
 function Navbar() {
   const authenticated = isAuthenticated();
@@ -39,6 +41,14 @@ function Navbar() {
   const handleClose = () => setAnchorEl(null);
 
   const toggleDrawer = (open) => () => setDrawerOpen(open);
+
+  function handleLogout() {
+    const isLogout = window.confirm("Biztosan ki szeretnél lépni?");
+    if (isLogout) {
+      logout();
+      navigate("/home");
+    }
+  }
 
   const navLinks = [
     { to: "/home", label: "Kezdőlap", show: true },
@@ -62,7 +72,8 @@ function Navbar() {
           }}
         >
           {/* LOGO - bal oldalt */}
-          <Typography sx={{ minWidth: 100 }}>
+          <Typography sx={{ minWidth: 100, justifyContent: "center", display: "flex", alignItems: "center"   }}>
+            <img src={hotel_svg} alt="Hotel Logo" className={style.logo}/>
             <NavLink to="/home" activeClass="active">
               GRAND HOTEL OHIO
             </NavLink>
@@ -183,11 +194,11 @@ function Navbar() {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={() => { handleClose(); handleLogout(); }}>
               <Avatar /> Fiókom
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={() => { handleClose(); handleLogout(); }}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
@@ -227,12 +238,12 @@ function Navbar() {
                       <ListItemText primary="Fiókom" />
                     </ListItemButton>
                   </ListItem>
-                  <ListItem disablePadding>
+                  <ListItem disablePadding >
                     <ListItemButton onClick={toggleDrawer(false)}>
                       <ListItemIcon>
                         <Logout fontSize="small" />
                       </ListItemIcon>
-                      <ListItemText primary="Kilépés" />
+                      <ListItemText primary="Kilépés" onClick={() => { handleClose(); handleLogout(); }}/>
                     </ListItemButton>
                   </ListItem>
                 </>
