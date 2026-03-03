@@ -6,6 +6,8 @@ import { Route, Routes } from "react-router";
 import AllRoomsPage from "./components/booking_rooms/all-rooms/AllRoomsPage";
 import FindBookingPage from "./components/booking_rooms/find-bookings/FindBookingPage";
 import RoomDetailsPage from "./components/booking_rooms/room-details/RoomDetailsPage";
+import LoginPage from "./components/auth/login/LoginPage";
+import RegisterPage from "./components/auth/register/RegisterPage";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path="/rooms" element={<AllRoomsPage />} />
           <Route path="/find-booking" element={<FindBookingPage />} />
           <Route path="/room-details-book/:roomId" element={<RoomDetailsPage />} />
+          <Route path="/login" element={<LoginPage/>} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </main>
       <Footer />

@@ -21,7 +21,7 @@ function LoginPage() {
         }
 
         try {
-            const response = await loginUser(email, password);
+            const response = await loginUser({email, password});
             if (response.status === 200) {
                 navigate(from, { replace: true });
             }
@@ -33,7 +33,7 @@ function LoginPage() {
 
     return ( 
         <div className={style.loginContainer}>
-            <h2>Login</h2>
+            <h2>Bejelentkezés</h2>
             {error && <p className={style.error}>{error}</p>}
             <form onSubmit={handleSubmit}>
                 <div className={style.formGroup}>
@@ -56,7 +56,7 @@ function LoginPage() {
                         required
                     />
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit" className={style.loginButton}>Login</button>
             </form>
             <p className={style.registerLink}>
                 Nincs fiókod? <a href="/register">Regisztráció</a>

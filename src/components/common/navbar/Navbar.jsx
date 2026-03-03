@@ -41,6 +41,7 @@ function Navbar() {
   const handleClose = () => setAnchorEl(null);
 
   const toggleDrawer = (open) => () => setDrawerOpen(open);
+  const navigate = useNavigate();
 
   function handleLogout() {
     const isLogout = window.confirm("Biztosan ki szeretnél lépni?");
@@ -194,7 +195,7 @@ function Navbar() {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <MenuItem onClick={() => { handleClose(); handleLogout(); }}>
+            <MenuItem onClick={() => { handleClose(); navigate("/profile"); }}>
               <Avatar /> Fiókom
             </MenuItem>
             <Divider />
