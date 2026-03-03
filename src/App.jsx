@@ -5,6 +5,7 @@ import HomePage from "./components/home/HomePage";
 import { Route, Routes } from "react-router";
 import AllRoomsPage from "./components/booking_rooms/all-rooms/AllRoomsPage";
 import FindBookingPage from "./components/booking_rooms/find-bookings/FindBookingPage";
+import RoomDetailsPage from "./components/booking_rooms/room-details/RoomDetailsPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/rooms" element={<AllRoomsPage />} />
           <Route path="/find-booking" element={<FindBookingPage />} />
+          <Route path="/room-details-book/:roomId" element={<RoomDetailsPage />} />
         </Routes>
       </main>
       <Footer />
