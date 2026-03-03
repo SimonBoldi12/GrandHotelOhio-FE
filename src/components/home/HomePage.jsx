@@ -3,6 +3,7 @@ import style from "./HomePage.module.css";
 import { Star, MapPin, Clock } from "lucide-react";
 import RoomSearch from "../common/room-search/RoomSearch";
 import { useState } from "react";
+import RoomResult from "../common/room-result/RoomResult";
 
 
 function HomePage() {
@@ -68,8 +69,9 @@ function HomePage() {
                         </div>
                       </div>
 
-                      
+
                       <RoomSearch handleSearchResult={handleSearchResult} />
+                      <RoomResult roomSearchResults={roomSearchResults} />
                 
                       {/* About Section */}
                       <div className={style.aboutGrid}>

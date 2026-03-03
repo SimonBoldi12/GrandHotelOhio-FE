@@ -25,6 +25,10 @@
 }
 
 @media (max-width: 768px) {
+  .searchContainer {
+    text-align: center;
+  
+  }
   .searchField {
     flex: 1 1 100%;
     max-width: 100%;

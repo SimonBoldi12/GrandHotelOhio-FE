@@ -1,0 +1,36 @@
+.paginationNav {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.paginationUl {
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+}
+
+.paginationLi {
+    margin: 0 5px;
+}
+
+.paginationButton {
+    background-color: #fff;
+    color: #1d4ed8;
+    border: 1px solid #1d4ed8;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.paginationButton:hover {
+    background-color: rgb(50, 127, 209);
+    color: #fff;
+}
+
+
+.active {
+    background-color: #1d4ed8;
+    color: #fff;
+}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import style from "./RoomSearch.module.css";
-import { getRoomTypes } from "../../../service/ApiService";
+import { getRoomTypes, getAvailableRoomsByDateAndType } from "../../../service/ApiService";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { hu } from "date-fns/locale";
@@ -44,13 +44,15 @@ function RoomSearch({ handleSearchResult }) {
         ? endDate.toISOString().split("T")[0]
         : null;
 
-      const response = await ApiService.getAvailableRoomsByDateAndType(
+      const response = await getAvailableRoomsByDateAndType(
         formattedStartDate,
         formattedEndDate,
         roomType
       );
+      console.log(response);
+      
 
-      if (response.statusCode === 200) {
+      if (response.status === 200) {
         if (response.roomList.length === 0) {
           showError(
             "A kiválasztott szobatípus nem érhető el a megadott időszakra."
@@ -61,7 +63,7 @@ function RoomSearch({ handleSearchResult }) {
         setError("");
       }
     } catch (error) {
-      showError("Ismeretlen hiba történt: " + error.response.data.message);
+      showError("Ismeretlen hiba történt: " + (error.response?.data?.message || error.message));
     }
   };
 

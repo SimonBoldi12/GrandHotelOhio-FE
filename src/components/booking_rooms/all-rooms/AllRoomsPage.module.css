@@ -1,0 +1,39 @@
+.allRoomsContainer {
+    margin: 50px 0px 90px 0px;
+}
+
+.allRoomsContainer h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1d4ed8;
+}
+
+.filterContainer {
+    margin-left: 1rem;
+}
+
+.filterContainer label {
+    color: #1d4ed8;
+    font-weight: 800;
+    font-size: 20px;
+}
+
+.filterContainer select {
+    width: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .filterContainer {
+        margin: 0px 0px 0px 0px;
+        text-align: center;
+    }
+
+    .filterContainer label {
+        display: block;
+        margin-bottom: 10px;
+    }
+}

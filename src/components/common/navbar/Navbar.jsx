@@ -74,7 +74,7 @@ function Navbar() {
           {/* LOGO - bal oldalt */}
           <Typography sx={{ minWidth: 100, justifyContent: "center", display: "flex", alignItems: "center"   }}>
             <img src={hotel_svg} alt="Hotel Logo" className={style.logo}/>
-            <NavLink to="/home" activeClass="active">
+            <NavLink to="/home" activeclass="active">
               GRAND HOTEL OHIO
             </NavLink>
           </Typography>
@@ -83,45 +83,45 @@ function Navbar() {
           {!isMobile && (
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography sx={{ minWidth: 100 }}>
-                <NavLink to="/rooms" activeClass="active">
+                <NavLink to="/rooms" activeclass="active">
                   Szobák
                 </NavLink>
               </Typography>
               {authenticated && (<Typography sx={{ minWidth: 100 }}>
-                <NavLink to="/find-booking" activeClass="active">
+                <NavLink to="/find-booking" activeclass="active">
                   Foglalásaim
                 </NavLink>
               </Typography>)}
               {user && (
                 <Typography sx={{ minWidth: 100 }}>
-                  <NavLink to="/profile" activeClass="active">
+                  <NavLink to="/profile" activeclass="active">
                     Fiók
                   </NavLink>
                 </Typography>
               )}
               {admin && (
                 <Typography sx={{ minWidth: 100 }}>
-                  <NavLink to="/admin" activeClass="active">
+                  <NavLink to="/admin" activeclass="active">
                     Admin
                   </NavLink>
                 </Typography>
               )}
               {!authenticated && (
                 <Typography sx={{ minWidth: 100 }}>
-                  <NavLink to="/login" activeClass="active">
+                  <NavLink to="/login" activeclass="active">
                     Bejelentkezés
                   </NavLink>
                 </Typography>
               )}
               {!authenticated && (
                 <Typography sx={{ minWidth: 100 }}>
-                  <NavLink to="/register" activeClass="active">
+                  <NavLink to="/register" activeclass="active">
                     Regisztráció
                   </NavLink>
                 </Typography>
               )}
               <Typography sx={{ minWidth: 100 }}>
-                <NavLink to="/home" activeClass="active">
+                <NavLink to="/home" activeclass="active">
                   Kezdőlap
                 </NavLink>
               </Typography>
