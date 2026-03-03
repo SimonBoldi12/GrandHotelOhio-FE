@@ -3,8 +3,12 @@
     margin: 10px auto 60px auto;
     padding: 20px;
     color: #333;
+    text-align: center;
 }
 
+.findBookingContainer h2{
+    margin-bottom: 20px;
+}
 
 .searchContainer input[type="text"] {
     padding: 10px;
@@ -15,7 +19,7 @@
     width: 300px;
 }
 
-button {
+.searchContainer button {
     padding: 10px 20px;
     font-size: 16px;
     background-color: #1d4ed8;
@@ -25,7 +29,7 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.searchContainer button:hover {
     background-color: #1e40af;
 }
 
@@ -34,6 +38,7 @@ button:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 10px;
+    text-align: left;
 }
 
 .bookingDetailsContainer img{
@@ -43,6 +48,22 @@ button:hover {
     margin-bottom: 10px;
 }
 
-p {
+.bookingDetailsContainer p {
     margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+    .findBookingContainer {
+        max-width: 90%;
+        padding: 10px;
+    }
+
+    .searchContainer input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .searchContainer button {
+        width: 100%;
+    }
 }
