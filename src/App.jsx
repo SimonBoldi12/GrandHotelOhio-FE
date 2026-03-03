@@ -4,18 +4,22 @@ import Footer from "./components/common/footer/Footer";
 import HomePage from "./components/home/HomePage";
 import { Route, Routes } from "react-router";
 import AllRoomsPage from "./components/booking_rooms/all-rooms/AllRoomsPage";
+import FindBookingPage from "./components/booking_rooms/find-bookings/FindBookingPage";
 
 function App() {
   return (
-    <>
+    <div className="appCont">
       <Navbar />
-      <Routes>
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/" element={<HomePage />} />
-        <Route path="/rooms" element={<AllRoomsPage />} />
-      </Routes>
+      <main className="main">
+        <Routes>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/rooms" element={<AllRoomsPage />} />
+          <Route path="/find-booking" element={<FindBookingPage />} />
+        </Routes>
+      </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

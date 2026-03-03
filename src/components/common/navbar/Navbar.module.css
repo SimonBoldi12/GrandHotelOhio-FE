@@ -15,6 +15,9 @@ nav a:hover {
 nav {
   background-color: #e3e0e0;
   padding: 15px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .logo{

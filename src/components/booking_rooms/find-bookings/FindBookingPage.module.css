@@ -1,0 +1,48 @@
+.findBookingContainer {
+    max-width: 50%;
+    margin: 10px auto 60px auto;
+    padding: 20px;
+    color: #333;
+}
+
+
+.searchContainer input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+    width: 300px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #1d4ed8;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1e40af;
+}
+
+.bookingDetailsContainer {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.bookingDetailsContainer img{
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+p {
+    margin: 10px 0;
+}

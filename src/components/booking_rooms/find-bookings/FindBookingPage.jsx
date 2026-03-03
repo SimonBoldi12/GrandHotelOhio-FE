@@ -1,6 +1,6 @@
 import style from "./FindBookingPage.module.css";
 import { getBookingByConfirmationCode } from "../../../service/ApiService";
-import { set } from "react-datepicker/dist/dist/date_utils.js";
+import { useState } from "react";
 
 function FindBookingPage() {
     const [confirmationCode, setConfirmationCode] = useState("");
@@ -38,11 +38,35 @@ function FindBookingPage() {
 
             {error && <p className={style.error}>{error}</p>}
             {bookingDetails && (
-                <div>
+                <div className={style.bookingDetailsContainer}>
                     <h3>Foglalás részletei</h3>
                     <p>Kód: {bookingDetails.bookingConfirmationCode}</p>
-                    <p>Dátum: {bookingDetails.date}</p>
-                    <p>Ár: {bookingDetails.price}</p>
+                    <p>Érkezés: {bookingDetails.checkInDate}</p>
+                    <p>Távozás: {bookingDetails.checkOutDate}</p>
+                    <p>Felnőttek száma: {bookingDetails.numOfAdults}</p>
+                    <p>Gyerekek száma: {bookingDetails.numOfChildren}</p>
+
+                    <br /> 
+                    <hr />
+                    <br />
+
+                    <h3>Foglaló adatai</h3>
+                    <div>
+                        <p>Név: {bookingDetails.users.name}</p>
+                        <p>Email: {bookingDetails.users.email}</p>
+                        <p>Telefon: {bookingDetails.users.phoneNumber}</p>
+                    </div>
+
+                    <br /> 
+                    <hr />
+                    <br />
+
+                    <h3>Szoba adatai</h3>
+                    <div>
+                        <p>Szoba típus: {bookingDetails.room.roomType}</p>
+                        <img src={bookingDetails.room.roomPhotoUrl} alt="Szoba kép" />
+                    </div>
+
                 </div>
             )}
         </div>
