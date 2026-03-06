@@ -12,6 +12,11 @@ import ProfilePage from "./components/profile/profile-page/ProfilePage";
 import EditProfile from "./components/profile/edit-profile/EditProfile";
 import { ProtectedRoute, AdminRoute} from "./service/Guard"
 import AdminPage from "./components/admin/admin-page/AdminPage";
+import ManageRoomPage from "./components/admin/manage-room-page/ManageRoomPage";
+import ManageBookingsPage from "./components/admin/manage-bookings-page/ManageBookingsPage";
+import AddRoomPage from "./components/admin/add-room-page/AddRoomPage";
+import EditRoomPage from "./components/admin/edit-room-page/EditRoomPage";
+import EditBookingPage from "./components/admin/edit-booking-page/EditBookingPage";
 
 function App() {
   return (
@@ -34,6 +39,11 @@ function App() {
 
           {/* Admin routes */ }
           <Route path="/admin" element={ <AdminRoute element={<AdminPage />} /> } />
+          <Route path="/admin/manage-rooms" element={ <AdminRoute element={<ManageRoomPage />} /> } />
+          <Route path="/admin/manage-bookings" element={ <AdminRoute element={<ManageBookingsPage />} /> } />
+          <Route path="/admin/edit-room/:roomId" element={ <AdminRoute element={<EditRoomPage />} /> } />
+          <Route path="/admin/add-room" element={ <AdminRoute element={<AddRoomPage />} /> } />
+          <Route path="/admin/edit-booking/:bookingCode" element={ <AdminRoute element={<EditBookingPage />} /> } />
           <Route path="*" element={<Navigate to="/home" />} />
 
         </Routes>

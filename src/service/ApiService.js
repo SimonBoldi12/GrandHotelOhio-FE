@@ -66,7 +66,11 @@ export const deleteUser = async (userId) => {
 
 // Rooms
 export const addRoom = async (roomData) => {
-    const { data } = await api.post("/rooms/add", roomData);
+    const { data } = await api.post("/rooms/add", roomData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
     return data;
 };
 
@@ -103,7 +107,11 @@ export const deleteRoom = async (roomId) => {
 };
 
 export const updateRoom = async (roomId, roomData) => {
-    const { data } = await api.put(`/rooms/update/${roomId}`, roomData);
+    const { data } = await api.put(`/rooms/update/${roomId}`, roomData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
     return data;
 };
 
@@ -124,7 +132,7 @@ export const getBookingByConfirmationCode = async (bookingCode) => {
 };
 
 export const cancelBooking = async (bookingId) => {
-    const { data } = await api.delete(`/bookings/delete/${bookingId}`);
+    const { data } = await api.delete(`/bookings/cancel/${bookingId}`);
     return data;
 };
 

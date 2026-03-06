@@ -82,7 +82,7 @@ function Navbar() {
           {/* ASZTALI NÉZET - jobb oldalt */}
           {!isMobile && (
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography sx={{ minWidth: 100 }}>
+              <Typography sx={{ minWidth: 100, textAlign: "center" }}>
                 <NavLink to="/rooms" activeclass="active">
                   Szobák
                 </NavLink>
@@ -93,7 +93,7 @@ function Navbar() {
                 </NavLink>
               </Typography>)}
               {admin && (
-                <Typography sx={{ minWidth: 100 }}>
+                <Typography sx={{ minWidth: 100, textAlign: "center" }}>
                   <NavLink to="/admin" activeclass="active">
                     Admin
                   </NavLink>
