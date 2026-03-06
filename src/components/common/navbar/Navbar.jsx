@@ -55,7 +55,6 @@ function Navbar() {
     { to: "/home", label: "Kezdőlap", show: true },
     { to: "/rooms", label: "Szobák", show: true },
     { to: "/find-booking", label: "Foglalásaim", show: authenticated },
-    { to: "/profile", label: "Fiók", show: !!user },
     { to: "/admin", label: "Admin", show: !!admin },
     { to: "/login", label: "Bejelentkezés", show: !authenticated },
     { to: "/register", label: "Regisztráció", show: !authenticated },
@@ -93,13 +92,6 @@ function Navbar() {
                   Foglalásaim
                 </NavLink>
               </Typography>)}
-              {user && (
-                <Typography sx={{ minWidth: 100 }}>
-                  <NavLink to="/profile" activeclass="active">
-                    Fiók
-                  </NavLink>
-                </Typography>
-              )}
               {admin && (
                 <Typography sx={{ minWidth: 100 }}>
                   <NavLink to="/admin" activeclass="active">
@@ -136,7 +128,7 @@ function Navbar() {
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
                   >
-                    <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                    <Avatar sx={{ width: 32, height: 32 }}>F</Avatar>
                   </IconButton>
                 </Tooltip>
               )}
@@ -233,12 +225,14 @@ function Navbar() {
               {authenticated && (
                 <>
                   <Divider sx={{ my: 1 }} />
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={toggleDrawer(false)}>
-                      <Avatar sx={{ width: 28, height: 28, mr: 1 }}>M</Avatar>
-                      <ListItemText primary="Fiókom" />
-                    </ListItemButton>
-                  </ListItem>
+                  <NavLink to="/profile" style={{ textDecoration: "none", color: "inherit" }} onClick={toggleDrawer(false)}>
+                    <ListItem disablePadding>
+                      <ListItemButton onClick={toggleDrawer(false)}>
+                        <Avatar sx={{ width: 28, height: 28, mr: 1 }}>M</Avatar>
+                        <ListItemText primary="Fiókom" />
+                      </ListItemButton>
+                    </ListItem>
+                  </NavLink>
                   <ListItem disablePadding >
                     <ListItemButton onClick={toggleDrawer(false)}>
                       <ListItemIcon>

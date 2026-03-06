@@ -1,0 +1,70 @@
+.adminPage {
+  max-width: 700px;
+  margin: 40px auto 60px auto;
+  padding: 32px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.title {
+  font-size: 1.8rem;
+  color: #1e3a8a;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.adminPage p {
+  color: #6b7280;
+  margin-bottom: 32px;
+  font-size: 1rem;
+}
+
+.adminActions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.manageRoomsBtn {
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.manageRoomsBtn:hover {
+  background-color: #1e40af;
+}
+
+.manageBookingsBtn {
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #6b7280;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.manageBookingsBtn:hover {
+  background-color: #4b5563;
+}
+
+@media (max-width: 480px) {
+  .manageRoomsBtn,
+  .manageBookingsBtn {
+    width: 100%;
+  }
+}

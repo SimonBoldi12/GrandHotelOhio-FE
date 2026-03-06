@@ -1,0 +1,113 @@
+.profilePage {
+  max-width: 800px;
+  margin: 30px auto 60px auto;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1e3a8a;
+  font-size: 1.6rem;
+}
+
+.profilePage h3 {
+  color: #1e3a8a;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.profileActions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.editProfileBtn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.editProfileBtn:hover {
+  background-color: #1e40af;
+}
+
+.logoutBtn {
+  background-color: #6b7280;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.logoutBtn:hover {
+  background-color: #4b5563;
+}
+
+.profileDetails {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.profileDetails p {
+  margin: 8px 0;
+  color: #374151;
+}
+
+.bookingsSection {
+  margin-bottom: 20px;
+}
+
+.bookingList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bookingItem {
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.bookingItem p {
+  margin: 6px 0;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.roomPhoto {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.error {
+  color: #dc2626;
+  background-color: #fef2f2;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 0.9rem;
+}

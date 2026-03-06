@@ -16,8 +16,8 @@ function RoomDetailsPage() {
   const [error, setError] = useState(null);
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
-  const [numAdults, setNumAdults] = useState(1);
-  const [numChildren, setNumChildren] = useState(0);
+  const [numOfAdults, setNumOfAdults] = useState(1);
+  const [numOfChildren, setNumOfChildren] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalGuests, setTotalGuests] = useState(1);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -50,7 +50,7 @@ function RoomDetailsPage() {
       return;
     }
 
-    if (isNaN(numAdults) || numAdults < 1 || isNaN(numChildren) || numChildren < 0) {
+    if (isNaN(numOfAdults) || numOfAdults < 1 || isNaN(numOfChildren) || numOfChildren < 0) {
       setErrorMessage("Kérem válassza ki a felnőttek és gyermekek számát.");
       setTimeout(() => setErrorMessage(""), 5000);
       return;
@@ -69,7 +69,7 @@ function RoomDetailsPage() {
     const endDate = new Date(checkOutDate);
     const totalDays = Math.round(Math.abs((endDate - startDate) / oneDay)) + 1;
 
-    const totalGuests = numAdults + numChildren;
+    const totalGuests = numOfAdults + numOfChildren;
 
     const roomPricePerNight = roomDetails.roomPrice;
     const totalPrice = totalDays * roomPricePerNight;
@@ -97,8 +97,8 @@ function RoomDetailsPage() {
       const booking = {
         checkInDate: formattedCheckInDate,
         checkOutDate: formattedCheckOutDate,
-        numAdults: numAdults,
-        numChildren: numChildren,
+        numOfAdults: numOfAdults,
+        numOfChildren: numOfChildren,
       };
 
       const response = await bookRoom(roomId, userId, booking);
@@ -203,8 +203,8 @@ function RoomDetailsPage() {
                 <input
                   type="number"
                   min="1"
-                  value={numAdults}
-                  onChange={(e) => setNumAdults(parseInt(e.target.value))}
+                  value={numOfAdults}
+                  onChange={(e) => setNumOfAdults(parseInt(e.target.value))}
                 />
               </div>
               <div className={style.guestDiv}>
@@ -212,8 +212,8 @@ function RoomDetailsPage() {
                 <input
                   type="number"
                   min="0"
-                  value={numChildren}
-                  onChange={(e) => setNumChildren(parseInt(e.target.value))}
+                  value={numOfChildren}
+                  onChange={(e) => setNumOfChildren(parseInt(e.target.value))}
                 />
               </div>
               <button
