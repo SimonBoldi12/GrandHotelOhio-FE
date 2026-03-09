@@ -128,7 +128,7 @@ function Navbar() {
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
                   >
-                    <Avatar sx={{ width: 32, height: 32 }}>F</Avatar>
+                    <Avatar sx={{ width: 32, height: 32 }}></Avatar>
                   </IconButton>
                 </Tooltip>
               )}
@@ -228,7 +228,7 @@ function Navbar() {
                   <NavLink to="/profile" style={{ textDecoration: "none", color: "inherit" }} onClick={toggleDrawer(false)}>
                     <ListItem disablePadding>
                       <ListItemButton onClick={toggleDrawer(false)}>
-                        <Avatar sx={{ width: 28, height: 28, mr: 1 }}>M</Avatar>
+                        <Avatar sx={{ width: 28, height: 28, mr: 1 }}></Avatar>
                         <ListItemText primary="Fiókom" />
                       </ListItemButton>
                     </ListItem>
