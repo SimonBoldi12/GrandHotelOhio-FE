@@ -31,6 +31,9 @@ function AdminPage() {
                 <button className={style.manageBookingsBtn} onClick={() => navigate("/admin/manage-bookings")}>
                     Foglalások kezelése
                 </button>
+                <button className={style.manageUsersBtn} onClick={() => navigate("/admin/manage-users")}>
+                    Felhasználók kezelése
+                </button>
             </div>
         </div>
      );

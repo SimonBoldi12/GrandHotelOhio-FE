@@ -17,6 +17,7 @@ import ManageBookingsPage from "./components/admin/manage-bookings-page/ManageBo
 import AddRoomPage from "./components/admin/add-room-page/AddRoomPage";
 import EditRoomPage from "./components/admin/edit-room-page/EditRoomPage";
 import EditBookingPage from "./components/admin/edit-booking-page/EditBookingPage";
+import ManageUsersPage from "./components/admin/manage-users-page/ManageUsersPage";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="/admin/edit-room/:roomId" element={ <AdminRoute element={<EditRoomPage />} /> } />
           <Route path="/admin/add-room" element={ <AdminRoute element={<AddRoomPage />} /> } />
           <Route path="/admin/edit-booking/:bookingCode" element={ <AdminRoute element={<EditBookingPage />} /> } />
+          <Route path="/admin/manage-users" element={ <AdminRoute element={<ManageUsersPage />} /> } />
           <Route path="*" element={<Navigate to="/home" />} />
 
         </Routes>
