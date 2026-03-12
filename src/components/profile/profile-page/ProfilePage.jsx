@@ -51,7 +51,7 @@ function ProfilePage() {
         )}
 
         <div className={style.bookingsSection}>
-            <h3>Foglalásai</h3>
+            <h3>Foglalásaim</h3>
             <div className={style.bookingList}>
                 {user && user.bookings && user.bookings.length > 0 ? (
                     user.bookings.map((booking) => (

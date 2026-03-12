@@ -61,13 +61,9 @@ function EditRoomPage() {
             formData.append("roomDescription", roomDetails.roomDescription);
 
             if(file) {
-                formData.append("roomPhoto", file);
+                formData.append("photo", file); 
             }
-             for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
             const result = await updateRoom(roomId, formData);
-             console.log("result:", result);
             if(result.status === 200) {
                 setSuccess("Szoba sikeresen frissítve!");
                 setTimeout(() => {
