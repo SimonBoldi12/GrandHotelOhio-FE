@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import style from "./RoomSearch.module.css";
-import { getRoomTypes, getAvailableRoomsByDateAndType } from "../../../service/ApiService";
+import {
+  getRoomTypes,
+  getAvailableRoomsByDateAndType,
+} from "../../../service/ApiService";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { hu } from "date-fns/locale";
@@ -47,15 +50,14 @@ function RoomSearch({ handleSearchResult }) {
       const response = await getAvailableRoomsByDateAndType(
         formattedStartDate,
         formattedEndDate,
-        roomType
+        roomType,
       );
       console.log(response);
-      
 
       if (response.status === 200) {
         if (response.roomList.length === 0) {
           showError(
-            "A kiválasztott szobatípus nem érhető el a megadott időszakra."
+            "A kiválasztott szobatípus nem érhető el a megadott időszakra.",
           );
           return;
         }
@@ -63,7 +65,10 @@ function RoomSearch({ handleSearchResult }) {
         setError("");
       }
     } catch (error) {
-      showError("Ismeretlen hiba történt: " + (error.response?.data?.message || error.message));
+      showError(
+        "Ismeretlen hiba történt: " +
+          (error.response?.data?.message || error.message),
+      );
     }
   };
 
@@ -75,6 +80,9 @@ function RoomSearch({ handleSearchResult }) {
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}
+            selectsStart
+            startDate={startDate}
+            endDate={endDate}
             dateFormat="dd/MM/yyyy"
             placeholderText="Érkezés dátuma"
             className={style.dateInput}
@@ -87,6 +95,10 @@ function RoomSearch({ handleSearchResult }) {
           <DatePicker
             selected={endDate}
             onChange={(date) => setEndDate(date)}
+            selectsEnd
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
             dateFormat="dd/MM/yyyy"
             placeholderText="Távozás dátuma"
             className={style.dateInput}

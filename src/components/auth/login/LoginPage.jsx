@@ -26,42 +26,40 @@ function LoginPage() {
                 navigate(from, { replace: true });
             }
         } catch (error) {
-            setError(error.response?.data?.message || error.message);
+            setError("Hibás email cím vagy jelszó. Kérem próbálja újra.");
             setTimeout(() => setError(""), 5000);
         }
     }
 
     return ( 
-        <div className={style.loginContainer}>
-            <h2>Bejelentkezés</h2>
+        <div className={style.loginWrapper}>
+        <div className={style.container}>
+            <h2 className={style.heading}>Bejelentkezés</h2>
             {error && <p className={style.error}>{error}</p>}
             <form onSubmit={handleSubmit}>
-                <div className={style.formGroup}>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className={style.formGroup}>
-                    <label htmlFor="password">Jelszó:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" className={style.loginButton}>Login</button>
+                <input
+                    className={style.input}
+                    type="email"
+                    placeholder="Email cím"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+                <input
+                    className={style.input}
+                    type="password"
+                    placeholder="Jelszó"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                <button type="submit" className={style.loginButton}>Bejelentkezés</button>
             </form>
             <p className={style.registerLink}>
                 Nincs fiókod? <a href="/register">Regisztráció</a>
             </p>
         </div>
+    </div>
      );
 }
 

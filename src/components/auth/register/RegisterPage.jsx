@@ -64,70 +64,23 @@ function RegisterPage() {
   }
 
   return (
-    <div className={style.registerContainer}>
-      {errorMessage && <p className={style.error}>{errorMessage}</p>}
-      {successMessage && <p className={style.success}>{successMessage}</p>}
-      <h2>Regisztráció</h2>
-      <form onSubmit={handleSubmit} className={style.registerForm}>
-        <div className={style.formGroup}>
-          <label htmlFor="lastname">Vezetéknév:</label>
-          <input
-            type="text"
-            id="lastname"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            required
-          />
+     <div className={style.registerWrapper}>
+        <div className={style.container}>
+            <h2 className={style.heading}>Regisztráció</h2>
+            {errorMessage && <p className={style.error}>{errorMessage}</p>}
+            {successMessage && <p className={style.success}>{successMessage}</p>}
+            <form onSubmit={handleSubmit}>
+                <input className={style.input} type="text" name="lastName" placeholder="Vezetéknév" value={formData.lastName} onChange={handleInputChange} required />
+                <input className={style.input} type="text" name="firstName" placeholder="Keresztnév" value={formData.firstName} onChange={handleInputChange} required />
+                <input className={style.input} type="email" name="email" placeholder="Email cím" value={formData.email} onChange={handleInputChange} required />
+                <input className={style.input} type="password" name="password" placeholder="Jelszó" value={formData.password} onChange={handleInputChange} required />
+                <input className={style.input} type="text" name="phoneNumber" placeholder="Telefonszám" value={formData.phoneNumber} onChange={handleInputChange} required />
+                <button type="submit" className={style.registerButton}>Regisztrálok</button>
+            </form>
+            <p className={style.loginLink}>
+                Már van fiókod? <a href="/login">Bejelentkezés</a>
+            </p>
         </div>
-        <div className={style.formGroup}>
-          <label htmlFor="firstname">Keresztnév:</label>
-          <input
-            type="text"
-            id="firstname"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className={style.formGroup}>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className={style.formGroup}>
-          <label htmlFor="password">Jelszó:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className={style.formGroup}>
-          <label htmlFor="phoneNumber">Telefonszám:</label>
-          <input
-            type="text"
-            id="phoneNumber"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <button type="submit" className={style.registerButton}>
-          Regisztrálok
-        </button>
-      </form>
     </div>
   );
 }

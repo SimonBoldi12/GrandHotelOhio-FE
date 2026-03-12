@@ -1,93 +1,113 @@
 .roomResults {
   width: 100%;
-  margin: 10px 0 30px 0;
-  padding: 0 20px;
-  box-sizing: border-box;
+  margin: 8px 0 30px 0;
 }
 
 .roomList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .roomListItem {
   display: flex;
   align-items: stretch;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 14px;
   overflow: hidden;
-  background-color: #f9f9f9;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s;
+  background-color: #fff;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.07);
+  transition: box-shadow 0.2s, transform 0.2s;
 }
 
 .roomListItem:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 28px rgba(37, 99, 235, 0.15);
+  transform: translateY(-2px);
 }
 
 .roomListItemImage {
-  width: 220px;
-  min-width: 220px;
-  height: 160px;
+  width: 240px;
+  min-width: 240px;
+  height: 180px;
   object-fit: cover;
 }
 
 .roomDetails {
   flex: 1;
-  padding: 16px 20px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
 }
 
 .roomDetails h3 {
-  color: #2563eb;
-  font-size: 1.2rem;
-  margin-bottom: 8px;
+  color: #1e3a8a;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
 }
 
 .roomDetails p {
-  color: #555;
+  color: #6b7280;
   font-size: 0.95rem;
-  margin: 4px 0;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.roomDetails p:first-of-type {
+  color: #374151;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 .bookNowDiv {
   display: flex;
   align-items: center;
-  padding: 16px;
+  padding: 20px;
+  flex-shrink: 0;
 }
 
 .bookNowButton {
   background-color: #2563eb;
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 12px 20px;
+  border-radius: 8px;
+  padding: 12px 22px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   white-space: nowrap;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .bookNowButton:hover {
-  background-color: #1d4ed8;
+  background-color: #1e40af;
+}
+
+.bookNowButton:active {
+  transform: scale(0.97);
 }
 
 .editRoomButton {
-  background-color: #1d4ed8;
-  color: white;
+  background-color: #1e40af;
+  color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 12px 20px;
+  border-radius: 8px;
+  padding: 12px 22px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   white-space: nowrap;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .editRoomButton:hover {
-  background-color: #005f65;
+  background-color: #1e3a8a;
+}
+
+.editRoomButton:active {
+  transform: scale(0.97);
 }
 
 @media (max-width: 640px) {
@@ -98,7 +118,7 @@
   .roomListItemImage {
     width: 100%;
     min-width: unset;
-    height: 200px;
+    height: 220px;
   }
 
   .bookNowDiv {
@@ -108,5 +128,6 @@
   .bookNowButton,
   .editRoomButton {
     width: 100%;
+    text-align: center;
   }
 }

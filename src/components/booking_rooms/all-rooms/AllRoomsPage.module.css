@@ -1,39 +1,64 @@
 .allRoomsContainer {
-    margin: 50px 0px 90px 0px;
+  max-width: 1100px;
+  margin: 40px auto 80px auto;
+  padding: 0 24px;
 }
 
 .allRoomsContainer h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+  text-align: center;
+  margin-bottom: 32px;
+  color: #1e3a8a;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .filterContainer {
-    margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background-color: #f8faff;
+  border-radius: 10px;
+  border: 1px solid #e0e7ff;
 }
 
 .filterContainer label {
-    color: #1d4ed8;
-    font-weight: 800;
-    font-size: 20px;
+  color: #1e3a8a;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
 }
 
 .filterContainer select {
-    width: auto;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+  padding: 10px 14px;
+  border: 1px solid #c7d2fe;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background-color: #fff;
+  color: #1e293b;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.filterContainer select:focus {
+  outline: none;
+  border-color: #2563eb;
 }
 
 @media (max-width: 768px) {
-    .filterContainer {
-        margin: 0px 0px 0px 0px;
-        text-align: center;
-    }
+  .allRoomsContainer {
+    padding: 0 12px;
+    margin: 20px auto 60px auto;
+  }
 
-    .filterContainer label {
-        display: block;
-        margin-bottom: 10px;
-    }
+  .filterContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filterContainer select {
+    width: 100%;
+  }
 }

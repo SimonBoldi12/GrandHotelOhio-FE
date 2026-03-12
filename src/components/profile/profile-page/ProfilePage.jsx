@@ -31,44 +31,45 @@ function ProfilePage() {
     }
 
     return (
-        <div className={style.profilePage}>
+         <div className={style.profilePage}>
+        <div className={style.header}>
             {user && <h2 className={style.title}>Üdvözlünk, {user.name}!</h2>}
-
             <div className={style.profileActions}>
                 <button className={style.editProfileBtn} onClick={handleEditProfile}>Profil szerkesztése</button>
                 <button className={style.logoutBtn} onClick={handleLogout}>Kijelentkezés</button>
             </div>
+        </div>
 
-            {error && <p className={style.error}>{error}</p>}
+        {error && <p className={style.error}>{error}</p>}
 
-            {user && (
-                <div className={style.profileDetails}>
-                    <h3>Profil adatai</h3>
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Telefonszám:</strong> {user.phoneNumber}</p>
-                </div>
-            )}
+        {user && (
+            <div className={style.profileDetails}>
+                <h3>Profil adatai</h3>
+                <p><strong>Email:</strong> {user.email}</p>
+                <p><strong>Telefonszám:</strong> {user.phoneNumber}</p>
+            </div>
+        )}
 
-            <div className={style.bookingsSection}>
-                <h3>Foglalásai</h3>
-                <div className={style.bookingList}>
-                    {user && user.bookings && user.bookings.length > 0 ? (
-                        user.bookings.map((booking) => (
-                            <div key={booking.id} className={style.bookingItem}>
-                                <p><strong>Foglalási kód:</strong> {booking.bookingConfirmationCode}</p>
-                                <p><strong>Érkezés:</strong> {booking.checkInDate}</p>
-                                <p><strong>Távozás:</strong> {booking.checkOutDate}</p>
-                                <p><strong>Összes vendég:</strong> {booking.totalNumOfGuests}</p>
-                                <p><strong>Szoba típusa:</strong> {booking.room?.roomType}</p>
-                                <img src={booking.room?.roomPhotoUrl} alt={booking.room?.roomType} className={style.roomPhoto} />
-                            </div>
-                        ))
-                    ) : (
-                        <p>Nincs foglalás.</p>
-                    )}
-                </div>
+        <div className={style.bookingsSection}>
+            <h3>Foglalásai</h3>
+            <div className={style.bookingList}>
+                {user && user.bookings && user.bookings.length > 0 ? (
+                    user.bookings.map((booking) => (
+                        <div key={booking.id} className={style.bookingItem}>
+                            <p><strong>Foglalási kód:</strong> {booking.bookingConfirmationCode}</p>
+                            <p><strong>Érkezés:</strong> {booking.checkInDate}</p>
+                            <p><strong>Távozás:</strong> {booking.checkOutDate}</p>
+                            <p><strong>Összes vendég:</strong> {booking.totalNumOfGuests}</p>
+                            <p><strong>Szoba típusa:</strong> {booking.room?.roomType}</p>
+                            <img src={booking.room?.roomPhotoUrl} alt={booking.room?.roomType} className={style.roomPhoto} />
+                        </div>
+                    ))
+                ) : (
+                    <p className={style.noBookings}>Nincs foglalás.</p>
+                )}
             </div>
         </div>
+    </div>
     );
 }
 

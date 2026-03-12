@@ -1,77 +1,129 @@
 .profilePage {
-  max-width: 800px;
-  margin: 30px auto 60px auto;
-  padding: 24px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  max-width: 900px;
+  margin: 40px auto 80px auto;
+  padding: 0 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding: 32px;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
 }
 
 .title {
-  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e3a8a;
   margin-bottom: 20px;
-  color: #1e3a8a;
-  font-size: 1.6rem;
-}
-
-.profilePage h3 {
-  color: #1e3a8a;
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+  letter-spacing: -0.5px;
 }
 
 .profileActions {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 12px;
 }
 
 .editProfileBtn {
   background-color: #2563eb;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 11px 24px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.2s;
+  font-size: 0.95rem;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .editProfileBtn:hover {
   background-color: #1e40af;
 }
 
+.editProfileBtn:active {
+  transform: scale(0.97);
+}
+
 .logoutBtn {
-  background-color: #6b7280;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  background-color: #fff;
+  color: #6b7280;
+  border: 1.5px solid #e5e7eb;
+  padding: 11px 24px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.2s;
+  font-size: 0.95rem;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .logoutBtn:hover {
-  background-color: #4b5563;
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.error {
+  color: #dc2626;
+  background-color: #fef2f2;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  border: 1px solid #fecaca;
 }
 
 .profileDetails {
   margin-bottom: 24px;
-  padding: 16px;
-  background-color: #f9fafb;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 14px;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+}
+
+.profileDetails h3 {
+  color: #1e3a8a;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e7ff;
 }
 
 .profileDetails p {
-  margin: 8px 0;
+  margin: 10px 0;
   color: #374151;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profileDetails p strong {
+  color: #1e3a8a;
+  min-width: 110px;
 }
 
 .bookingsSection {
-  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 14px;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+  padding: 24px;
+}
+
+.bookingsSection h3 {
+  color: #1e3a8a;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e7ff;
 }
 
 .bookingList {
@@ -81,11 +133,15 @@
 }
 
 .bookingItem {
-  padding: 16px;
-  background-color: #f9fafb;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  background-color: #f8faff;
+  border-radius: 10px;
+  border: 1px solid #e0e7ff;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.bookingItem:hover {
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
 }
 
 .bookingItem p {
@@ -94,20 +150,37 @@
   font-size: 0.95rem;
 }
 
-.roomPhoto {
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-top: 10px;
+.bookingItem p strong {
+  color: #1e3a8a;
 }
 
-.error {
-  color: #dc2626;
-  background-color: #fef2f2;
-  border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 16px;
+.roomPhoto {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 14px;
+}
+
+.noBookings {
+  color: #6b7280;
   text-align: center;
-  font-size: 0.9rem;
+  padding: 20px 0;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .profilePage {
+    padding: 0 12px;
+    margin: 20px auto 60px auto;
+  }
+
+  .profileActions {
+    flex-direction: column;
+  }
+
+  .editProfileBtn,
+  .logoutBtn {
+    width: 100%;
+  }
 }

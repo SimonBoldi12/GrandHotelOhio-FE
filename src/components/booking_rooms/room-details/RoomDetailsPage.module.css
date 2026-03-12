@@ -40,7 +40,7 @@
   margin: 4px 0;
 }
 
-/* Booking list */
+
 .bookingList {
   list-style-type: none;
   padding: 0;
@@ -67,7 +67,7 @@
   color: #666;
 }
 
-/* Booking actions */
+
 .bookingInfo {
   margin-top: 20px;
   width: 100%;
@@ -109,7 +109,7 @@
   background-color: #4b5563;
 }
 
-/* Date picker */
+
 .datePickerContainer {
   display: flex;
   flex-direction: column;
@@ -131,7 +131,7 @@
   width: 100%;
 }
 
-/* Guests */
+
 .guestContainer {
   display: flex;
   flex-direction: column;
@@ -176,7 +176,6 @@
   background-color: #1e40af;
 }
 
-/* Total price */
 .totalPriceContainer {
   padding: 16px;
   border: 1px solid #ddd;
@@ -209,7 +208,7 @@
   background-color: #15803d;
 }
 
-/* Messages */
+
 .bookingSuccessMessage {
   text-align: center;
   color: #16a34a;

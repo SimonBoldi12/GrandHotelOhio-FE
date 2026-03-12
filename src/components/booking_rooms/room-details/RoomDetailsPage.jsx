@@ -7,6 +7,7 @@ import {
   getUserProfile,
 } from "../../../service/ApiService";
 import DatePicker from "react-datepicker";
+import { hu } from "date-fns/locale";
 
 function RoomDetailsPage() {
   const navigate = useNavigate();
@@ -142,24 +143,6 @@ function RoomDetailsPage() {
         <p>Ár: ${roomPrice} / éjszaka</p>
         <p>{description}</p>
       </div>
-      {bookings && bookings.length > 0 && (
-        <div>
-          <h3>Meglévő foglalások részletei</h3>
-          <ul className={style.bookingList}>
-            {bookings.map((booking, index) => (
-              <li key={booking.id} className={style.bookingItem}>
-                <span className={style.bookingNumber}>Foglalás {index + 1} </span>
-                <span className={style.bookingText}>
-                  Érkezés: {booking.checkInDate}{" "}
-                </span>
-                <span className={style.bookingText}>
-                  Távozás: {booking.checkOutDate}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
       <div className={style.bookingInfo}>
         <button
           className={style.bookNowButton} 
@@ -182,8 +165,9 @@ function RoomDetailsPage() {
               selectsStart
               startDate={checkInDate}
               endDate={checkOutDate}
-              placeholderText="Check-in Date"
+              placeholderText="Érkezés dátuma"
               dateFormat="dd/MM/yyyy"
+              locale={hu}
             />
             <DatePicker
               className={style.detailSearchField}
@@ -193,8 +177,9 @@ function RoomDetailsPage() {
               startDate={checkInDate}
               endDate={checkOutDate}
               minDate={checkInDate}
-              placeholderText="Check-out Date"
+              placeholderText="Távozás dátuma"
               dateFormat="dd/MM/yyyy"
+              locale={hu}
             />
 
             <div className={style.guestContainer}>
