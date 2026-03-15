@@ -49,6 +49,12 @@ export const getUserProfile = async () => {
     return data;
 };
 
+export const getLoggedInUserName = () => {
+    const token = Cookies.get("token");
+    if (!token) return "";
+    return parseJwt(token)?.sub || "";
+};
+
 export const getUser = async (userId) => {
     const { data } = await api.get(`/users/${userId}`);
     return data;

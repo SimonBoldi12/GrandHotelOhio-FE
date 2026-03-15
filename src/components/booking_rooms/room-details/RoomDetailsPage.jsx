@@ -21,7 +21,6 @@ function RoomDetailsPage() {
   const [totalGuests, setTotalGuests] = useState(1);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [userId, setUserId] = useState("");
-  const [confirmationCode, setConfirmationCode] = useState("");
   const [toast, setToast] = useState({ message: "", type: "success" });
 
   useEffect(() => {
@@ -71,7 +70,6 @@ function RoomDetailsPage() {
       };
       const response = await bookRoom(roomId, userId, booking);
       if (response.status === 200) {
-        setConfirmationCode(response.bookingConfirmationCode);
         setToast({ message: `Sikeres foglalás! Foglalási kód: ${response.bookingConfirmationCode}`, type: "success" });
         setTimeout(() => navigate("/rooms"), 5000);
       }
@@ -83,111 +81,139 @@ function RoomDetailsPage() {
   if (isLoading) return <div className={style.loading}>Szoba adatok betöltése...</div>;
   if (error) return <div className={style.error}>Hiba történt: {error}</div>;
 
-  const { roomType, roomPrice, roomPhotoUrl, description, imageUrls } = roomDetails;
+  const { roomType: roomTypeName, roomPrice, roomPhotoUrl, roomDescription, imageUrls } = roomDetails;
   const allImages = [roomPhotoUrl, ...(imageUrls || [])].filter(Boolean);
 
   return (
     <div className={style.pageWrapper}>
-      <Toast
-        message={toast.message}
-        type={toast.type}
-        onClose={() => setToast({ message: "", type: "success" })}
-      />
+      <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "success" })} />
 
       <div className={style.roomDetailsContainer}>
-        <div className={style.heroCard}>
 
-          {/* CAROUSEL */}
-          <div className={style.carouselWrapper}>
-            <span className={style.imageBadge}>{roomType}</span>
-            <Carousel images={allImages} />
+        {/* HERO HEADER */}
+        <div className={style.heroHeader}>
+          <div className={style.heroLeft}>
+            <p className={style.heroLabel}>Szoba részletei</p>
+            <h2 className={style.roomTitle}>{roomTypeName}</h2>
+            <div className={style.priceTag}>
+              <span className={style.priceAmount}>${roomPrice}</span>
+              <span className={style.priceUnit}>/ éjszaka</span>
+            </div>
           </div>
-
-          <div className={style.infoPanel}>
-            <div>
-              <h2 className={style.roomTitle}>{roomType}</h2>
-              <div className={style.priceTag}>
-                <span className={style.priceAmount}>${roomPrice}</span>
-                <span className={style.priceUnit}>/ éjszaka</span>
-              </div>
-              <div className={style.divider} />
-              <p className={style.description}>{description || "Luxus szoba minden kényelemmel felszerelve."}</p>
-            </div>
-            <div className={style.actionButtons}>
-              <button className={style.bookNowButton} onClick={() => setShowDatePicker(true)}>
-                Foglalj most
-              </button>
-              <button className={style.goBackButton} onClick={() => navigate(-1)}>
-                ← Vissza
-              </button>
-            </div>
+          <div className={style.heroActions}>
+            <button className={style.bookNowButton} onClick={() => setShowDatePicker(true)}>
+              Foglalj most
+            </button>
+            <button className={style.goBackButton} onClick={() => navigate(-1)}>
+              ← Vissza
+            </button>
           </div>
         </div>
 
-        {showDatePicker && (
-          <div className={style.bookingCard}>
-            <h3 className={style.bookingCardTitle}>Foglalás részletei</h3>
+        {/* CONTENT GRID */}
+        <div className={style.contentGrid}>
 
-            <div className={style.datePickerContainer}>
-              <div className={style.dateField}>
-                <label>Érkezés dátuma</label>
-                <DatePicker
-                  className={style.detailSearchField}
-                  selected={checkInDate}
-                  onChange={(date) => setCheckInDate(date)}
-                  selectsStart
-                  startDate={checkInDate}
-                  endDate={checkOutDate}
-                  placeholderText="Válasszon dátumot"
-                  dateFormat="dd/MM/yyyy"
-                  locale={hu}
-                />
-              </div>
-              <div className={style.dateField}>
-                <label>Távozás dátuma</label>
-                <DatePicker
-                  className={style.detailSearchField}
-                  selected={checkOutDate}
-                  onChange={(date) => setCheckOutDate(date)}
-                  selectsEnd
-                  startDate={checkInDate}
-                  endDate={checkOutDate}
-                  minDate={checkInDate}
-                  placeholderText="Válasszon dátumot"
-                  dateFormat="dd/MM/yyyy"
-                  locale={hu}
-                />
-              </div>
+          {/* BAL: CAROUSEL + LEÍRÁS */}
+          <div className={style.carouselCard}>
+            <div className={style.carouselWrapper}>
+              <span className={style.imageBadge}>{roomTypeName}</span>
+              <Carousel images={allImages} />
             </div>
-
-            <div className={style.guestContainer}>
-              <div className={style.guestDiv}>
-                <label>Felnőttek</label>
-                <input type="number" min="1" value={numOfAdults} onChange={(e) => setNumOfAdults(parseInt(e.target.value))} />
-              </div>
-              <div className={style.guestDiv}>
-                <label>Gyerekek</label>
-                <input type="number" min="0" value={numOfChildren} onChange={(e) => setNumOfChildren(parseInt(e.target.value))} />
-              </div>
-            </div>
-
-            <button className={style.confirmBookingButton} onClick={handleConfirmBooking}>
-              Foglalás megerősítése
-            </button>
-
-            {totalPrice > 0 && (
-              <div className={style.totalPriceContainer}>
-                <div className={style.totalPriceInfo}>
-                  <p>Összes vendég: <strong>{totalGuests} fő</strong></p>
-                  <p>Végösszeg: <strong>${totalPrice}</strong></p>
-                </div>
-                <button onClick={acceptBooking} className={style.acceptBookingButton}>
-                  Foglalás elfogadása ✓
-                </button>
+            {roomDescription && (
+              <div className={style.descriptionSection}>
+                <p className={style.descriptionLabel}>Leírás</p>
+                <p className={style.description}>{roomDescription}</p>
               </div>
             )}
           </div>
-        )}
+
+          {/* JOBB: FOGLALÁS PANEL */}
+          {showDatePicker && (
+            <div className={style.bookingCard}>
+              <h3 className={style.bookingCardTitle}>Foglalás részletei</h3>
+
+              <div className={style.sectionHeader}>
+                <span className={style.sectionIcon}>📅</span>
+                <span className={style.sectionLabel}>Dátumok</span>
+              </div>
+              <div className={style.datePickerContainer}>
+                <div className={style.dateField}>
+                  <label>Érkezés dátuma</label>
+                  <DatePicker
+                    className={style.detailSearchField}
+                    selected={checkInDate}
+                    onChange={(date) => setCheckInDate(date)}
+                    selectsStart
+                    startDate={checkInDate}
+                    endDate={checkOutDate}
+                    placeholderText="Válasszon dátumot"
+                    dateFormat="dd/MM/yyyy"
+                    locale={hu}
+                  />
+                </div>
+                <div className={style.dateField}>
+                  <label>Távozás dátuma</label>
+                  <DatePicker
+                    className={style.detailSearchField}
+                    selected={checkOutDate}
+                    onChange={(date) => setCheckOutDate(date)}
+                    selectsEnd
+                    startDate={checkInDate}
+                    endDate={checkOutDate}
+                    minDate={checkInDate}
+                    placeholderText="Válasszon dátumot"
+                    dateFormat="dd/MM/yyyy"
+                    locale={hu}
+                  />
+                </div>
+              </div>
+
+              <div className={style.divider} />
+
+              <div className={style.sectionHeader}>
+                <span className={style.sectionIcon}>👥</span>
+                <span className={style.sectionLabel}>Vendégek</span>
+              </div>
+              <div className={style.guestContainer}>
+                <div className={style.guestDiv}>
+                  <label>Felnőttek</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={numOfAdults}
+                    onChange={(e) => setNumOfAdults(parseInt(e.target.value))}
+                  />
+                </div>
+                <div className={style.guestDiv}>
+                  <label>Gyerekek</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={numOfChildren}
+                    onChange={(e) => setNumOfChildren(parseInt(e.target.value))}
+                  />
+                </div>
+              </div>
+
+              <button className={style.confirmBookingButton} onClick={handleConfirmBooking}>
+                Foglalás megerősítése
+              </button>
+
+              {totalPrice > 0 && (
+                <div className={style.totalPriceContainer}>
+                  <div className={style.totalPriceInfo}>
+                    <p>Összes vendég: <strong>{totalGuests} fő</strong></p>
+                    <p>Végösszeg: <strong>${totalPrice}</strong></p>
+                  </div>
+                  <button onClick={acceptBooking} className={style.acceptBookingButton}>
+                    Foglalás elfogadása ✓
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+        </div>
       </div>
     </div>
   );

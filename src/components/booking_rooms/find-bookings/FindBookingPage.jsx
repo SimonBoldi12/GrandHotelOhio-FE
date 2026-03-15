@@ -1,5 +1,5 @@
 import style from "./FindBookingPage.module.css";
-import { getUserBookings, getUserProfile } from "../../../service/ApiService";
+import { getUserBookings, getUserProfile, cancelBooking } from "../../../service/ApiService";
 import { useState, useEffect } from "react";
 import Toast from "../../common/toast/Toast";
 
@@ -14,23 +14,34 @@ function FindBookingPage() {
         const response = await getUserBookings(profile.users.id);
         setBookings(response.users.bookings || []);
       } catch (error) {
-        setToast({
-          message: error.response?.data?.message || error.message,
-          type: "error",
-        });
+        setToast({ message: error.response?.data?.message || error.message, type: "error" });
       }
     }
     fetchBookings();
   }, []);
 
+  async function handleCancel(bookingId) {
+    if (!window.confirm("Biztosan törölni szeretnéd a foglalást? Ez a művelet visszafordíthatatlan!")) return;
+    try {
+      const response = await cancelBooking(bookingId);
+      if (response.status === 200) {
+        setBookings(prev => prev.filter(b => b.id !== bookingId));
+        setToast({ message: "Foglalás sikeresen törölve!", type: "success" });
+      }
+    } catch (error) {
+      setToast({ message: error.response?.data?.message || error.message, type: "error" });
+    }
+  }
+
   return (
     <div className={style.findBookingContainer}>
-      <Toast
-        message={toast.message}
-        type={toast.type}
-        onClose={() => setToast({ message: "", type: "error" })}
-      />
-      <h2>Foglalásaim</h2>
+      <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "error" })} />
+
+      <div className={style.header}>
+        <p className={style.headerLabel}>Fiókom</p>
+        <h2 className={style.title}>Foglalásaim</h2>
+      </div>
+
       {bookings.length === 0 ? (
         <div className={style.emptyState}>
           <div className={style.emptyIcon}>🛎️</div>
@@ -39,20 +50,18 @@ function FindBookingPage() {
         </div>
       ) : (
         <div className={style.bookingList}>
-          {bookings.map((booking) => (
-            <div key={booking.id} className={style.bookingDetailsContainer}>
-              <img
-                src={booking.room?.roomPhotoUrl}
-                alt={booking.room?.roomType}
-                className={style.bookingImage}
-              />
-              <div className={style.bookingContent}>
-                <div>
+          {bookings.map((booking) => {
+            const oneDay = 24 * 60 * 60 * 1000;
+            const days = Math.round(Math.abs((new Date(booking.checkOutDate) - new Date(booking.checkInDate)) / oneDay)) + 1;
+            const total = days * booking.room?.roomPrice;
+
+            return (
+              <div key={booking.id} className={style.bookingDetailsContainer}>
+                <img src={booking.room?.roomPhotoUrl} alt={booking.room?.roomType} className={style.bookingImage} />
+                <div className={style.bookingContent}>
                   <div className={style.bookingHeader}>
                     <h3 className={style.roomType}>{booking.room?.roomType}</h3>
-                    <span className={style.confirmationBadge}>
-                      {booking.bookingConfirmationCode}
-                    </span>
+                    <span className={style.confirmationBadge}>{booking.bookingConfirmationCode}</span>
                   </div>
                   <div className={style.divider} />
                   <div className={style.bookingGrid}>
@@ -73,28 +82,28 @@ function FindBookingPage() {
                       <span>{booking.numOfChildren} fő</span>
                     </div>
                     <div className={style.bookingField}>
-                      <span>Végösszeg</span>
-                      <span>
-                        $
-                        {(() => {
-                          const oneDay = 24 * 60 * 60 * 1000;
-                          const days =
-                            Math.round(
-                              Math.abs(
-                                (new Date(booking.checkOutDate) -
-                                  new Date(booking.checkInDate)) /
-                                  oneDay,
-                              ),
-                            ) + 1;
-                          return days * booking.room?.roomPrice;
-                        })()}
-                      </span>
+                      <span>Éjszakák</span>
+                      <span>{days} éj</span>
                     </div>
+                    <div className={`${style.bookingField} ${style.highlight}`}>
+                      <span>Végösszeg</span>
+                      <span>${total}</span>
+                    </div>
+                  </div>
+                  <div className={style.divider} />
+                  <div className={style.cancelZone}>
+                    <div className={style.cancelInfo}>
+                      <span className={style.cancelTitle}>Foglalás lemondása</span>
+                      <span className={style.cancelSubtitle}>Ez a művelet visszafordíthatatlan.</span>
+                    </div>
+                    <button className={style.cancelButton} onClick={() => handleCancel(booking.id)}>
+                      Lemondás
+                    </button>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

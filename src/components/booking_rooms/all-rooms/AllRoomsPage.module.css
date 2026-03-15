@@ -1,45 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+.allRoomsPage {
+  min-height: 100vh;
+  background: #f7f8fc;
+  padding: 48px 24px 80px;
+  font-family: 'DM Sans', sans-serif;
+}
+
 .allRoomsContainer {
   max-width: 1100px;
-  margin: 40px auto 80px auto;
-  padding: 0 24px;
+  margin: 0 auto;
 }
 
-.allRoomsContainer h2 {
-  text-align: center;
-  margin-bottom: 32px;
-  color: #1e3a8a;
-  font-size: 2rem;
+/* ── HERO HEADER ── */
+.header {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
+  padding: 48px 40px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 280px;
+  height: 280px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: 25%;
+  width: 220px;
+  height: 220px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.headerLeft {
+  position: relative;
+  z-index: 1;
+}
+
+.headerLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 8px;
+}
+
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
   font-weight: 700;
+  color: #fff;
+  margin: 0;
   letter-spacing: -0.5px;
+  line-height: 1.1;
 }
 
+.roomCount {
+  position: relative;
+  z-index: 1;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+  align-self: flex-end;
+}
+
+.roomCount strong {
+  color: #fff;
+}
+
+/* ── FILTER BAR ── */
 .filterContainer {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.06);
+  padding: 16px 22px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-  padding: 16px 20px;
-  background-color: #f8faff;
-  border-radius: 10px;
-  border: 1px solid #e0e7ff;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .filterContainer label {
-  color: #1e3a8a;
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   white-space: nowrap;
 }
 
 .filterContainer select {
-  padding: 10px 14px;
-  border: 1px solid #c7d2fe;
+  padding: 9px 14px;
+  border: 1.5px solid #e0e7ff;
   border-radius: 8px;
-  font-size: 0.95rem;
-  background-color: #fff;
+  font-size: 0.88rem;
+  background-color: #f8faff;
   color: #1e293b;
+  font-family: 'DM Sans', sans-serif;
   cursor: pointer;
   transition: border-color 0.2s;
+  min-width: 180px;
 }
 
 .filterContainer select:focus {
@@ -47,10 +129,55 @@
   border-color: #2563eb;
 }
 
+/* ── SEARCH + RESULTS ── */
+.searchWrapper {
+  margin-bottom: 20px;
+}
+
+.resultsWrapper {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.06);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 64px 24px;
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  margin-bottom: 14px;
+}
+
+.emptyState p {
+  color: #94a3b8;
+  font-size: 0.92rem;
+}
+
+/* ── PAGINATION ── */
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+/* ── RESZPONZÍV ── */
 @media (max-width: 768px) {
-  .allRoomsContainer {
-    padding: 0 12px;
-    margin: 20px auto 60px auto;
+  .allRoomsPage {
+    padding: 24px 16px 60px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 32px 24px;
+  }
+
+  .title {
+    font-size: 1.8rem;
   }
 
   .filterContainer {

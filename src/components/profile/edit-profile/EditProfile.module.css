@@ -202,3 +202,120 @@
     text-align: center;
   }
 }
+
+/* ── MONOGRAM SZÍNVÁLASZTÓ ── */
+.colorCard {
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.colorCardHeader {}
+
+.colorCardTitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+
+.colorCardSubtitle {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.colorPreview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.monogramPreview {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  filter: saturate(0.85) brightness(0.95);
+}
+
+.colorPreviewLabel {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.colorSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.colorSectionLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.colorGrid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.colorSwatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.colorSwatch:hover {
+  transform: scale(1.12);
+}
+
+.colorSwatchActive {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  transform: scale(1.12);
+}
+
+.saveColorsBtn {
+  align-self: flex-start;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+}
+
+.saveColorsBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}

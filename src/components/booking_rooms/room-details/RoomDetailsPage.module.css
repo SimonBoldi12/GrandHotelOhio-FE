@@ -3,7 +3,8 @@
 .pageWrapper {
   min-height: 100vh;
   background: #f7f8fc;
-  padding: 40px 24px 80px;
+  padding: 48px 24px 80px;
+  font-family: 'DM Sans', sans-serif;
 }
 
 .roomDetailsContainer {
@@ -11,179 +12,243 @@
   margin: 0 auto;
 }
 
-/* ── HERO KÁRTYA ── */
-.heroCard {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  background: #fff;
+/* ── HERO HEADER (gradient) ── */
+.heroHeader {
+  position: relative;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 40px rgba(30, 58, 138, 0.1);
-  margin-bottom: 32px;
-}
-
-/* ── CAROUSEL WRAPPER ── */
-.carouselWrapper {
-  position: relative;
-  overflow: hidden;
-  min-height: 440px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
+  padding: 40px 40px 36px;
+  margin-bottom: 24px;
   display: flex;
-  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
 }
 
-.carouselWrapper :global(.Carousel_carousel__) ,
-.carouselWrapper > div {
-  flex: 1;
-  height: 100%;
-}
-
-.imageBadge {
+.heroHeader::before {
+  content: '';
   position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 3;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(8px);
-  color: #1e3a8a;
-  font-family: 'DM Sans', sans-serif;
+  top: -60px;
+  right: -60px;
+  width: 280px;
+  height: 280px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.heroHeader::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: 25%;
+  width: 220px;
+  height: 220px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.heroLeft {
+  position: relative;
+  z-index: 1;
+}
+
+.heroLabel {
   font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid #e0e7ff;
-}
-
-/* ── INFO PANEL ── */
-.infoPanel {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 40px 36px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 8px;
 }
 
 .roomTitle {
   font-family: 'Playfair Display', serif;
-  font-size: 2.2rem;
-  color: #0f172a;
-  margin: 0 0 8px;
-  line-height: 1.2;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 12px;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
 }
 
 .priceTag {
   display: inline-flex;
   align-items: baseline;
-  gap: 4px;
-  margin-bottom: 20px;
+  gap: 6px;
 }
 
 .priceAmount {
   font-family: 'Playfair Display', serif;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  color: #2563eb;
+  color: #fff;
 }
 
 .priceUnit {
-  font-family: 'DM Sans', sans-serif;
   font-size: 0.9rem;
-  color: #94a3b8;
+  color: rgba(255,255,255,0.6);
   font-weight: 400;
 }
 
-.divider {
-  height: 1px;
-  background: #e0e7ff;
-  margin: 20px 0;
-}
-
-.description {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
-  color: #64748b;
-  line-height: 1.7;
-  margin-bottom: 28px;
-  flex: 1;
-}
-
-.actionButtons {
+.heroActions {
   display: flex;
-  flex-direction: column;
   gap: 10px;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
 }
 
 .bookNowButton {
-  background: linear-gradient(135deg, #2563eb, #1e40af);
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
   color: #fff;
-  border: none;
-  padding: 14px 24px;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 12px 24px;
   border-radius: 10px;
   cursor: pointer;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  transition: opacity 0.2s, transform 0.15s;
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+  transition: background 0.2s;
 }
 
 .bookNowButton:hover {
-  opacity: 0.92;
-  transform: translateY(-1px);
+  background: rgba(255,255,255,0.25);
 }
 
 .goBackButton {
   background: transparent;
-  color: #64748b;
-  border: 1.5px solid #e2e8f0;
-  padding: 13px 24px;
+  color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 12px 20px;
   border-radius: 10px;
   cursor: pointer;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 500;
-  transition: border-color 0.2s, color 0.2s;
+  transition: color 0.2s, border-color 0.2s;
 }
 
 .goBackButton:hover {
-  border-color: #94a3b8;
-  color: #374151;
+  color: #fff;
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* ── CONTENT GRID ── */
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ── CAROUSEL KÁRTYA ── */
+.carouselCard {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.06);
+  overflow: hidden;
+}
+
+.carouselWrapper {
+  position: relative;
+}
+
+.imageBadge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 3;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  color: #1e3a8a;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid #e0e7ff;
+}
+
+.descriptionSection {
+  padding: 24px 28px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.descriptionLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.description {
+  font-size: 0.92rem;
+  color: #64748b;
+  line-height: 1.7;
+  margin: 0;
 }
 
 /* ── FOGLALÁS PANEL ── */
 .bookingCard {
   background: #fff;
-  border-radius: 20px;
-  padding: 36px;
-  box-shadow: 0 8px 40px rgba(30, 58, 138, 0.07);
+  border-radius: 16px;
   border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.06);
+  padding: 28px;
+  position: sticky;
+  top: 90px;
 }
 
 .bookingCardTitle {
   font-family: 'Playfair Display', serif;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   color: #0f172a;
-  margin: 0 0 24px;
+  margin: 0 0 20px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.sectionIcon {
+  font-size: 0.9rem;
+}
+
+.sectionLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .datePickerContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .dateField {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .dateField label {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 600;
   color: #94a3b8;
   text-transform: uppercase;
@@ -192,12 +257,12 @@
 
 .detailSearchField {
   width: 100%;
-  padding: 12px 14px;
+  padding: 11px 14px;
   border: 1.5px solid #e0e7ff;
   border-radius: 10px;
   background-color: #f8faff;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #1e293b;
   box-sizing: border-box;
   transition: border-color 0.2s;
@@ -210,22 +275,27 @@
   background-color: #fff;
 }
 
+.divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 18px 0;
+}
+
 .guestContainer {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .guestDiv {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .guestDiv label {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 600;
   color: #94a3b8;
   text-transform: uppercase;
@@ -233,12 +303,12 @@
 }
 
 .guestDiv input[type="number"] {
-  padding: 12px 14px;
+  padding: 11px 14px;
   border: 1.5px solid #e0e7ff;
   border-radius: 10px;
   background: #f8faff;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #1e293b;
   width: 100%;
   box-sizing: border-box;
@@ -256,11 +326,11 @@
   background: linear-gradient(135deg, #2563eb, #1e40af);
   color: #fff;
   border: none;
-  padding: 14px 24px;
+  padding: 13px 24px;
   border-radius: 10px;
   cursor: pointer;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 600;
   transition: opacity 0.2s, transform 0.15s;
   box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
@@ -273,44 +343,39 @@
 
 /* ── ÖSSZESÍTŐ ── */
 .totalPriceContainer {
-  margin-top: 20px;
-  padding: 24px;
+  margin-top: 16px;
+  padding: 18px;
   background: linear-gradient(135deg, #eff6ff, #dbeafe);
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid #bfdbfe;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
 }
 
 .totalPriceInfo p {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   color: #1e3a8a;
   margin: 4px 0;
   font-weight: 500;
 }
 
 .totalPriceInfo p strong {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-family: 'Playfair Display', serif;
 }
 
 .acceptBookingButton {
+  width: 100%;
+  margin-top: 14px;
   background: linear-gradient(135deg, #16a34a, #15803d);
   color: #fff;
   border: none;
-  padding: 13px 28px;
+  padding: 13px 24px;
   border-radius: 10px;
   cursor: pointer;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 600;
   transition: opacity 0.2s, transform 0.15s;
   box-shadow: 0 4px 16px rgba(22, 163, 74, 0.3);
-  white-space: nowrap;
 }
 
 .acceptBookingButton:hover {
@@ -318,33 +383,7 @@
   transform: translateY(-1px);
 }
 
-/* ── ÜZENETEK ── */
-.bookingSuccessMessage {
-  text-align: center;
-  color: #16a34a;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 14px 20px;
-  background-color: #f0fdf4;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #bbf7d0;
-}
-
-.errorMessage {
-  text-align: center;
-  color: #dc2626;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: 12px 20px;
-  background-color: #fef2f2;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #fecaca;
-}
-
+/* ── LOADING / ERROR ── */
 .loading {
   text-align: center;
   font-family: 'DM Sans', sans-serif;
@@ -362,31 +401,43 @@
 }
 
 /* ── RESZPONZÍV ── */
-@media (max-width: 768px) {
-  .heroCard {
+@media (max-width: 900px) {
+  .contentGrid {
     grid-template-columns: 1fr;
   }
 
-  .carouselWrapper {
-    min-height: 260px;
-    border-radius: 20px 20px 0 0;
+  .bookingCard {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .pageWrapper {
+    padding: 24px 16px 60px;
   }
 
-  .infoPanel {
+  .heroHeader {
+    flex-direction: column;
+    align-items: flex-start;
     padding: 28px 24px;
   }
 
-  .datePickerContainer,
-  .guestContainer {
-    grid-template-columns: 1fr;
+  .heroActions {
+    width: 100%;
+    flex-direction: column;
   }
 
-  .totalPriceContainer {
-    flex-direction: column;
+  .bookNowButton,
+  .goBackButton {
+    width: 100%;
     text-align: center;
   }
 
-  .acceptBookingButton {
-    width: 100%;
+  .roomTitle {
+    font-size: 1.8rem;
+  }
+
+  .guestContainer {
+    grid-template-columns: 1fr;
   }
 }
