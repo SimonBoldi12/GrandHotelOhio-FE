@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router";
 import style from "./EditRoomPage.module.css";
 import { useEffect, useState } from "react";
-import { deleteRoom, getRoomById, updateRoom } from "../../../service/ApiService";
+import { deleteRoom, getRoomById, updateRoom, addImageToRoom } from "../../../service/ApiService";
 import Toast from "../../common/toast/Toast";
 
 function EditRoomPage() {
@@ -12,6 +12,10 @@ function EditRoomPage() {
     });
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
+    const [existingImages, setExistingImages] = useState([]);
+    const [newFiles, setNewFiles] = useState([]);
+    const [newPreviews, setNewPreviews] = useState([]);
+    const [isUploading, setIsUploading] = useState(false);
     const [toast, setToast] = useState({ message: "", type: "success" });
 
     useEffect(() => {
@@ -25,6 +29,7 @@ function EditRoomPage() {
                     roomDescription: response.room.roomDescription,
                 });
                 setPreview(response.room.roomPhotoUrl);
+                setExistingImages(response.room.imageUrls || []);
             } catch (error) {
                 setToast({ message: "Szoba adatok lekérése sikertelen: " + (error.response?.data?.message || error.message), type: "error" });
             }
@@ -37,31 +42,51 @@ function EditRoomPage() {
         setRoomDetails((prevState) => ({ ...prevState, [name]: value }));
     }
 
-    function handleFileChange(event) {
+    function handleMainPhotoChange(event) {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
             setFile(selectedFile);
             setPreview(URL.createObjectURL(selectedFile));
-        } else {
-            setFile(null);
-            setPreview(null);
         }
     }
 
+    function handleNewImagesChange(event) {
+        const selected = Array.from(event.target.files);
+        if (selected.length === 0) return;
+        setNewFiles(prev => [...prev, ...selected]);
+        setNewPreviews(prev => [...prev, ...selected.map(f => URL.createObjectURL(f))]);
+    }
+
+    function removeNewImage(index) {
+        setNewFiles(prev => prev.filter((_, i) => i !== index));
+        setNewPreviews(prev => prev.filter((_, i) => i !== index));
+    }
+
     async function handleUpdate() {
+        setIsUploading(true);
         try {
+            // 1. Alap adatok + fő kép frissítése
             const formData = new FormData();
             formData.append("roomType", roomDetails.roomType);
             formData.append("roomPrice", roomDetails.roomPrice);
             formData.append("roomDescription", roomDetails.roomDescription);
             if (file) formData.append("photo", file);
             const result = await updateRoom(roomId, formData);
-            if (result.status === 200) {
-                setToast({ message: "Szoba sikeresen frissítve!", type: "success" });
-                setTimeout(() => navigate("/admin/manage-rooms"), 2000);
+            if (result.status !== 200) throw new Error("Frissítés sikertelen.");
+
+            // 2. Új extra képek feltöltése
+            if (newFiles.length > 0) {
+                for (const newFile of newFiles) {
+                    await addImageToRoom(roomId, newFile);
+                }
             }
+
+            setToast({ message: "Szoba sikeresen frissítve!", type: "success" });
+            setTimeout(() => navigate("/admin/manage-rooms"), 2000);
         } catch (error) {
             setToast({ message: "Szoba frissítése sikertelen: " + (error.response?.data?.message || error.message), type: "error" });
+        } finally {
+            setIsUploading(false);
         }
     }
 
@@ -91,7 +116,8 @@ function EditRoomPage() {
 
                 <div className={style.formCard}>
 
-                    {/* KÉP */}
+                    {/* FŐ KÉP */}
+                    <div className={style.sectionLabel}>Fő kép</div>
                     <div className={style.uploadArea}>
                         {preview ? (
                             <>
@@ -107,7 +133,48 @@ function EditRoomPage() {
                                 <p>JPG, PNG – max. 10MB</p>
                             </div>
                         )}
-                        <input type="file" name="roomPhoto" className={style.uploadInput} onChange={handleFileChange} />
+                        <input type="file" name="roomPhoto" className={style.uploadInput} onChange={handleMainPhotoChange} accept="image/*" />
+                    </div>
+
+                    {/* MEGLÉVŐ EXTRA KÉPEK */}
+                    {existingImages.length > 0 && (
+                        <>
+                            <div className={style.sectionLabel}>Meglévő képek</div>
+                            <div className={style.previewGrid}>
+                                {existingImages.map((url, index) => (
+                                    <div key={index} className={style.previewItem}>
+                                        <img src={url} alt={`Kép ${index + 1}`} className={style.previewImg} />
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    {/* ÚJ EXTRA KÉPEK */}
+                    <div className={style.sectionLabel}>
+                        Új képek hozzáadása
+                        {newFiles.length > 0 && <span className={style.imageCount}>{newFiles.length} kép kiválasztva</span>}
+                    </div>
+                    <div className={style.previewGrid}>
+                        {newPreviews.map((src, index) => (
+                            <div key={index} className={style.previewItem}>
+                                <img src={src} alt={`Új kép ${index + 1}`} className={style.previewImg} />
+                                <button className={style.removeBtn} onClick={() => removeNewImage(index)}>✕</button>
+                            </div>
+                        ))}
+                        <div className={style.addMoreArea}>
+                            <div className={style.uploadPlaceholder}>
+                                <div className={style.uploadIcon}>➕</div>
+                                <p>Képek hozzáadása</p>
+                            </div>
+                            <input
+                                type="file"
+                                className={style.uploadInput}
+                                onChange={handleNewImagesChange}
+                                multiple
+                                accept="image/*"
+                            />
+                        </div>
                     </div>
 
                     {/* MEZŐK */}
@@ -131,7 +198,9 @@ function EditRoomPage() {
                     {/* GOMBOK */}
                     <div className={style.actions}>
                         <button className={style.backButton} onClick={() => navigate("/admin/manage-rooms")}>← Vissza</button>
-                        <button className={style.submitButton} onClick={handleUpdate}>Változtatások mentése →</button>
+                        <button className={style.submitButton} onClick={handleUpdate} disabled={isUploading}>
+                            {isUploading ? "Mentés..." : "Változtatások mentése →"}
+                        </button>
                     </div>
 
                     <div className={style.divider} />

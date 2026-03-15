@@ -23,28 +23,26 @@
   margin-bottom: 32px;
 }
 
-.imageWrapper {
+/* ── CAROUSEL WRAPPER ── */
+.carouselWrapper {
   position: relative;
   overflow: hidden;
   min-height: 440px;
+  display: flex;
+  flex-direction: column;
 }
 
-.roomDetailsImage {
-  width: 100%;
+.carouselWrapper :global(.Carousel_carousel__) ,
+.carouselWrapper > div {
+  flex: 1;
   height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s ease;
-}
-
-.imageWrapper:hover .roomDetailsImage {
-  transform: scale(1.03);
 }
 
 .imageBadge {
   position: absolute;
   top: 20px;
   left: 20px;
+  z-index: 3;
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(8px);
   color: #1e3a8a;
@@ -58,7 +56,7 @@
   border: 1px solid #e0e7ff;
 }
 
-/* ── JOB PANEL ── */
+/* ── INFO PANEL ── */
 .infoPanel {
   display: flex;
   flex-direction: column;
@@ -369,8 +367,9 @@
     grid-template-columns: 1fr;
   }
 
-  .imageWrapper {
+  .carouselWrapper {
     min-height: 260px;
+    border-radius: 20px 20px 0 0;
   }
 
   .infoPanel {

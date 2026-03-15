@@ -115,6 +115,15 @@ export const updateRoom = async (roomId, roomData) => {
     return data;
 };
 
+export const addImageToRoom = async (roomId, photo) => {
+    const formData = new FormData();
+    formData.append("photo", photo);
+    const { data } = await api.post(`/rooms/${roomId}/add-image`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+    });
+    return data;
+};
+
 // Bookings
 export const bookRoom = async (roomId, userId, booking) => {
     const { data } = await api.post(`/bookings/book-room/${roomId}/${userId}`, booking);

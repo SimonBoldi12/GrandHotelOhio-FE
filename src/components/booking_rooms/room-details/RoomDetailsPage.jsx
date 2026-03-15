@@ -5,6 +5,7 @@ import { bookRoom, getRoomById, getUserProfile } from "../../../service/ApiServi
 import DatePicker from "react-datepicker";
 import { hu } from "date-fns/locale";
 import Toast from "../../common/toast/Toast";
+import Carousel from "../../common/carousel/Carousel";
 
 function RoomDetailsPage() {
   const navigate = useNavigate();
@@ -82,7 +83,8 @@ function RoomDetailsPage() {
   if (isLoading) return <div className={style.loading}>Szoba adatok betöltése...</div>;
   if (error) return <div className={style.error}>Hiba történt: {error}</div>;
 
-  const { roomType, roomPrice, roomPhotoUrl, description } = roomDetails;
+  const { roomType, roomPrice, roomPhotoUrl, description, imageUrls } = roomDetails;
+  const allImages = [roomPhotoUrl, ...(imageUrls || [])].filter(Boolean);
 
   return (
     <div className={style.pageWrapper}>
@@ -94,9 +96,11 @@ function RoomDetailsPage() {
 
       <div className={style.roomDetailsContainer}>
         <div className={style.heroCard}>
-          <div className={style.imageWrapper}>
+
+          {/* CAROUSEL */}
+          <div className={style.carouselWrapper}>
             <span className={style.imageBadge}>{roomType}</span>
-            <img src={roomPhotoUrl} alt={roomType} className={style.roomDetailsImage} />
+            <Carousel images={allImages} />
           </div>
 
           <div className={style.infoPanel}>
