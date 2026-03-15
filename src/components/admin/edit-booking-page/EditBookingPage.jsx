@@ -118,7 +118,7 @@ function EditBookingPage() {
             />
           </div>
           <button onClick={() => achieveBooking(bookingDetails.id)}>
-            Foglalás teljesítése
+            Foglalás törlése
           </button>
         </div>
       )}

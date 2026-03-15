@@ -1,11 +1,7 @@
 import style from "./RoomDetailsPage.module.css";
-import React, { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  bookRoom,
-  getRoomById,
-  getUserProfile,
-} from "../../../service/ApiService";
+import { bookRoom, getRoomById, getUserProfile } from "../../../service/ApiService";
 import DatePicker from "react-datepicker";
 import { hu } from "date-fns/locale";
 
@@ -50,66 +46,36 @@ function RoomDetailsPage() {
       setTimeout(() => setErrorMessage(""), 5000);
       return;
     }
-
     if (isNaN(numOfAdults) || numOfAdults < 1 || isNaN(numOfChildren) || numOfChildren < 0) {
       setErrorMessage("Kérem válassza ki a felnőttek és gyermekek számát.");
       setTimeout(() => setErrorMessage(""), 5000);
       return;
     }
-
-    if (checkInDate && checkOutDate && checkInDate > checkOutDate) {
-      setErrorMessage(
-        "A kijelentkezési dátum nem lehet korábbi, mint a bejelentkezési dátum.",
-      );
+    if (checkInDate > checkOutDate) {
+      setErrorMessage("A kijelentkezési dátum nem lehet korábbi, mint a bejelentkezési dátum.");
       setTimeout(() => setErrorMessage(""), 5000);
       return;
     }
-
     const oneDay = 24 * 60 * 60 * 1000;
-    const startDate = new Date(checkInDate);
-    const endDate = new Date(checkOutDate);
-    const totalDays = Math.round(Math.abs((endDate - startDate) / oneDay)) + 1;
-
-    const totalGuests = numOfAdults + numOfChildren;
-
-    const roomPricePerNight = roomDetails.roomPrice;
-    const totalPrice = totalDays * roomPricePerNight;
-
-    setTotalPrice(totalPrice);
-    setTotalGuests(totalGuests);
+    const totalDays = Math.round(Math.abs((new Date(checkOutDate) - new Date(checkInDate)) / oneDay)) + 1;
+    setTotalPrice(totalDays * roomDetails.roomPrice);
+    setTotalGuests(numOfAdults + numOfChildren);
   }
 
   async function acceptBooking() {
     try {
-      const startDate = new Date(checkInDate);
-      const endDate = new Date(checkOutDate);
-
-      const formattedCheckInDate = new Date(
-        startDate.getTime() - startDate.getTimezoneOffset() * 60000,
-      )
-        .toISOString()
-        .split("T")[0];
-      const formattedCheckOutDate = new Date(
-        endDate.getTime() - endDate.getTimezoneOffset() * 60000,
-      )
-        .toISOString()
-        .split("T")[0];
-
+      const fmt = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split("T")[0];
       const booking = {
-        checkInDate: formattedCheckInDate,
-        checkOutDate: formattedCheckOutDate,
-        numOfAdults: numOfAdults,
-        numOfChildren: numOfChildren,
+        checkInDate: fmt(new Date(checkInDate)),
+        checkOutDate: fmt(new Date(checkOutDate)),
+        numOfAdults,
+        numOfChildren,
       };
-
       const response = await bookRoom(roomId, userId, booking);
       if (response.status === 200) {
         setConfirmationCode(response.bookingConfirmationCode);
         setShowMessage(true);
-        setTimeout(() => {
-          setShowMessage(false);
-          navigate("/rooms");
-        }, 5000);
+        setTimeout(() => { setShowMessage(false); navigate("/rooms"); }, 5000);
       }
     } catch (err) {
       setErrorMessage(err.response?.data?.message || err.message);
@@ -117,106 +83,108 @@ function RoomDetailsPage() {
     }
   }
 
-  if (isLoading) {
-    return <div className={style.loading}>Szoba adatok betöltése...</div>;
-  }
+  if (isLoading) return <div className={style.loading}>Szoba adatok betöltése...</div>;
+  if (error) return <div className={style.error}>Hiba történt: {error}</div>;
 
-  if (error) {
-    return <div className={style.error}>Hiba történt: {error}</div>;
-  }
-
-  const { roomType, roomPrice, roomPhotoUrl, description, bookings } = roomDetails;
+  const { roomType, roomPrice, roomPhotoUrl, description } = roomDetails;
 
   return (
-    <div className={style.roomDetailsContainer}>
-      {showMessage && (
-        <p className={style.bookingSuccessMessage}>
-          Sikeres foglalás! Foglalási kód: {confirmationCode}.
-        </p>
-      )}
-      {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
-      <h2>Szoba adatai</h2>
-      <br />
-      <img src={roomPhotoUrl} alt={roomType} className={style.roomDetailsImage} />
-      <div className={style.roomDetailsInfo}>
-        <h3>{roomType}</h3>
-        <p>Ár: ${roomPrice} / éjszaka</p>
-        <p>{description}</p>
-      </div>
-      <div className={style.bookingInfo}>
-        <button
-          className={style.bookNowButton} 
-          onClick={() => setShowDatePicker(true)}
-        >
-          Foglalj most
-        </button>
-        <button
-          className={style.goBackButton}
-          onClick={() => setShowDatePicker(false)}
-        >
-          Vissza
-        </button>
-        {showDatePicker && (
-          <div className={style.datePickerContainer}>
-            <DatePicker
-              className={style.detailSearchField}
-              selected={checkInDate}
-              onChange={(date) => setCheckInDate(date)}
-              selectsStart
-              startDate={checkInDate}
-              endDate={checkOutDate}
-              placeholderText="Érkezés dátuma"
-              dateFormat="dd/MM/yyyy"
-              locale={hu}
-            />
-            <DatePicker
-              className={style.detailSearchField}
-              selected={checkOutDate}
-              onChange={(date) => setCheckOutDate(date)}
-              selectsEnd
-              startDate={checkInDate}
-              endDate={checkOutDate}
-              minDate={checkInDate}
-              placeholderText="Távozás dátuma"
-              dateFormat="dd/MM/yyyy"
-              locale={hu}
-            />
+    <div className={style.pageWrapper}>
+      <div className={style.roomDetailsContainer}>
+        {showMessage && <p className={style.bookingSuccessMessage}>Sikeres foglalás! Foglalási kód: {confirmationCode}.</p>}
+        {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
 
-            <div className={style.guestContainer}>
-              <div className={style.guestDiv}>
-                <label>Felnőttek:</label>
-                <input
-                  type="number"
-                  min="1"
-                  value={numOfAdults}
-                  onChange={(e) => setNumOfAdults(parseInt(e.target.value))}
-                />
+        {/* HERO KÁRTYA */}
+        <div className={style.heroCard}>
+          <div className={style.imageWrapper}>
+            <span className={style.imageBadge}>{roomType}</span>
+            <img src={roomPhotoUrl} alt={roomType} className={style.roomDetailsImage} />
+          </div>
+
+          <div className={style.infoPanel}>
+            <div>
+              <h2 className={style.roomTitle}>{roomType}</h2>
+              <div className={style.priceTag}>
+                <span className={style.priceAmount}>${roomPrice}</span>
+                <span className={style.priceUnit}>/ éjszaka</span>
               </div>
-              <div className={style.guestDiv}>
-                <label>Gyerekek:</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={numOfChildren}
-                  onChange={(e) => setNumOfChildren(parseInt(e.target.value))}
-                />
-              </div>
-              <button
-                className={style.confirmBookingButton}
-                onClick={handleConfirmBooking}
-              >
-                Foglalás megerősítése
+              <div className={style.divider} />
+              <p className={style.description}>{description || "Luxus szoba minden kényelemmel felszerelve."}</p>
+            </div>
+            <div className={style.actionButtons}>
+              <button className={style.bookNowButton} onClick={() => setShowDatePicker(true)}>
+                Foglalj most
+              </button>
+              <button className={style.goBackButton} onClick={() => navigate(-1)}>
+                ← Vissza
               </button>
             </div>
           </div>
-        )}
-        {totalPrice > 0 && (
-          <div className={style.totalPriceContainer}>
-            <p>Összes ár: ${totalPrice}</p>
-            <p>Összes vendég: {totalGuests}</p>
-            <button onClick={acceptBooking} className={style.acceptBookingButton}>
-              Foglalás elfogadása
+        </div>
+
+        {/* FOGLALÁS PANEL */}
+        {showDatePicker && (
+          <div className={style.bookingCard}>
+            <h3 className={style.bookingCardTitle}>Foglalás részletei</h3>
+
+            <div className={style.datePickerContainer}>
+              <div className={style.dateField}>
+                <label>Érkezés dátuma</label>
+                <DatePicker
+                  className={style.detailSearchField}
+                  selected={checkInDate}
+                  onChange={(date) => setCheckInDate(date)}
+                  selectsStart
+                  startDate={checkInDate}
+                  endDate={checkOutDate}
+                  placeholderText="Válasszon dátumot"
+                  dateFormat="dd/MM/yyyy"
+                  locale={hu}
+                />
+              </div>
+              <div className={style.dateField}>
+                <label>Távozás dátuma</label>
+                <DatePicker
+                  className={style.detailSearchField}
+                  selected={checkOutDate}
+                  onChange={(date) => setCheckOutDate(date)}
+                  selectsEnd
+                  startDate={checkInDate}
+                  endDate={checkOutDate}
+                  minDate={checkInDate}
+                  placeholderText="Válasszon dátumot"
+                  dateFormat="dd/MM/yyyy"
+                  locale={hu}
+                />
+              </div>
+            </div>
+
+            <div className={style.guestContainer}>
+              <div className={style.guestDiv}>
+                <label>Felnőttek</label>
+                <input type="number" min="1" value={numOfAdults} onChange={(e) => setNumOfAdults(parseInt(e.target.value))} />
+              </div>
+              <div className={style.guestDiv}>
+                <label>Gyerekek</label>
+                <input type="number" min="0" value={numOfChildren} onChange={(e) => setNumOfChildren(parseInt(e.target.value))} />
+              </div>
+            </div>
+
+            <button className={style.confirmBookingButton} onClick={handleConfirmBooking}>
+              Foglalás megerősítése
             </button>
+
+            {totalPrice > 0 && (
+              <div className={style.totalPriceContainer}>
+                <div className={style.totalPriceInfo}>
+                  <p>Összes vendég: <strong>{totalGuests} fő</strong></p>
+                  <p>Végösszeg: <strong>${totalPrice}</strong></p>
+                </div>
+                <button onClick={acceptBooking} className={style.acceptBookingButton}>
+                  Foglalás elfogadása ✓
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
