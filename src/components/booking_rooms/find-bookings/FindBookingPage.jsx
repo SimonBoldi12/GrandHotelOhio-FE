@@ -1,42 +1,34 @@
 import style from "./FindBookingPage.module.css";
 import { getBookingByConfirmationCode } from "../../../service/ApiService";
 import { useState } from "react";
+import Toast from "../../common/toast/Toast";
 
 function FindBookingPage() {
     const [confirmationCode, setConfirmationCode] = useState("");
     const [bookingDetails, setBookingDetails] = useState(null);
-    const [error, setError] = useState("");
+    const [toast, setToast] = useState({ message: "", type: "error" });
 
     async function handleSearch() {
         if (!confirmationCode) {
-            setError("Kérem adja meg a foglalási kódot!");
-            setTimeout(() => setError(""), 5000);
+            setToast({ message: "Kérem adja meg a foglalási kódot!", type: "warning" });
             return;
         }
         try {
             const response = await getBookingByConfirmationCode(confirmationCode);
             setBookingDetails(response.booking);
-            setError(null);
         } catch (error) {
-            setError(error.response?.data?.message || error.message);
-            setTimeout(() => setError(""), 5000);
+            setToast({ message: error.response?.data?.message || error.message, type: "error" });
         }
     }
 
-    return ( 
+    return (
         <div className={style.findBookingContainer}>
+            <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "error" })} />
             <h2>Keresés foglalás alapján</h2>
             <div className={style.searchContainer}>
-                <input 
-                required
-                type="text" 
-                placeholder="Foglalási kód" 
-                value={confirmationCode} 
-                onChange={(e) => setConfirmationCode(e.target.value)} />
+                <input required type="text" placeholder="Foglalási kód" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
                 <button onClick={handleSearch}>Keresés</button>
             </div>
-
-            {error && <p className={style.error}>{error}</p>}
             {bookingDetails && (
                 <div className={style.bookingDetailsContainer}>
                     <h3>Foglalás részletei</h3>
@@ -45,33 +37,19 @@ function FindBookingPage() {
                     <p>Távozás: {bookingDetails.checkOutDate}</p>
                     <p>Felnőttek száma: {bookingDetails.numOfAdults}</p>
                     <p>Gyerekek száma: {bookingDetails.numOfChildren}</p>
-
-                    <br /> 
-                    <hr />
-                    <br />
-
+                    <br /><hr /><br />
                     <h3>Foglaló adatai</h3>
-                    <div>
-                        <p>Név: {bookingDetails.users.name}</p>
-                        <p>Email: {bookingDetails.users.email}</p>
-                        <p>Telefon: {bookingDetails.users.phoneNumber}</p>
-                    </div>
-
-                    <br /> 
-                    <hr />
-                    <br />
-
+                    <p>Név: {bookingDetails.users.name}</p>
+                    <p>Email: {bookingDetails.users.email}</p>
+                    <p>Telefon: {bookingDetails.users.phoneNumber}</p>
+                    <br /><hr /><br />
                     <h3>Szoba adatai</h3>
-                    <div>
-                        <p>Szoba típus: {bookingDetails.room.roomType}</p>
-                        <img src={bookingDetails.room.roomPhotoUrl} alt="Szoba kép" />
-                    </div>
-
+                    <p>Szoba típus: {bookingDetails.room.roomType}</p>
+                    <img src={bookingDetails.room.roomPhotoUrl} alt="Szoba kép" />
                 </div>
             )}
         </div>
-        
-     );
+    );
 }
 
 export default FindBookingPage;

@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { bookRoom, getRoomById, getUserProfile } from "../../../service/ApiService";
 import DatePicker from "react-datepicker";
 import { hu } from "date-fns/locale";
+import Toast from "../../common/toast/Toast";
 
 function RoomDetailsPage() {
   const navigate = useNavigate();
@@ -19,9 +20,8 @@ function RoomDetailsPage() {
   const [totalGuests, setTotalGuests] = useState(1);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [userId, setUserId] = useState("");
-  const [showMessage, setShowMessage] = useState(false);
   const [confirmationCode, setConfirmationCode] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [toast, setToast] = useState({ message: "", type: "success" });
 
   useEffect(() => {
     async function fetchData() {
@@ -42,18 +42,15 @@ function RoomDetailsPage() {
 
   async function handleConfirmBooking() {
     if (!checkInDate || !checkOutDate) {
-      setErrorMessage("Kérem válassza ki a be- és kijelentkezési dátumot.");
-      setTimeout(() => setErrorMessage(""), 5000);
+      setToast({ message: "Kérem válassza ki a be- és kijelentkezési dátumot.", type: "warning" });
       return;
     }
     if (isNaN(numOfAdults) || numOfAdults < 1 || isNaN(numOfChildren) || numOfChildren < 0) {
-      setErrorMessage("Kérem válassza ki a felnőttek és gyermekek számát.");
-      setTimeout(() => setErrorMessage(""), 5000);
+      setToast({ message: "Kérem válassza ki a felnőttek és gyermekek számát.", type: "warning" });
       return;
     }
     if (checkInDate > checkOutDate) {
-      setErrorMessage("A kijelentkezési dátum nem lehet korábbi, mint a bejelentkezési dátum.");
-      setTimeout(() => setErrorMessage(""), 5000);
+      setToast({ message: "A kijelentkezési dátum nem lehet korábbi, mint a bejelentkezési dátum.", type: "error" });
       return;
     }
     const oneDay = 24 * 60 * 60 * 1000;
@@ -74,12 +71,11 @@ function RoomDetailsPage() {
       const response = await bookRoom(roomId, userId, booking);
       if (response.status === 200) {
         setConfirmationCode(response.bookingConfirmationCode);
-        setShowMessage(true);
-        setTimeout(() => { setShowMessage(false); navigate("/rooms"); }, 5000);
+        setToast({ message: `Sikeres foglalás! Foglalási kód: ${response.bookingConfirmationCode}`, type: "success" });
+        setTimeout(() => navigate("/rooms"), 5000);
       }
     } catch (err) {
-      setErrorMessage(err.response?.data?.message || err.message);
-      setTimeout(() => setErrorMessage(""), 5000);
+      setToast({ message: err.response?.data?.message || err.message, type: "error" });
     }
   }
 
@@ -90,11 +86,13 @@ function RoomDetailsPage() {
 
   return (
     <div className={style.pageWrapper}>
-      <div className={style.roomDetailsContainer}>
-        {showMessage && <p className={style.bookingSuccessMessage}>Sikeres foglalás! Foglalási kód: {confirmationCode}.</p>}
-        {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast({ message: "", type: "success" })}
+      />
 
-        {/* HERO KÁRTYA */}
+      <div className={style.roomDetailsContainer}>
         <div className={style.heroCard}>
           <div className={style.imageWrapper}>
             <span className={style.imageBadge}>{roomType}</span>
@@ -122,7 +120,6 @@ function RoomDetailsPage() {
           </div>
         </div>
 
-        {/* FOGLALÁS PANEL */}
         {showDatePicker && (
           <div className={style.bookingCard}>
             <h3 className={style.bookingCardTitle}>Foglalás részletei</h3>
