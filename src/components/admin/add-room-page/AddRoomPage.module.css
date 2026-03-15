@@ -1,100 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+.addRoomWrapper {
+  min-height: 100vh;
+  background: #0a0f1e;
+  padding: 48px 24px 80px;
+  font-family: 'Inter', sans-serif;
+}
+
 .addRoomPage {
-  max-width: 600px;
-  margin: 30px auto 60px auto;
-  padding: 24px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ── HEADER ── */
+.header {
+  margin-bottom: 40px;
+}
+
+.badge {
+  display: inline-block;
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  color: #60a5fa;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
 }
 
 .title {
-  text-align: center;
-  margin-bottom: 24px;
-  color: #1e3a8a;
-  font-size: 1.6rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.4rem;
   font-weight: 700;
+  color: #fff;
+  margin: 0 0 10px;
+  letter-spacing: -1px;
+  line-height: 1.1;
 }
 
-.form {
+.title span {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  color: #475569;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ── FORM KÁRTYA ── */
+.formCard {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 20px;
+  padding: 36px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
+}
+
+/* ── KÉP FELTÖLTÉS ── */
+.uploadArea {
+  border: 2px dashed #1e293b;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.uploadArea:hover {
+  border-color: #3b82f6;
+}
+
+.uploadPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 10px;
+}
+
+.uploadIcon {
+  font-size: 2.5rem;
+  margin-bottom: 4px;
+}
+
+.uploadPlaceholder p {
+  color: #475569;
+  font-size: 0.9rem;
+  margin: 0;
+  text-align: center;
+}
+
+.uploadPlaceholder strong {
+  color: #60a5fa;
+}
+
+.uploadInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.preview {
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.previewOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadArea:hover .previewOverlay {
+  background: rgba(0,0,0,0.4);
+}
+
+.changePhoto {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.uploadArea:hover .changePhoto {
+  opacity: 1;
+}
+
+/* ── FORM GRID ── */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+}
+
+.formGroup.fullWidth {
+  grid-column: 1 / -1;
 }
 
 .formGroup label {
+  font-size: 0.75rem;
   font-weight: 600;
-  color: #374151;
-  font-size: 0.95rem;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .formGroup input,
 .formGroup select,
 .formGroup textarea {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 1rem;
+  background: #0a0f1e;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.92rem;
+  color: #f1f5f9;
+  font-family: 'Inter', sans-serif;
   box-sizing: border-box;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
 }
 
 .formGroup input:focus,
 .formGroup select:focus,
 .formGroup textarea:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: #334155;
+}
+
+.formGroup select option {
+  background: #111827;
+  color: #f1f5f9;
 }
 
 .formGroup textarea {
-  min-height: 100px;
+  min-height: 110px;
   resize: vertical;
 }
 
-.preview {
-  width: 100%;
-  max-height: 250px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 8px;
+/* ── GOMBOK ── */
+.actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 8px;
 }
 
 .submitButton {
-  padding: 12px;
-  background-color: #2563eb;
+  flex: 1;
+  padding: 14px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
   color: #fff;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: 10px;
+  font-size: 0.92rem;
   font-weight: 600;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
-  transition: background-color 0.2s;
-  margin-top: 8px;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
 }
 
 .submitButton:hover {
-  background-color: #1e40af;
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
-.error {
-  color: #dc2626;
-  background-color: #fef2f2;
-  border-radius: 6px;
-  padding: 10px;
-  text-align: center;
-  font-size: 0.9rem;
+.backButton {
+  padding: 14px 24px;
+  background: transparent;
+  color: #475569;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
 }
 
-.success {
-  color: #16a34a;
-  background-color: #f0fdf4;
-  border-radius: 6px;
-  padding: 10px;
-  text-align: center;
-  font-size: 0.9rem;
+.backButton:hover {
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+/* ── RESZPONZÍV ── */
+@media (max-width: 640px) {
+  .addRoomWrapper {
+    padding: 24px 16px 60px;
+  }
+
+  .formCard {
+    padding: 24px 20px;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
 }

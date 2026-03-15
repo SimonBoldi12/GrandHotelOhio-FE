@@ -110,6 +110,20 @@
   transform: scale(0.97);
 }
 
+.roomListItemAdmin {
+  background: #111827;
+  border: 1px solid #1e293b;
+  color: #f1f5f9;
+}
+
+.roomListItemAdmin h3 {
+  color: #60a5fa;
+}
+
+.roomListItemAdmin p {
+  color: #94a3b8;
+}
+
 @media (max-width: 640px) {
   .roomListItem {
     flex-direction: column;

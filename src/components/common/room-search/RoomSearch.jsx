@@ -4,7 +4,7 @@ import { getRoomTypes, getAvailableRoomsByDateAndType } from "../../../service/A
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { hu } from "date-fns/locale";
-import Toast from "../../common/toast/Toast";
+import Toast from "../toast/Toast";
 
 function RoomSearch({ handleSearchResult }) {
     const [startDate, setStartDate] = useState(null);

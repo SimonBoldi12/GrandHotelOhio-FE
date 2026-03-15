@@ -1,21 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+.manageRoomWrapper {
+  min-height: 100vh;
+  background: #0a0f1e;
+  padding: 48px 24px 80px;
+  font-family: 'Inter', sans-serif;
+}
+
 .manageRoomPage {
-  max-width: 1000px;
-  margin: 30px auto 60px auto;
-  padding: 24px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.headerLeft {}
+
+.badge {
+  display: inline-block;
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  color: #60a5fa;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
 }
 
 .title {
-  text-align: center;
-  margin-bottom: 24px;
-  color: #1e3a8a;
-  font-size: 1.6rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.4rem;
   font-weight: 700;
+  color: #fff;
+  margin: 0 0 8px;
+  letter-spacing: -1px;
+  line-height: 1.1;
 }
 
+.title span {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  color: #475569;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.addRoomButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+.addRoomButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ── CONTROLS ── */
 .controls {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -24,51 +99,108 @@
 }
 
 .controls label {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #374151;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
 }
 
 .controls select {
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 1rem;
-  background-color: #f9fafb;
-  color: #111827;
+  background: #0a0f1e;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 0.88rem;
+  color: #f1f5f9;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
+  transition: border-color 0.2s;
+  min-width: 180px;
 }
 
 .controls select:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #3b82f6;
 }
 
-.addRoomButton {
+.controls select option {
+  background: #111827;
+}
+
+.roomCount {
   margin-left: auto;
-  padding: 10px 20px;
-  background-color: #2563eb;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  font-size: 0.82rem;
+  color: #475569;
+  font-weight: 500;
 }
 
-.addRoomButton:hover {
-  background-color: #1e40af;
+.roomCount strong {
+  color: #60a5fa;
 }
 
-@media (max-width: 640px) {
+/* ── ROOM LIST ── */
+.roomListWrapper {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+/* ── PAGINATION WRAPPER ── */
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+/* ── ÜRES ÁLLAPOT ── */
+.emptyState {
+  text-align: center;
+  padding: 64px 24px;
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  margin-bottom: 14px;
+}
+
+.emptyState p {
+  color: #475569;
+  font-size: 0.92rem;
+}
+
+/* ── RESZPONZÍV ── */
+@media (max-width: 768px) {
+  .manageRoomWrapper {
+    padding: 24px 16px 60px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .addRoomButton {
+    width: 100%;
+    justify-content: center;
+  }
+
   .controls {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .addRoomButton {
-    margin-left: 0;
+  .controls select {
     width: 100%;
+  }
+
+  .roomCount {
+    margin-left: 0;
   }
 }

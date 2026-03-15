@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllUsers, deleteUser } from "../../../service/ApiService";
 import Pagination from "../../common/pagination/Pagination";
 import style from "./ManageUsersPage.module.css";
-import Toast from "../../../common/toast/Toast";
+import Toast from "../../common/toast/Toast";
 
 function ManageUsersPage() {
     const [users, setUsers] = useState([]);
@@ -41,32 +41,89 @@ function ManageUsersPage() {
         }
     }
 
-    const indexOfLast = currentPage * usersPerPage;
-    const currentUsers = filteredUsers.slice(indexOfLast - usersPerPage, indexOfLast);
+    const currentUsers = filteredUsers.slice((currentPage - 1) * usersPerPage, currentPage * usersPerPage);
 
     return (
-        <div className={style.manageUsersPage}>
+        <div className={style.manageUsersWrapper}>
             <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "success" })} />
-            <h2 className={style.title}>Felhasználók kezelése</h2>
-            <div className={style.searchContainer}>
-                <input type="text" placeholder="Keresés név alapján..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className={style.searchInput} />
-            </div>
-            <div className={style.userList}>
-                {currentUsers.length > 0 ? (
-                    currentUsers.map((user) => (
-                        <div key={user.id} className={style.userItem}>
-                            <p><strong>Név:</strong> {user.name}</p>
-                            <p><strong>Email:</strong> {user.email}</p>
-                            <p><strong>Telefonszám:</strong> {user.phoneNumber}</p>
-                            <p><strong>Szerepkör:</strong> {user.role}</p>
-                            <button className={style.deleteButton} onClick={() => handleDelete(user.id)}>Törlés</button>
+            <div className={style.manageUsersPage}>
+
+                {/* HEADER */}
+                <div className={style.header}>
+                    <div>
+                        <span className={style.badge}>Admin / Felhasználók</span>
+                        <h2 className={style.title}>Felhasználók <span>kezelése</span></h2>
+                        <p className={style.subtitle}>Felhasználók listázása, keresése és törlése.</p>
+                    </div>
+                    <span className={style.userCount}>
+                        Találat: <strong>{filteredUsers.length} felhasználó</strong>
+                    </span>
+                </div>
+
+                {/* KERESÉS */}
+                <div className={style.searchContainer}>
+                    <span className={style.searchIcon}>🔍</span>
+                    <input
+                        type="text"
+                        placeholder="Keresés név alapján..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className={style.searchInput}
+                    />
+                </div>
+
+                {/* LISTA */}
+                <div className={style.userList}>
+                    {currentUsers.length > 0 ? (
+                        currentUsers.map((user) => (
+                            <div key={user.id} className={style.userItem}>
+                                <div className={style.userItemInner}>
+                                    <div className={style.userHeader}>
+                                        <div className={style.userAvatar}>
+                                            {user.name?.charAt(0).toUpperCase()}
+                                        </div>
+                                        <div className={style.userNameBlock}>
+                                            <span className={style.userName}>{user.name}</span>
+                                            <span className={`${style.roleBadge} ${user.role === "ROLE_ADMIN" ? style.admin : style.user}`}>
+                                                {user.role === "ROLE_ADMIN" ? "Admin" : "Felhasználó"}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className={style.divider} />
+                                    <div className={style.fields}>
+                                        <div className={style.field}>
+                                            <span className={style.fieldLabel}>Email</span>
+                                            <span className={style.fieldValue}>{user.email}</span>
+                                        </div>
+                                        <div className={style.field}>
+                                            <span className={style.fieldLabel}>Telefonszám</span>
+                                            <span className={style.fieldValue}>{user.phoneNumber}</span>
+                                        </div>
+                                    </div>
+                                    <button className={style.deleteButton} onClick={() => handleDelete(user.id)}>
+                                        Felhasználó törlése
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className={style.emptyState}>
+                            <div className={style.emptyIcon}>👥</div>
+                            <p>Nem található felhasználó.</p>
                         </div>
-                    ))
-                ) : (
-                    <p className={style.noResults}>Nincs találat.</p>
-                )}
+                    )}
+                </div>
+
+                <div className={style.paginationWrapper}>
+                    <Pagination
+                        roomsPerPage={usersPerPage}
+                        totalRooms={filteredUsers.length}
+                        currentPage={currentPage}
+                        paginate={(page) => setCurrentPage(page)}
+                    />
+                </div>
+
             </div>
-            <Pagination roomsPerPage={usersPerPage} totalRooms={filteredUsers.length} currentPage={currentPage} paginate={(page) => setCurrentPage(page)} />
         </div>
     );
 }

@@ -1,55 +1,104 @@
 import style from "./FindBookingPage.module.css";
-import { getBookingByConfirmationCode } from "../../../service/ApiService";
-import { useState } from "react";
+import { getUserBookings, getUserProfile } from "../../../service/ApiService";
+import { useState, useEffect } from "react";
 import Toast from "../../common/toast/Toast";
 
 function FindBookingPage() {
-    const [confirmationCode, setConfirmationCode] = useState("");
-    const [bookingDetails, setBookingDetails] = useState(null);
-    const [toast, setToast] = useState({ message: "", type: "error" });
+  const [bookings, setBookings] = useState([]);
+  const [toast, setToast] = useState({ message: "", type: "error" });
 
-    async function handleSearch() {
-        if (!confirmationCode) {
-            setToast({ message: "Kérem adja meg a foglalási kódot!", type: "warning" });
-            return;
-        }
-        try {
-            const response = await getBookingByConfirmationCode(confirmationCode);
-            setBookingDetails(response.booking);
-        } catch (error) {
-            setToast({ message: error.response?.data?.message || error.message, type: "error" });
-        }
+  useEffect(() => {
+    async function fetchBookings() {
+      try {
+        const profile = await getUserProfile();
+        const response = await getUserBookings(profile.users.id);
+        setBookings(response.users.bookings || []);
+      } catch (error) {
+        setToast({
+          message: error.response?.data?.message || error.message,
+          type: "error",
+        });
+      }
     }
+    fetchBookings();
+  }, []);
 
-    return (
-        <div className={style.findBookingContainer}>
-            <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "error" })} />
-            <h2>Keresés foglalás alapján</h2>
-            <div className={style.searchContainer}>
-                <input required type="text" placeholder="Foglalási kód" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
-                <button onClick={handleSearch}>Keresés</button>
-            </div>
-            {bookingDetails && (
-                <div className={style.bookingDetailsContainer}>
-                    <h3>Foglalás részletei</h3>
-                    <p>Kód: {bookingDetails.bookingConfirmationCode}</p>
-                    <p>Érkezés: {bookingDetails.checkInDate}</p>
-                    <p>Távozás: {bookingDetails.checkOutDate}</p>
-                    <p>Felnőttek száma: {bookingDetails.numOfAdults}</p>
-                    <p>Gyerekek száma: {bookingDetails.numOfChildren}</p>
-                    <br /><hr /><br />
-                    <h3>Foglaló adatai</h3>
-                    <p>Név: {bookingDetails.users.name}</p>
-                    <p>Email: {bookingDetails.users.email}</p>
-                    <p>Telefon: {bookingDetails.users.phoneNumber}</p>
-                    <br /><hr /><br />
-                    <h3>Szoba adatai</h3>
-                    <p>Szoba típus: {bookingDetails.room.roomType}</p>
-                    <img src={bookingDetails.room.roomPhotoUrl} alt="Szoba kép" />
-                </div>
-            )}
+  return (
+    <div className={style.findBookingContainer}>
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast({ message: "", type: "error" })}
+      />
+      <h2>Foglalásaim</h2>
+      {bookings.length === 0 ? (
+        <div className={style.emptyState}>
+          <div className={style.emptyIcon}>🛎️</div>
+          <h3>Még nincs foglalásod</h3>
+          <p>Ha lefoglalsz egy szobát, itt fognak megjelenni a foglalásaid.</p>
         </div>
-    );
+      ) : (
+        <div className={style.bookingList}>
+          {bookings.map((booking) => (
+            <div key={booking.id} className={style.bookingDetailsContainer}>
+              <img
+                src={booking.room?.roomPhotoUrl}
+                alt={booking.room?.roomType}
+                className={style.bookingImage}
+              />
+              <div className={style.bookingContent}>
+                <div>
+                  <div className={style.bookingHeader}>
+                    <h3 className={style.roomType}>{booking.room?.roomType}</h3>
+                    <span className={style.confirmationBadge}>
+                      {booking.bookingConfirmationCode}
+                    </span>
+                  </div>
+                  <div className={style.divider} />
+                  <div className={style.bookingGrid}>
+                    <div className={style.bookingField}>
+                      <span>Érkezés</span>
+                      <span>{booking.checkInDate}</span>
+                    </div>
+                    <div className={style.bookingField}>
+                      <span>Távozás</span>
+                      <span>{booking.checkOutDate}</span>
+                    </div>
+                    <div className={style.bookingField}>
+                      <span>Felnőttek</span>
+                      <span>{booking.numOfAdults} fő</span>
+                    </div>
+                    <div className={style.bookingField}>
+                      <span>Gyerekek</span>
+                      <span>{booking.numOfChildren} fő</span>
+                    </div>
+                    <div className={style.bookingField}>
+                      <span>Végösszeg</span>
+                      <span>
+                        $
+                        {(() => {
+                          const oneDay = 24 * 60 * 60 * 1000;
+                          const days =
+                            Math.round(
+                              Math.abs(
+                                (new Date(booking.checkOutDate) -
+                                  new Date(booking.checkInDate)) /
+                                  oneDay,
+                              ),
+                            ) + 1;
+                          return days * booking.room?.roomPrice;
+                        })()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default FindBookingPage;

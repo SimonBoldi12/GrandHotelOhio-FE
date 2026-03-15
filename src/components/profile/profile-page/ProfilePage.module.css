@@ -1,186 +1,307 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
 .profilePage {
-  max-width: 900px;
-  margin: 40px auto 80px auto;
+  max-width: 960px;
+  margin: 48px auto 80px auto;
   padding: 0 24px;
+  font-family: 'DM Sans', sans-serif;
 }
 
+/* ── HERO HEADER ── */
 .header {
-  text-align: center;
-  margin-bottom: 32px;
-  padding: 32px;
-  background: #fff;
-  border-radius: 14px;
-  border: 1px solid #e0e7ff;
-  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+  position: relative;
+  margin-bottom: 28px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
+  padding: 48px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 260px;
+  height: 260px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: 30%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+}
+
+.headerLeft {
+  position: relative;
+  z-index: 1;
+}
+
+.welcomeLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 8px;
 }
 
 .title {
-  font-size: 2rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
   font-weight: 700;
-  color: #1e3a8a;
-  margin-bottom: 20px;
+  color: #fff;
+  margin: 0;
   letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 .profileActions {
   display: flex;
-  justify-content: center;
-  gap: 12px;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
 }
 
 .editProfileBtn {
-  background-color: #2563eb;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
   color: #fff;
-  border: none;
-  padding: 11px 24px;
-  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 11px 22px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.95rem;
-  transition: background-color 0.2s, transform 0.1s;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s;
 }
 
 .editProfileBtn:hover {
-  background-color: #1e40af;
-}
-
-.editProfileBtn:active {
-  transform: scale(0.97);
+  background: rgba(255,255,255,0.25);
 }
 
 .logoutBtn {
-  background-color: #fff;
-  color: #6b7280;
-  border: 1.5px solid #e5e7eb;
-  padding: 11px 24px;
-  border-radius: 8px;
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 11px 22px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.95rem;
-  transition: background-color 0.2s, border-color 0.2s;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  transition: color 0.2s, border-color 0.2s;
 }
 
 .logoutBtn:hover {
-  background-color: #f9fafb;
-  border-color: #d1d5db;
-  color: #374151;
+  color: #fff;
+  border-color: rgba(255,255,255,0.4);
 }
 
-.error {
-  color: #dc2626;
-  background-color: #fef2f2;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 0.9rem;
-  border: 1px solid #fecaca;
+/* ── GRID LAYOUT ── */
+.contentGrid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  align-items: start;
 }
 
+/* ── PROFIL ADATOK ── */
 .profileDetails {
-  margin-bottom: 24px;
-  padding: 24px;
-  background-color: #fff;
-  border-radius: 14px;
+  background: #fff;
+  border-radius: 16px;
   border: 1px solid #e0e7ff;
-  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.06);
+  overflow: hidden;
 }
 
-.profileDetails h3 {
-  color: #1e3a8a;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
+.sectionHeader {
+  padding: 18px 22px;
   border-bottom: 1px solid #e0e7ff;
-}
-
-.profileDetails p {
-  margin: 10px 0;
-  color: #374151;
-  font-size: 0.95rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.profileDetails p strong {
-  color: #1e3a8a;
-  min-width: 110px;
+.sectionIcon {
+  font-size: 1rem;
 }
 
-.bookingsSection {
-  background-color: #fff;
-  border-radius: 14px;
-  border: 1px solid #e0e7ff;
-  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
-  padding: 24px;
-}
-
-.bookingsSection h3 {
-  color: #1e3a8a;
-  font-size: 1.1rem;
+.sectionTitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
   font-weight: 700;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e0e7ff;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
 }
 
-.bookingList {
+.profileFields {
+  padding: 20px 22px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.bookingItem {
-  padding: 20px;
-  background-color: #f8faff;
-  border-radius: 10px;
+.profileField {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.fieldLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.fieldValue {
+  font-size: 0.92rem;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+/* ── FOGLALÁSOK ── */
+.bookingsSection {
+  background: #fff;
+  border-radius: 16px;
   border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.06);
+  overflow: hidden;
+}
+
+.bookingList {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bookingItem {
+  border-radius: 12px;
+  border: 1px solid #e0e7ff;
+  overflow: hidden;
   transition: box-shadow 0.2s, transform 0.2s;
+  background: #f8faff;
 }
 
 .bookingItem:hover {
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
+  transform: translateY(-2px);
 }
 
-.bookingItem p {
-  margin: 6px 0;
-  color: #374151;
-  font-size: 0.95rem;
-}
-
-.bookingItem p strong {
-  color: #1e3a8a;
+.bookingItemContent {
+  display: grid;
+  grid-template-columns: 160px 1fr;
 }
 
 .roomPhoto {
   width: 100%;
-  max-height: 350px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 8px;
-  margin-top: 14px;
+  display: block;
+  min-height: 140px;
 }
 
+.bookingInfo {
+  padding: 18px 20px;
+}
+
+.bookingCode {
+  display: inline-block;
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 12px;
+  margin-bottom: 12px;
+}
+
+.bookingFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+}
+
+.bookingField {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bookingField .fieldLabel {
+  font-size: 0.68rem;
+}
+
+.bookingField .fieldValue {
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+/* ── ÜRES ÁLLAPOT ── */
 .noBookings {
-  color: #6b7280;
+  padding: 48px 24px;
   text-align: center;
-  padding: 20px 0;
-  font-size: 0.95rem;
+  color: #94a3b8;
+  font-size: 0.92rem;
 }
 
-@media (max-width: 640px) {
+/* ── RESZPONZÍV ── */
+@media (max-width: 768px) {
   .profilePage {
-    padding: 0 12px;
-    margin: 20px auto 60px auto;
+    padding: 0 16px;
+    margin: 24px auto 60px auto;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 32px 24px;
   }
 
   .profileActions {
+    width: 100%;
     flex-direction: column;
   }
 
   .editProfileBtn,
   .logoutBtn {
     width: 100%;
+    text-align: center;
+  }
+
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bookingItemContent {
+    grid-template-columns: 1fr;
+  }
+
+  .roomPhoto {
+    height: 180px;
+  }
+
+  .title {
+    font-size: 1.6rem;
   }
 }

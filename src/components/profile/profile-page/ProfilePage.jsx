@@ -28,43 +28,88 @@ function ProfilePage() {
     }
 
     return (
-        <div className={style.profilePage}>
-            <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "error" })} />
-            <div className={style.header}>
-                {user && <h2 className={style.title}>Üdvözlünk, {user.name}!</h2>}
-                <div className={style.profileActions}>
-                    <button className={style.editProfileBtn} onClick={() => navigate("/edit-profile")}>Profil szerkesztése</button>
-                    <button className={style.logoutBtn} onClick={handleLogout}>Kijelentkezés</button>
-                </div>
+    <div className={style.profilePage}>
+        <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "error" })} />
+
+        {/* HERO HEADER */}
+        <div className={style.header}>
+            <div className={style.headerLeft}>
+                <p className={style.welcomeLabel}>Üdvözlünk</p>
+                <h2 className={style.title}>{user?.name || "..."}</h2>
             </div>
+            <div className={style.profileActions}>
+                <button className={style.editProfileBtn} onClick={() => navigate("/edit-profile")}>Profil szerkesztése</button>
+                <button className={style.logoutBtn} onClick={handleLogout}>Kijelentkezés</button>
+            </div>
+        </div>
+
+        <div className={style.contentGrid}>
+
+            {/* PROFIL ADATOK */}
             {user && (
                 <div className={style.profileDetails}>
-                    <h3>Profil adatai</h3>
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Telefonszám:</strong> {user.phoneNumber}</p>
+                    <div className={style.sectionHeader}>
+                        <span className={style.sectionIcon}>👤</span>
+                        <h3 className={style.sectionTitle}>Profil adatai</h3>
+                    </div>
+                    <div className={style.profileFields}>
+                        <div className={style.profileField}>
+                            <span className={style.fieldLabel}>Email</span>
+                            <span className={style.fieldValue}>{user.email}</span>
+                        </div>
+                        <div className={style.profileField}>
+                            <span className={style.fieldLabel}>Telefonszám</span>
+                            <span className={style.fieldValue}>{user.phoneNumber}</span>
+                        </div>
+                    </div>
                 </div>
             )}
+
+            {/* FOGLALÁSOK */}
             <div className={style.bookingsSection}>
-                <h3>Foglalásaim</h3>
+                <div className={style.sectionHeader}>
+                    <span className={style.sectionIcon}>🛎️</span>
+                    <h3 className={style.sectionTitle}>Foglalásaim</h3>
+                </div>
                 <div className={style.bookingList}>
                     {user && user.bookings && user.bookings.length > 0 ? (
                         user.bookings.map((booking) => (
                             <div key={booking.id} className={style.bookingItem}>
-                                <p><strong>Foglalási kód:</strong> {booking.bookingConfirmationCode}</p>
-                                <p><strong>Érkezés:</strong> {booking.checkInDate}</p>
-                                <p><strong>Távozás:</strong> {booking.checkOutDate}</p>
-                                <p><strong>Összes vendég:</strong> {booking.totalNumOfGuests}</p>
-                                <p><strong>Szoba típusa:</strong> {booking.room?.roomType}</p>
-                                <img src={booking.room?.roomPhotoUrl} alt={booking.room?.roomType} className={style.roomPhoto} />
+                                <div className={style.bookingItemContent}>
+                                    <img src={booking.room?.roomPhotoUrl} alt={booking.room?.roomType} className={style.roomPhoto} />
+                                    <div className={style.bookingInfo}>
+                                        <span className={style.bookingCode}>{booking.bookingConfirmationCode}</span>
+                                        <div className={style.bookingFields}>
+                                            <div className={style.bookingField}>
+                                                <span className={style.fieldLabel}>Szoba típusa</span>
+                                                <span className={style.fieldValue}>{booking.room?.roomType}</span>
+                                            </div>
+                                            <div className={style.bookingField}>
+                                                <span className={style.fieldLabel}>Összes vendég</span>
+                                                <span className={style.fieldValue}>{booking.totalNumOfGuests} fő</span>
+                                            </div>
+                                            <div className={style.bookingField}>
+                                                <span className={style.fieldLabel}>Érkezés</span>
+                                                <span className={style.fieldValue}>{booking.checkInDate}</span>
+                                            </div>
+                                            <div className={style.bookingField}>
+                                                <span className={style.fieldLabel}>Távozás</span>
+                                                <span className={style.fieldValue}>{booking.checkOutDate}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         ))
                     ) : (
-                        <p className={style.noBookings}>Nincs foglalás.</p>
+                        <p className={style.noBookings}>Még nincs foglalásod.</p>
                     )}
                 </div>
             </div>
+
         </div>
-    );
+    </div>
+);
 }
 
 export default ProfilePage;

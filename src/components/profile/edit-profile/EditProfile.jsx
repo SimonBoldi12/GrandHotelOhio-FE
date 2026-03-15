@@ -34,14 +34,49 @@ function EditProfile() {
     return (
         <div className={style.editProfilePage}>
             <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "error" })} />
-            <h2 className={style.title}>Profil szerkesztése</h2>
+
+            <div className={style.header}>
+                <button className={style.backButton} onClick={() => navigate("/profile")}>
+                    ← Vissza a profilhoz
+                </button>
+                <h2 className={style.title}>Profil szerkesztése</h2>
+                <p className={style.subtitle}>Fiókod adatainak megtekintése és kezelése.</p>
+            </div>
+
             {user && (
-                <div className={style.profileDetails}>
-                    <p><strong>Név:</strong> {user.name}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Telefonszám:</strong> {user.phoneNumber}</p>
-                    <button className={style.deleteButton} onClick={handleDeleteProfile}>Profil törlése</button>
-                </div>
+                <>
+                    <div className={style.profileCard}>
+                        <div className={style.avatarSection}>
+                            <div className={style.avatar}>
+                                {user.name?.charAt(0).toUpperCase()}
+                            </div>
+                            <div className={style.avatarInfo}>
+                                <h3 className={style.avatarName}>{user.name}</h3>
+                                <span className={style.avatarRole}>Felhasználó</span>
+                            </div>
+                        </div>
+                        <div className={style.profileFields}>
+                            <div className={style.profileField}>
+                                <span className={style.fieldLabel}>Email cím</span>
+                                <span className={style.fieldValue}>{user.email}</span>
+                            </div>
+                            <div className={style.profileField}>
+                                <span className={style.fieldLabel}>Telefonszám</span>
+                                <span className={style.fieldValue}>{user.phoneNumber}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={style.dangerZone}>
+                        <div className={style.dangerInfo}>
+                            <h4>Fiók törlése</h4>
+                            <p>Ez a művelet visszafordíthatatlan. Minden adatod és foglalásod törlésre kerül.</p>
+                        </div>
+                        <button className={style.deleteButton} onClick={handleDeleteProfile}>
+                            Profil törlése
+                        </button>
+                    </div>
+                </>
             )}
         </div>
     );

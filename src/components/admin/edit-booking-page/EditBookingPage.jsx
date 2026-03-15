@@ -27,46 +27,125 @@ function EditBookingPage() {
         try {
             const response = await cancelBooking(bookingId);
             if (response.status === 200) {
-                setToast({ message: "Foglalás teljesítése sikeres!", type: "success" });
+                setToast({ message: "Foglalás sikeresen törölve!", type: "success" });
                 setTimeout(() => navigate("/admin/manage-bookings"), 2000);
             }
         } catch (err) {
-            setToast({ message: "Foglalás teljesítése sikertelen: " + (err.response?.data?.message || err.message), type: "error" });
+            setToast({ message: "Foglalás törlése sikertelen: " + (err.response?.data?.message || err.message), type: "error" });
         }
     }
 
     return (
-        <div className={style.editBookingPage}>
+        <div className={style.editBookingWrapper}>
             <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "success" })} />
-            <h2>Foglalás Szerkesztése</h2>
-            {bookingDetails && (
-                <div>
-                    <div className={style.bookingDetails}>
-                        <h3>Foglalás részletei</h3>
-                        <p><strong>Foglalási kód:</strong> {bookingDetails.bookingConfirmationCode}</p>
-                        <p><strong>Felnőttek:</strong> {bookingDetails.numOfAdults}</p>
-                        <p><strong>Gyerekek:</strong> {bookingDetails.numOfChildren}</p>
-                        <p><strong>Érkezés:</strong> {bookingDetails.checkInDate}</p>
-                        <p><strong>Távozás:</strong> {bookingDetails.checkOutDate}</p>
-                    </div>
-                    <br /><hr /><br />
-                    <h3>Foglaló adatai</h3>
-                    <div className={style.bookerDetails}>
-                        <p><strong>Név:</strong> {bookingDetails.users?.name}</p>
-                        <p><strong>Telefonszám:</strong> {bookingDetails.users?.phoneNumber}</p>
-                        <p><strong>Email:</strong> {bookingDetails.users?.email}</p>
-                    </div>
-                    <br /><hr /><br />
-                    <h3>Szoba adatai</h3>
-                    <div className={style.roomDetails}>
-                        <p><strong>Szoba típus:</strong> {bookingDetails.room?.roomType}</p>
-                        <p><strong>Ár:</strong> {bookingDetails.room?.roomPrice}</p>
-                        <p><strong>Leírás:</strong> {bookingDetails.room?.roomDescription}</p>
-                        <img src={bookingDetails.room?.roomPhotoUrl} alt={bookingDetails.room?.roomType} />
-                    </div>
-                    <button onClick={() => achieveBooking(bookingDetails.id)}>Foglalás törlése</button>
+            <div className={style.editBookingPage}>
+
+                <button className={style.backButton} onClick={() => navigate("/admin/manage-bookings")}>
+                    ← Vissza a foglalásokhoz
+                </button>
+
+                <div className={style.header}>
+                    <span className={style.badge}>Admin / Foglalások</span>
+                    <h2 className={style.title}>Foglalás <span>szerkesztése</span></h2>
+                    <p className={style.subtitle}>Foglalás részleteinek megtekintése és kezelése.</p>
                 </div>
-            )}
+
+                {bookingDetails && (
+                    <>
+                        <div className={style.contentGrid}>
+
+                            {/* FOGLALÁS ADATAI */}
+                            <div className={style.card}>
+                                <div className={style.cardHeader}>
+                                    <span className={style.cardIcon}>📋</span>
+                                    <h3 className={style.cardTitle}>Foglalás adatai</h3>
+                                </div>
+                                <div className={style.fields}>
+                                    <div className={style.field}>
+                                        <span className={style.fieldLabel}>Visszaigazolási kód</span>
+                                        <span className={style.confirmationBadge}>{bookingDetails.bookingConfirmationCode}</span>
+                                    </div>
+                                    <div className={style.field}>
+                                        <span className={style.fieldLabel}>Érkezés</span>
+                                        <span className={style.fieldValue}>{bookingDetails.checkInDate}</span>
+                                    </div>
+                                    <div className={style.field}>
+                                        <span className={style.fieldLabel}>Távozás</span>
+                                        <span className={style.fieldValue}>{bookingDetails.checkOutDate}</span>
+                                    </div>
+                                    <div className={style.field}>
+                                        <span className={style.fieldLabel}>Felnőttek</span>
+                                        <span className={style.fieldValue}>{bookingDetails.numOfAdults} fő</span>
+                                    </div>
+                                    <div className={style.field}>
+                                        <span className={style.fieldLabel}>Gyerekek</span>
+                                        <span className={style.fieldValue}>{bookingDetails.numOfChildren} fő</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* FOGLALÓ ADATAI */}
+                            <div className={style.card}>
+                                <div className={style.cardHeader}>
+                                    <span className={style.cardIcon}>👤</span>
+                                    <h3 className={style.cardTitle}>Foglaló adatai</h3>
+                                </div>
+                                <div className={style.fields}>
+                                    <div className={style.field}>
+                                        <span className={style.fieldLabel}>Név</span>
+                                        <span className={style.fieldValue}>{bookingDetails.users?.name}</span>
+                                    </div>
+                                    <div className={style.field}>
+                                        <span className={style.fieldLabel}>Email</span>
+                                        <span className={style.fieldValue}>{bookingDetails.users?.email}</span>
+                                    </div>
+                                    <div className={style.field}>
+                                        <span className={style.fieldLabel}>Telefonszám</span>
+                                        <span className={style.fieldValue}>{bookingDetails.users?.phoneNumber}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* SZOBA ADATAI */}
+                            <div className={style.roomCard}>
+                                <img src={bookingDetails.room?.roomPhotoUrl} alt={bookingDetails.room?.roomType} className={style.roomImage} />
+                                <div className={style.roomInfo}>
+                                    <div className={style.cardHeader}>
+                                        <span className={style.cardIcon}>🛏️</span>
+                                        <h3 className={style.cardTitle}>Szoba adatai</h3>
+                                    </div>
+                                    <div className={style.fields}>
+                                        <div className={style.field}>
+                                            <span className={style.fieldLabel}>Típus</span>
+                                            <span className={style.fieldValue}>{bookingDetails.room?.roomType}</span>
+                                        </div>
+                                        <div className={style.field}>
+                                            <span className={style.fieldLabel}>Ár / éjszaka</span>
+                                            <span className={style.fieldValue}>${bookingDetails.room?.roomPrice}</span>
+                                        </div>
+                                        <div className={style.field}>
+                                            <span className={style.fieldLabel}>Leírás</span>
+                                            <span className={style.fieldValue}>{bookingDetails.room?.roomDescription}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* DANGER ZONE */}
+                        <div className={style.dangerZone}>
+                            <div className={style.dangerInfo}>
+                                <h4>Foglalás törlése</h4>
+                                <p>Ez a művelet visszafordíthatatlan. A foglalás véglegesen törlésre kerül.</p>
+                            </div>
+                            <button className={style.deleteButton} onClick={() => achieveBooking(bookingDetails.id)}>
+                                Foglalás törlése
+                            </button>
+                        </div>
+                    </>
+                )}
+            </div>
         </div>
     );
 }

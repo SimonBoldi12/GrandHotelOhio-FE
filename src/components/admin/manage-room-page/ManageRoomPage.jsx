@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getAllRooms, getRoomTypes } from "../../../service/ApiService";
 import RoomResult from "../../common/room-result/RoomResult";
 import Pagination from "../../common/pagination/Pagination";
-import Toast from "../../../common/toast/Toast";
+import Toast from "../../common/toast/Toast";
 
 function ManageRoomPage() {
     const [rooms, setRooms] = useState([]);
@@ -42,26 +42,67 @@ function ManageRoomPage() {
         const type = event.target.value;
         setSelectedRoomType(type);
         setFilteredRooms(type === "" ? rooms : rooms.filter((room) => room.roomType === type));
+        setCurrentPage(1);
     }
 
     const currentRooms = filteredRooms.slice((currentPage - 1) * roomsPerPage, currentPage * roomsPerPage);
 
     return (
-        <div className={style.manageRoomPage}>
+        <div className={style.manageRoomWrapper}>
             <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "error" })} />
-            <h2 className={style.title}>Szobák kezelése</h2>
-            <div className={style.controls}>
-                <label htmlFor="roomType">Szoba típus:</label>
-                <select id="roomType" value={selectedRoomType} onChange={handleRoomTypeChange}>
-                    <option value="">Összes</option>
-                    {roomTypes.map((type) => (
-                        <option key={type} value={type}>{type}</option>
-                    ))}
-                </select>
-                <button onClick={() => navigate("/admin/add-room")} className={style.addRoomButton}>Új szoba</button>
+            <div className={style.manageRoomPage}>
+
+                {/* HEADER */}
+                <div className={style.header}>
+                    <div className={style.headerLeft}>
+                        <span className={style.badge}>Admin / Szobák</span>
+                        <h2 className={style.title}>Szobák <span>kezelése</span></h2>
+                        <p className={style.subtitle}>Szobák listázása, szerkesztése és törlése.</p>
+                    </div>
+                    <button className={style.addRoomButton} onClick={() => navigate("/admin/add-room")}>
+                        + Új szoba hozzáadása
+                    </button>
+                </div>
+
+                {/* CONTROLS */}
+                <div className={style.controls}>
+                    <label htmlFor="roomType">Szűrés típus szerint</label>
+                    <select id="roomType" value={selectedRoomType} onChange={handleRoomTypeChange}>
+                        <option value="">Összes szoba</option>
+                        {roomTypes.map((type) => (
+                            <option key={type} value={type}>{type}</option>
+                        ))}
+                    </select>
+                    <span className={style.roomCount}>
+                        Találat: <strong>{filteredRooms.length} szoba</strong>
+                    </span>
+                </div>
+
+                {/* SZOBÁK LISTÁJA */}
+                {currentRooms.length > 0 ? (
+                    <div className={style.roomListWrapper}>
+                        <RoomResult roomSearchResults={currentRooms} adminView={true} />
+                    </div>
+                ) : (
+                    <div className={style.roomListWrapper}>
+                        <div className={style.emptyState}>
+                            <div className={style.emptyIcon}>🛏️</div>
+                            <p>Nem található szoba a kiválasztott típushoz.</p>
+                        </div>
+                    </div>
+                )}
+
+                {/* PAGINATION */}
+                <div className={style.paginationWrapper}>
+                    <Pagination
+                        roomsPerPage={roomsPerPage}
+                        totalRooms={filteredRooms.length}
+                        currentPage={currentPage}
+                        paginate={(page) => setCurrentPage(page)}
+                    />
+                </div>
+
             </div>
-            <RoomResult roomSearchResults={currentRooms} />
-            <Pagination roomsPerPage={roomsPerPage} totalRooms={filteredRooms.length} currentPage={currentPage} paginate={(page) => setCurrentPage(page)} />
         </div>
     );
 }

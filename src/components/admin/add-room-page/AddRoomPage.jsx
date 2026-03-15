@@ -79,36 +79,99 @@ function AddRoomPage() {
     }
 
     return (
-        <div className={style.addRoomPage}>
+        <div className={style.addRoomWrapper}>
             <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "success" })} />
-            <h2 className={style.title}>Új szoba hozzáadása</h2>
-            <div className={style.form}>
-                <div className={style.formGroup}>
-                    {preview && <img src={preview} alt="Room preview" className={style.preview} />}
-                    <input type="file" name="roomPhoto" onChange={handleFileChange} />
+            <div className={style.addRoomPage}>
+
+                <div className={style.header}>
+                    <span className={style.badge}>Admin / Szobák</span>
+                    <h2 className={style.title}>Új szoba <span>hozzáadása</span></h2>
+                    <p className={style.subtitle}>Töltsd ki az adatokat és add hozzá az új szobát a rendszerhez.</p>
                 </div>
-                <div className={style.formGroup}>
-                    <label htmlFor="roomType">Szoba típus:</label>
-                    <select id="roomType" value={roomDetails.roomType} onChange={handleRoomTypeChange}>
-                        <option value="">Válassz egy típust</option>
-                        {roomTypes.map((type) => (
-                            <option key={type} value={type}>{type}</option>
-                        ))}
-                        <option value="new">Új típus</option>
-                    </select>
-                    {newRoomType && (
-                        <input type="text" name="roomType" placeholder="Add meg az új típus nevét" value={roomDetails.roomType} onChange={handleChange} />
-                    )}
+
+                <div className={style.formCard}>
+
+                    {/* KÉP FELTÖLTÉS */}
+                    <div className={style.uploadArea}>
+                        {preview ? (
+                            <>
+                                <img src={preview} alt="Előnézet" className={style.preview} />
+                                <div className={style.previewOverlay}>
+                                    <span className={style.changePhoto}>🔄 Kép cseréje</span>
+                                </div>
+                            </>
+                        ) : (
+                            <div className={style.uploadPlaceholder}>
+                                <div className={style.uploadIcon}>🖼️</div>
+                                <p><strong>Kattints a feltöltéshez</strong></p>
+                                <p>JPG, PNG – max. 10MB</p>
+                            </div>
+                        )}
+                        <input
+                            type="file"
+                            name="roomPhoto"
+                            className={style.uploadInput}
+                            onChange={handleFileChange}
+                        />
+                    </div>
+
+                    {/* FORM MEZŐK */}
+                    <div className={style.formGrid}>
+                        <div className={style.formGroup}>
+                            <label htmlFor="roomType">Szoba típus</label>
+                            <select id="roomType" value={newRoomType ? "new" : roomDetails.roomType} onChange={handleRoomTypeChange}>
+                                <option value="">Válassz egy típust</option>
+                                {roomTypes.map((type) => (
+                                    <option key={type} value={type}>{type}</option>
+                                ))}
+                                <option value="new">+ Új típus</option>
+                            </select>
+                            {newRoomType && (
+                                <input
+                                    type="text"
+                                    name="roomType"
+                                    placeholder="Új típus neve..."
+                                    value={roomDetails.roomType}
+                                    onChange={handleChange}
+                                />
+                            )}
+                        </div>
+
+                        <div className={style.formGroup}>
+                            <label htmlFor="roomPrice">Ár / éjszaka ($)</label>
+                            <input
+                                type="number"
+                                name="roomPrice"
+                                id="roomPrice"
+                                placeholder="pl. 150"
+                                value={roomDetails.roomPrice}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className={`${style.formGroup} ${style.fullWidth}`}>
+                            <label htmlFor="roomDescription">Leírás</label>
+                            <textarea
+                                name="roomDescription"
+                                id="roomDescription"
+                                placeholder="Írd le a szoba jellemzőit..."
+                                value={roomDetails.roomDescription}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    {/* GOMBOK */}
+                    <div className={style.actions}>
+                        <button className={style.backButton} onClick={() => navigate("/admin/manage-rooms")}>
+                            ← Vissza
+                        </button>
+                        <button className={style.submitButton} onClick={addRoom}>
+                            Szoba hozzáadása →
+                        </button>
+                    </div>
+
                 </div>
-                <div className={style.formGroup}>
-                    <label htmlFor="roomPrice">Szoba ára:</label>
-                    <input type="number" name="roomPrice" id="roomPrice" value={roomDetails.roomPrice} onChange={handleChange} />
-                </div>
-                <div className={style.formGroup}>
-                    <label htmlFor="roomDescription">Szoba leírása:</label>
-                    <textarea name="roomDescription" id="roomDescription" value={roomDetails.roomDescription} onChange={handleChange} />
-                </div>
-                <button className={style.submitButton} onClick={addRoom}>Szoba hozzáadása</button>
             </div>
         </div>
     );

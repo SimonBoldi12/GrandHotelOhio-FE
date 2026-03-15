@@ -1,88 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+.adminWrapper {
+  min-height: 100vh;
+  background: #0a0f1e;
+  padding: 48px 24px 80px;
+  font-family: 'Inter', sans-serif;
+}
+
 .adminPage {
-  max-width: 700px;
-  margin: 40px auto 60px auto;
-  padding: 32px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ── HEADER ── */
+.header {
+  margin-bottom: 48px;
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.badge {
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  color: #60a5fa;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
 }
 
 .title {
-  font-size: 1.8rem;
-  color: #1e3a8a;
-  margin-bottom: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3rem;
   font-weight: 700;
+  color: #fff;
+  margin: 0 0 10px;
+  letter-spacing: -1px;
+  line-height: 1.1;
 }
 
-.adminPage p {
-  color: #6b7280;
-  margin-bottom: 32px;
-  font-size: 1rem;
+.title span {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.adminActions {
-  display: flex;
-  justify-content: center;
+.subtitle {
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* ── STAT SÁYV ── */
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  flex-wrap: wrap;
+  margin-bottom: 40px;
 }
 
-.manageRoomsBtn {
-  padding: 14px 28px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #fff;
-  background-color: #2563eb;
-  border: none;
-  border-radius: 6px;
+.statCard {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.statIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.statIcon.blue { background: rgba(37, 99, 235, 0.15); }
+.statIcon.purple { background: rgba(139, 92, 246, 0.15); }
+.statIcon.green { background: rgba(16, 185, 129, 0.15); }
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: #475569;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.statValue {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+/* ── ACTION KÁRTYÁK ── */
+.adminActions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.actionCard {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 18px;
+  padding: 32px 28px;
   cursor: pointer;
-  transition: background-color 0.2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
 }
 
-.manageRoomsBtn:hover {
-  background-color: #1e40af;
+.actionCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 18px 18px 0 0;
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
-.manageBookingsBtn {
-  padding: 14px 28px;
-  font-size: 1rem;
+.actionCard.rooms::before { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+.actionCard.bookings::before { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
+.actionCard.users::before { background: linear-gradient(90deg, #10b981, #3b82f6); }
+
+.actionCard:hover {
+  transform: translateY(-4px);
+  border-color: #334155;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.actionCard:hover::before {
+  opacity: 1;
+}
+
+.cardIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.actionCard.rooms .cardIcon { background: rgba(59, 130, 246, 0.1); }
+.actionCard.bookings .cardIcon { background: rgba(139, 92, 246, 0.1); }
+.actionCard.users .cardIcon { background: rgba(16, 185, 129, 0.1); }
+
+.cardTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem;
   font-weight: 600;
-  color: #fff;
-  background-color: #6b7280;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  color: #f1f5f9;
+  margin: 0 0 8px;
 }
 
-.manageBookingsBtn:hover {
-  background-color: #4b5563;
+.cardDesc {
+  font-size: 0.83rem;
+  color: #475569;
+  line-height: 1.5;
+  margin: 0 0 24px;
 }
 
-.manageUsersBtn {
-  padding: 14px 28px;
-  font-size: 1rem;
+.cardArrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
   font-weight: 600;
-  color: #fff;
-  background-color: #dc2626;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: gap 0.2s;
 }
 
-.manageUsersBtn:hover {
-  background-color: #b91c1c;
+.actionCard.rooms .cardArrow { color: #3b82f6; }
+.actionCard.bookings .cardArrow { color: #8b5cf6; }
+.actionCard.users .cardArrow { color: #10b981; }
+
+.actionCard:hover .cardArrow {
+  gap: 10px;
 }
 
-@media (max-width: 480px) {
-  .manageRoomsBtn,
-  .manageBookingsBtn,
-  .manageUsersBtn {
-    width: 100%;
+/* ── RESZPONZÍV ── */
+@media (max-width: 768px) {
+  .statsRow,
+  .adminActions {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .headerTop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 }

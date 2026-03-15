@@ -1,69 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
 .findBookingContainer {
-    max-width: 50%;
-    margin: 10px auto 60px auto;
-    padding: 20px;
-    color: #333;
-    text-align: center;
+    max-width: 900px;
+    margin: 40px auto 80px auto;
+    padding: 0 24px;
+    font-family: 'DM Sans', sans-serif;
 }
 
-.findBookingContainer h2{
-    margin-bottom: 20px;
+.findBookingContainer h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #0f172a;
+    margin-bottom: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
-.searchContainer input[type="text"] {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
-    width: 300px;
-}
-
-.searchContainer button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #1d4ed8;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.searchContainer button:hover {
-    background-color: #1e40af;
+/* ── BOOKING KÁRTYÁK ── */
+.bookingList {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .bookingDetailsContainer {
-    margin-top: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px;
-    text-align: left;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e0e7ff;
+    box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 280px 1fr;
 }
 
-.bookingDetailsContainer img{
+.bookingImage {
     width: 100%;
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 10px;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    min-height: 200px;
 }
 
-.bookingDetailsContainer p {
-    margin: 10px 0;
+.bookingContent {
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
+.bookingHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.roomType {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #0f172a;
+    margin: 0;
+}
+
+.confirmationBadge {
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.divider {
+    height: 1px;
+    background: #e0e7ff;
+    margin-bottom: 20px;
+}
+
+.bookingGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 24px;
+}
+
+.bookingField {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.bookingField span:first-child {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+.bookingField span:last-child {
+    font-size: 0.95rem;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+/* ── ÜRES ÁLLAPOT ── */
+.emptyState {
+    text-align: center;
+    padding: 80px 24px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e0e7ff;
+    box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+}
+
+.emptyIcon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+}
+
+.emptyState h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.emptyState p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+/* ── RESZPONZÍV ── */
 @media (max-width: 768px) {
     .findBookingContainer {
-        max-width: 90%;
-        padding: 10px;
+        margin: 20px auto 60px auto;
+        padding: 0 16px;
     }
 
-    .searchContainer input[type="text"] {
-        width: 100%;
-        margin-bottom: 10px;
+    .bookingDetailsContainer {
+        grid-template-columns: 1fr;
     }
 
-    .searchContainer button {
-        width: 100%;
+    .bookingImage {
+        height: 200px;
+    }
+
+    .bookingContent {
+        padding: 20px;
+    }
+
+    .bookingGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .bookingHeader {
+        flex-direction: column;
+        gap: 10px;
     }
 }
