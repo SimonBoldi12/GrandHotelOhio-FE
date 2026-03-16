@@ -9,10 +9,14 @@ import { isAuthenticated } from "../../service/ApiService";
 function HomePage() {
     const navigate = useNavigate();
     const [roomSearchResults, setRoomSearchResults] = useState([]);
+    const [dateParams, setDateParams] = useState("");
     const authenticated = isAuthenticated();
 
-    function handleSearchResult(results) {
+    function handleSearchResult(results, checkIn, checkOut) {
         setRoomSearchResults(results);
+        if (checkIn && checkOut) {
+            setDateParams(`?checkIn=${checkIn}&checkOut=${checkOut}`);
+        }
     }
 
     return (
@@ -79,7 +83,10 @@ function HomePage() {
                         <p className={style.sectionLabel}>Szobakeresés</p>
                         <h2 className={style.sectionTitle}>Találja meg a tökéletes szobát</h2>
                         <RoomSearch handleSearchResult={handleSearchResult} />
-                        <RoomResult roomSearchResults={roomSearchResults} />
+                        <RoomResult
+                            roomSearchResults={roomSearchResults}
+                            dateParams={dateParams}
+                        />
                     </div>
 
                     {/* ── ABOUT ── */}

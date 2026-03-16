@@ -9,14 +9,20 @@ function AllRoomsPage() {
     const [rooms, setRooms] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredRooms, setFilteredRooms] = useState([]);
+    const [sortedRooms, setSortedRooms] = useState([]);
     const [roomTypes, setRoomTypes] = useState([]);
     const [selectedRoomType, setSelectedRoomType] = useState("");
+    const [priceSort, setPriceSort] = useState("");
     const [roomsPerPage] = useState(5);
+    const [dateParams, setDateParams] = useState("");
 
-    function handleSearchResults(results) {
+    function handleSearchResults(results, checkIn, checkOut) {
         setRooms(results);
         setFilteredRooms(results);
         setCurrentPage(1);
+        if (checkIn && checkOut) {
+            setDateParams(`?checkIn=${checkIn}&checkOut=${checkOut}`);
+        }
     }
 
     useEffect(() => {
@@ -44,14 +50,33 @@ function AllRoomsPage() {
         fetchRoomTypes();
     }, []);
 
+    useEffect(() => {
+        let result = [...filteredRooms];
+
+        if (priceSort === "asc") {
+            result.sort((a, b) => a.roomPrice - b.roomPrice);
+        } else if (priceSort === "desc") {
+            result.sort((a, b) => b.roomPrice - a.roomPrice);
+        }
+
+        setSortedRooms(result);
+        setCurrentPage(1);
+    }, [filteredRooms, priceSort]);
+
     function handleRoomTypeChange(event) {
         const type = event.target.value;
         setSelectedRoomType(type);
-        setFilteredRooms(type === "" ? rooms : rooms.filter(room => room.roomType === type));
+        const base = type === "" ? rooms : rooms.filter(room => room.roomType === type);
+        setFilteredRooms(base);
         setCurrentPage(1);
     }
 
-    const currentRooms = filteredRooms.slice(
+    function handlePriceSortChange(event) {
+        setPriceSort(event.target.value);
+        setCurrentPage(1);
+    }
+
+    const currentRooms = sortedRooms.slice(
         (currentPage - 1) * roomsPerPage,
         currentPage * roomsPerPage
     );
@@ -73,13 +98,51 @@ function AllRoomsPage() {
 
                 {/* FILTER */}
                 <div className={style.filterContainer}>
-                    <label htmlFor="roomType">Szűrés típus szerint</label>
-                    <select id="roomType" value={selectedRoomType} onChange={handleRoomTypeChange}>
-                        <option value="">Összes szoba</option>
-                        {roomTypes.map(type => (
-                            <option key={type} value={type}>{type}</option>
-                        ))}
-                    </select>
+                    <div className={style.filterGroup}>
+                        <label htmlFor="roomType">Szobatípus</label>
+                        <select id="roomType" value={selectedRoomType} onChange={handleRoomTypeChange}>
+                            <option value="">Összes szoba</option>
+                            {roomTypes.map(type => (
+                                <option key={type} value={type}>{type}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className={style.filterDivider} />
+
+                    <div className={style.filterGroup}>
+                        <label htmlFor="priceSort">Ár szerinti rendezés</label>
+                        <div className={style.sortButtons}>
+                            <button
+                                className={`${style.sortBtn} ${priceSort === "asc" ? style.sortBtnActive : ""}`}
+                                onClick={() => setPriceSort(priceSort === "asc" ? "" : "asc")}
+                            >
+                                ↑ Legolcsóbb
+                            </button>
+                            <button
+                                className={`${style.sortBtn} ${priceSort === "desc" ? style.sortBtnActive : ""}`}
+                                onClick={() => setPriceSort(priceSort === "desc" ? "" : "desc")}
+                            >
+                                ↓ Legdrágább
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className={style.filterRight}>
+                        {(selectedRoomType || priceSort) && (
+                            <button
+                                className={style.clearBtn}
+                                onClick={() => {
+                                    setSelectedRoomType("");
+                                    setPriceSort("");
+                                    setFilteredRooms(rooms);
+                                    setCurrentPage(1);
+                                }}
+                            >
+                                ✕ Szűrők törlése
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 {/* SEARCH */}
@@ -90,7 +153,10 @@ function AllRoomsPage() {
                 {/* RESULTS */}
                 {currentRooms.length > 0 ? (
                     <div className={style.resultsWrapper}>
-                        <RoomResult roomSearchResults={currentRooms} />
+                        <RoomResult
+                            roomSearchResults={currentRooms}
+                            dateParams={dateParams}
+                        />
                     </div>
                 ) : (
                     <div className={style.resultsWrapper}>
@@ -105,7 +171,7 @@ function AllRoomsPage() {
                 <div className={style.paginationWrapper}>
                     <Pagination
                         roomsPerPage={roomsPerPage}
-                        totalRooms={filteredRooms.length}
+                        totalRooms={sortedRooms.length}
                         paginate={(page) => setCurrentPage(page)}
                         currentPage={currentPage}
                     />

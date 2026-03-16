@@ -1,11 +1,16 @@
 import style from "./RoomDetailsPage.module.css";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { bookRoom, getRoomById, getUserProfile } from "../../../service/ApiService";
+import {
+  bookRoom,
+  getRoomById,
+  getUserProfile,
+} from "../../../service/ApiService";
 import DatePicker from "react-datepicker";
 import { hu } from "date-fns/locale";
 import Toast from "../../common/toast/Toast";
 import Carousel from "../../common/carousel/Carousel";
+import { useSearchParams } from "react-router-dom";
 
 function RoomDetailsPage() {
   const navigate = useNavigate();
@@ -22,6 +27,7 @@ function RoomDetailsPage() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [userId, setUserId] = useState("");
   const [toast, setToast] = useState({ message: "", type: "success" });
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     async function fetchData() {
@@ -40,28 +46,57 @@ function RoomDetailsPage() {
     fetchData();
   }, [roomId]);
 
+  useEffect(() => {
+    const checkIn = searchParams.get("checkIn");
+    const checkOut = searchParams.get("checkOut");
+    if (checkIn) setCheckInDate(new Date(checkIn));
+    if (checkOut) setCheckOutDate(new Date(checkOut));
+    if (checkIn && checkOut) setShowDatePicker(true);
+  }, []);
+
   async function handleConfirmBooking() {
     if (!checkInDate || !checkOutDate) {
-      setToast({ message: "Kérem válassza ki a be- és kijelentkezési dátumot.", type: "warning" });
+      setToast({
+        message: "Kérem válassza ki a be- és kijelentkezési dátumot.",
+        type: "warning",
+      });
       return;
     }
-    if (isNaN(numOfAdults) || numOfAdults < 1 || isNaN(numOfChildren) || numOfChildren < 0) {
-      setToast({ message: "Kérem válassza ki a felnőttek és gyermekek számát.", type: "warning" });
+    if (
+      isNaN(numOfAdults) ||
+      numOfAdults < 1 ||
+      isNaN(numOfChildren) ||
+      numOfChildren < 0
+    ) {
+      setToast({
+        message: "Kérem válassza ki a felnőttek és gyermekek számát.",
+        type: "warning",
+      });
       return;
     }
     if (checkInDate > checkOutDate) {
-      setToast({ message: "A kijelentkezési dátum nem lehet korábbi, mint a bejelentkezési dátum.", type: "error" });
+      setToast({
+        message:
+          "A kijelentkezési dátum nem lehet korábbi, mint a bejelentkezési dátum.",
+        type: "error",
+      });
       return;
     }
     const oneDay = 24 * 60 * 60 * 1000;
-    const totalDays = Math.round(Math.abs((new Date(checkOutDate) - new Date(checkInDate)) / oneDay)) + 1;
+    const totalDays =
+      Math.round(
+        Math.abs((new Date(checkOutDate) - new Date(checkInDate)) / oneDay),
+      ) + 1;
     setTotalPrice(totalDays * roomDetails.roomPrice);
     setTotalGuests(numOfAdults + numOfChildren);
   }
 
   async function acceptBooking() {
     try {
-      const fmt = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split("T")[0];
+      const fmt = (d) =>
+        new Date(d.getTime() - d.getTimezoneOffset() * 60000)
+          .toISOString()
+          .split("T")[0];
       const booking = {
         checkInDate: fmt(new Date(checkInDate)),
         checkOutDate: fmt(new Date(checkOutDate)),
@@ -70,26 +105,42 @@ function RoomDetailsPage() {
       };
       const response = await bookRoom(roomId, userId, booking);
       if (response.status === 200) {
-        setToast({ message: `Sikeres foglalás! Foglalási kód: ${response.bookingConfirmationCode}`, type: "success" });
+        setToast({
+          message: `Sikeres foglalás! Foglalási kód: ${response.bookingConfirmationCode}`,
+          type: "success",
+        });
         setTimeout(() => navigate("/rooms"), 5000);
       }
     } catch (err) {
-      setToast({ message: err.response?.data?.message || err.message, type: "error" });
+      setToast({
+        message: err.response?.data?.message || err.message,
+        type: "error",
+      });
     }
   }
 
-  if (isLoading) return <div className={style.loading}>Szoba adatok betöltése...</div>;
+  if (isLoading)
+    return <div className={style.loading}>Szoba adatok betöltése...</div>;
   if (error) return <div className={style.error}>Hiba történt: {error}</div>;
 
-  const { roomType: roomTypeName, roomPrice, roomPhotoUrl, roomDescription, imageUrls } = roomDetails;
+  const {
+    roomType: roomTypeName,
+    roomPrice,
+    roomPhotoUrl,
+    roomDescription,
+    imageUrls,
+  } = roomDetails;
   const allImages = [roomPhotoUrl, ...(imageUrls || [])].filter(Boolean);
 
   return (
     <div className={style.pageWrapper}>
-      <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "success" })} />
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast({ message: "", type: "success" })}
+      />
 
       <div className={style.roomDetailsContainer}>
-
         {/* HERO HEADER */}
         <div className={style.heroHeader}>
           <div className={style.heroLeft}>
@@ -101,7 +152,10 @@ function RoomDetailsPage() {
             </div>
           </div>
           <div className={style.heroActions}>
-            <button className={style.bookNowButton} onClick={() => setShowDatePicker(true)}>
+            <button
+              className={style.bookNowButton}
+              onClick={() => setShowDatePicker(true)}
+            >
               Foglalj most
             </button>
             <button className={style.goBackButton} onClick={() => navigate(-1)}>
@@ -112,7 +166,6 @@ function RoomDetailsPage() {
 
         {/* CONTENT GRID */}
         <div className={style.contentGrid}>
-
           {/* BAL: CAROUSEL + LEÍRÁS */}
           <div className={style.carouselCard}>
             <div className={style.carouselWrapper}>
@@ -195,24 +248,33 @@ function RoomDetailsPage() {
                 </div>
               </div>
 
-              <button className={style.confirmBookingButton} onClick={handleConfirmBooking}>
+              <button
+                className={style.confirmBookingButton}
+                onClick={handleConfirmBooking}
+              >
                 Foglalás megerősítése
               </button>
 
               {totalPrice > 0 && (
                 <div className={style.totalPriceContainer}>
                   <div className={style.totalPriceInfo}>
-                    <p>Összes vendég: <strong>{totalGuests} fő</strong></p>
-                    <p>Végösszeg: <strong>${totalPrice}</strong></p>
+                    <p>
+                      Összes vendég: <strong>{totalGuests} fő</strong>
+                    </p>
+                    <p>
+                      Végösszeg: <strong>${totalPrice}</strong>
+                    </p>
                   </div>
-                  <button onClick={acceptBooking} className={style.acceptBookingButton}>
+                  <button
+                    onClick={acceptBooking}
+                    className={style.acceptBookingButton}
+                  >
                     Foglalás elfogadása ✓
                   </button>
                 </div>
               )}
             </div>
           )}
-
         </div>
       </div>
     </div>

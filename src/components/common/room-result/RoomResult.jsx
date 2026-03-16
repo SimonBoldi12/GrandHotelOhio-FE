@@ -1,9 +1,10 @@
-import { useNavigate } from "react-router";
 import style from "./RoomResult.module.css";
+import { useNavigate } from "react-router";
 import { isAdmin } from "../../../service/ApiService";
 
-function RoomResult({ roomSearchResults = [], adminView = false }) {
+function RoomResult({ roomSearchResults = [], adminView = false, dateParams = "" }) {
     const navigate = useNavigate();
+    const admin = isAdmin();
 
     return (
         <section className={style.roomResults}>
@@ -19,11 +20,17 @@ function RoomResult({ roomSearchResults = [], adminView = false }) {
                             </div>
                             <div className={style.bookNowDiv}>
                                 {adminView ? (
-                                    <button className={style.editRoomButton} onClick={() => navigate(`/admin/edit-room/${room.id}`)}>
+                                    <button
+                                        className={style.editRoomButton}
+                                        onClick={() => navigate(`/admin/edit-room/${room.id}`)}
+                                    >
                                         Szoba szerkesztése
                                     </button>
                                 ) : (
-                                    <button className={style.bookNowButton} onClick={() => navigate(`/room-details-book/${room.id}`)}>
+                                    <button
+                                        className={style.bookNowButton}
+                                        onClick={() => navigate(`/room-details-book/${room.id}${dateParams}`)}
+                                    >
                                         Megtekintés / Foglalás
                                     </button>
                                 )}
