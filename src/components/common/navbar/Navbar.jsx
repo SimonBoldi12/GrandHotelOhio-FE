@@ -17,13 +17,15 @@ import Logout from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate, NavLink } from "react-router-dom";
-import { isAuthenticated, isAdmin, logout, getLoggedInUserName } from "../../../service/ApiService";
+import { isAuthenticated, isAdmin, logout, getLoggedInUserName, getLoggedInUserEmail } from "../../../service/ApiService";
 import style from "./Navbar.module.css";
 import hotel_svg from "../../../assets/hotel-svg.svg";
 
 function getMonogramColors() {
     try {
-        const saved = localStorage.getItem("monogramColors");
+        const email = getLoggedInUserEmail();
+        if (!email) return { bg: "#6b7280", text: "#ffffff" };
+        const saved = localStorage.getItem(`monogramColors_${email}`);
         if (saved) return JSON.parse(saved);
     } catch {}
     return { bg: "#6b7280", text: "#ffffff" };
@@ -48,7 +50,6 @@ function Monogram({ size = 32 }) {
             fontSize: size * 0.4,
             fontFamily: "'DM Sans', sans-serif",
             flexShrink: 0,
-            backdropFilter: "saturate(0.8) brightness(0.95)",
         }}>
             {letter}
         </div>

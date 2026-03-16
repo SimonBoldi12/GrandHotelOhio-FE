@@ -49,7 +49,15 @@ export const getUserProfile = async () => {
     return data;
 };
 
+
 export const getLoggedInUserName = () => {
+    const token = Cookies.get("token");
+    if (!token) return "";
+    return parseJwt(token)?.sub || "";
+};
+
+
+export const getLoggedInUserEmail = () => {
     const token = Cookies.get("token");
     if (!token) return "";
     return parseJwt(token)?.sub || "";

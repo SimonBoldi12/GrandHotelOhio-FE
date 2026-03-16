@@ -18,10 +18,12 @@ import AddRoomPage from "./components/admin/add-room-page/AddRoomPage";
 import EditRoomPage from "./components/admin/edit-room-page/EditRoomPage";
 import EditBookingPage from "./components/admin/edit-booking-page/EditBookingPage";
 import ManageUsersPage from "./components/admin/manage-users-page/ManageUsersPage";
+import ScrollToTop from "./components/common/scroll-to-top/ScrollToTop";
 
 function App() {
   return (
     <div className="appCont">
+      <ScrollToTop />
       <Navbar />
       <main className="main">
         <Routes>
