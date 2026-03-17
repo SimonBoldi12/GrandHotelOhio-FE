@@ -75,6 +75,8 @@ function ManageBookingsPage() {
           <span className={style.bookingCount}>
             Találat: <strong>{filteredBookings.length} foglalás</strong>
           </span>
+
+          <button className={style.backButton} onClick={() => navigate("/admin")}>← Vissza</button>
         </div>
 
         {/* KERESÉS */}

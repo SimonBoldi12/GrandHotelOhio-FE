@@ -251,6 +251,24 @@
   justify-content: center;
 }
 
+.backButton {
+  padding: 10px 20px;
+  background: #111827;
+  border: 1.5px solid #1e293b;
+  border-radius: 10px;
+  color: #94a3b8;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+}
+
+.backButton:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
 /* ── RESZPONZÍV ── */
 @media (max-width: 768px) {
   .manageBookingsWrapper {

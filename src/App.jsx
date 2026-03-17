@@ -19,6 +19,11 @@ import EditRoomPage from "./components/admin/edit-room-page/EditRoomPage";
 import EditBookingPage from "./components/admin/edit-booking-page/EditBookingPage";
 import ManageUsersPage from "./components/admin/manage-users-page/ManageUsersPage";
 import ScrollToTop from "./components/common/scroll-to-top/ScrollToTop";
+import ManageServicesPage from "./components/admin/manage-services-page/ManageServicesPage";
+import GalleryPage from "./components/gallery-page/GalleryPage";
+import ManageGalleryPage from "./components/admin/manage-gallery/ManageGalleryPage";
+import ServicesPage from "./components/service-page/ServicePage";
+
 
 function App() {
   return (
@@ -33,6 +38,8 @@ function App() {
           <Route path="/rooms" element={<AllRoomsPage />} />
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
 
           {/* Authenticated users routes */ }
           <Route path="/room-details-book/:roomId" element={ <ProtectedRoute element={<RoomDetailsPage />} /> } />
@@ -48,8 +55,10 @@ function App() {
           <Route path="/admin/add-room" element={ <AdminRoute element={<AddRoomPage />} /> } />
           <Route path="/admin/edit-booking/:bookingCode" element={ <AdminRoute element={<EditBookingPage />} /> } />
           <Route path="/admin/manage-users" element={ <AdminRoute element={<ManageUsersPage />} /> } />
+          <Route path="/admin/manage-services" element={ <AdminRoute element={<ManageServicesPage />} /> } />
+          <Route path="/admin/manage-gallery" element={ <AdminRoute element={<ManageGalleryPage />} /> } />
+          
           <Route path="*" element={<Navigate to="/home" />} />
-
         </Routes>
       </main>
       <Footer />

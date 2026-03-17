@@ -59,9 +59,12 @@ function ManageRoomPage() {
                         <h2 className={style.title}>Szobák <span>kezelése</span></h2>
                         <p className={style.subtitle}>Szobák listázása, szerkesztése és törlése.</p>
                     </div>
-                    <button className={style.addRoomButton} onClick={() => navigate("/admin/add-room")}>
+                    <div className={style.headerRight}>
+                        <button className={style.addRoomButton} onClick={() => navigate("/admin/add-room")}>
                         + Új szoba hozzáadása
-                    </button>
+                        </button>
+                        <button className={style.backButton} onClick={() => navigate("/admin")}>← Vissza</button>
+                    </div>
                 </div>
 
                 {/* CONTROLS */}

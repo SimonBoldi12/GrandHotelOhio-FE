@@ -3,6 +3,7 @@ import { getAllUsers, deleteUser } from "../../../service/ApiService";
 import Pagination from "../../common/pagination/Pagination";
 import style from "./ManageUsersPage.module.css";
 import Toast from "../../common/toast/Toast";
+import { useNavigate } from "react-router";
 
 function ManageUsersPage() {
     const [users, setUsers] = useState([]);
@@ -11,6 +12,7 @@ function ManageUsersPage() {
     const [toast, setToast] = useState({ message: "", type: "success" });
     const [currentPage, setCurrentPage] = useState(1);
     const [usersPerPage] = useState(6);
+    const navigate = useNavigate();
 
     useEffect(() => { fetchUsers(); }, []);
 
@@ -58,6 +60,7 @@ function ManageUsersPage() {
                     <span className={style.userCount}>
                         Találat: <strong>{filteredUsers.length} felhasználó</strong>
                     </span>
+                    <button className={style.backButton} onClick={() => navigate("/admin")}>← Vissza</button>
                 </div>
 
                 {/* KERESÉS */}
