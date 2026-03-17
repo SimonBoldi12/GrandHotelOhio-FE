@@ -19,7 +19,7 @@ import EditRoomPage from "./components/admin/edit-room-page/EditRoomPage";
 import EditBookingPage from "./components/admin/edit-booking-page/EditBookingPage";
 import ManageUsersPage from "./components/admin/manage-users-page/ManageUsersPage";
 import ScrollToTop from "./components/common/scroll-to-top/ScrollToTop";
-import ManageServicesPage from "./components/admin/manage-services-page/ManageServicesPage";
+import ManageServicesPage from "./components/admin/manage-service-page/ManageServicesPage";
 import GalleryPage from "./components/gallery-page/GalleryPage";
 import ManageGalleryPage from "./components/admin/manage-gallery/ManageGalleryPage";
 import ServicesPage from "./components/service-page/ServicePage";

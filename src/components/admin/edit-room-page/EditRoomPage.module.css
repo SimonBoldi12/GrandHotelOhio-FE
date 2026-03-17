@@ -297,6 +297,231 @@
   border-color: rgba(220, 38, 38, 0.5);
 }
 
+/* ── FELSZERELTSÉG ── */
+.amenityAddRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.iconInput {
+  width: 60px;
+  padding: 10px;
+  background: #0a0f1e;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  color: #f1f5f9;
+  font-size: 1.1rem;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s;
+}
+
+.iconInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.amenityInput {
+  flex: 1;
+  padding: 10px 14px;
+  background: #0a0f1e;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s;
+}
+
+.amenityInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.addAmenityBtn {
+  padding: 10px 18px;
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.addAmenityBtn:hover {
+  background: rgba(59, 130, 246, 0.25);
+}
+
+.amenityList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.amenityItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #0a0f1e;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  transition: border-color 0.2s;
+}
+
+.amenityItem:hover {
+  border-color: #334155;
+}
+
+.amenityIcon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.amenityName {
+  flex: 1;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #cbd5e1;
+}
+
+.amenityDeleteBtn {
+  background: none;
+  border: none;
+  color: #475569;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.amenityDeleteBtn:hover {
+  color: #f87171;
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.emptyHint {
+  font-size: 0.82rem;
+  color: #334155;
+  margin: 0 0 8px;
+}
+
+/* ── ÉTKEZÉSI CSOMAG ── */
+.mealPlanCurrent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.mealPlanInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mealPlanBadge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #60a5fa;
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.mealPlanName {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.mealPlanPrice {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.mealPlanRemoveBtn {
+  padding: 6px 14px;
+  background: rgba(220, 38, 38, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.mealPlanRemoveBtn:hover {
+  background: rgba(220, 38, 38, 0.2);
+}
+
+.mealPlanSetRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.mealPlanSelect {
+  flex: 1;
+  padding: 10px 14px;
+  background: #0a0f1e;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  color: #f1f5f9;
+  font-size: 0.88rem;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s;
+}
+
+.mealPlanSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.mealPlanSetBtn {
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.mealPlanSetBtn:hover {
+  opacity: 0.9;
+}
+
+.mealPlanSetBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* ── RESZPONZÍV ── */
 @media (max-width: 640px) {
   .editRoomWrapper {

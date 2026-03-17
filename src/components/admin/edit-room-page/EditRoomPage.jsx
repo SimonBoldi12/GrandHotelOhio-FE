@@ -1,8 +1,19 @@
 import { useNavigate, useParams } from "react-router";
 import style from "./EditRoomPage.module.css";
 import { useEffect, useState } from "react";
-import { deleteRoom, getRoomById, updateRoom, addImageToRoom } from "../../../service/ApiService";
+import {
+    deleteRoom, getRoomById, updateRoom, addImageToRoom,
+    getAllMealPlans, addAmenityToRoom, deleteAmenityFromRoom,
+    addMealPlanToRoom, removeMealPlanFromRoom
+} from "../../../service/ApiService";
 import Toast from "../../common/toast/Toast";
+
+const MEAL_TYPE_LABEL = {
+    BREAKFAST: "Csak reggeli",
+    HALF_BOARD: "Félpanzió",
+    ALL_INCLUSIVE: "All inclusive",
+    NONE: "Nincs étkezés",
+};
 
 function EditRoomPage() {
     const { roomId } = useParams();
@@ -18,23 +29,39 @@ function EditRoomPage() {
     const [isUploading, setIsUploading] = useState(false);
     const [toast, setToast] = useState({ message: "", type: "success" });
 
+    // Amenity
+    const [amenities, setAmenities] = useState([]);
+    const [newAmenityName, setNewAmenityName] = useState("");
+    const [newAmenityIcon, setNewAmenityIcon] = useState("");
+
+    // Meal plan - most több lehet
+    const [mealPlans, setMealPlans] = useState([]);
+    const [roomMealPlans, setRoomMealPlans] = useState([]);
+    const [selectedMealPlanId, setSelectedMealPlanId] = useState("");
+
     useEffect(() => {
-        async function fetchRoomDetails() {
+        async function fetchData() {
             try {
                 const response = await getRoomById(roomId);
+                const room = response.room;
                 setRoomDetails({
-                    roomPhotoUrl: response.room.roomPhotoUrl,
-                    roomType: response.room.roomType,
-                    roomPrice: response.room.roomPrice,
-                    roomDescription: response.room.roomDescription,
+                    roomPhotoUrl: room.roomPhotoUrl,
+                    roomType: room.roomType,
+                    roomPrice: room.roomPrice,
+                    roomDescription: room.roomDescription,
                 });
-                setPreview(response.room.roomPhotoUrl);
-                setExistingImages(response.room.imageUrls || []);
+                setPreview(room.roomPhotoUrl);
+                setExistingImages(room.imageUrls || []);
+                setAmenities(room.amenities || []);
+                setRoomMealPlans(room.mealPlans || []);
+
+                const mealRes = await getAllMealPlans();
+                setMealPlans(mealRes.mealPlanList || []);
             } catch (error) {
                 setToast({ message: "Szoba adatok lekérése sikertelen: " + (error.response?.data?.message || error.message), type: "error" });
             }
         }
-        fetchRoomDetails();
+        fetchData();
     }, [roomId]);
 
     function handleChange(event) {
@@ -62,10 +89,59 @@ function EditRoomPage() {
         setNewPreviews(prev => prev.filter((_, i) => i !== index));
     }
 
+    async function handleAddAmenity() {
+        if (!newAmenityName.trim()) {
+            setToast({ message: "Kérem adja meg a felszereltség nevét.", type: "warning" });
+            return;
+        }
+        try {
+            await addAmenityToRoom(roomId, newAmenityName, newAmenityIcon || "⭐");
+            setToast({ message: "Felszereltség hozzáadva!", type: "success" });
+            setNewAmenityName("");
+            setNewAmenityIcon("");
+            const res = await getRoomById(roomId);
+            setAmenities(res.room.amenities || []);
+        } catch (error) {
+            setToast({ message: error.response?.data?.message || error.message, type: "error" });
+        }
+    }
+
+    async function handleDeleteAmenity(amenityId) {
+        try {
+            await deleteAmenityFromRoom(amenityId);
+            setAmenities(prev => prev.filter(a => a.id !== amenityId));
+            setToast({ message: "Felszereltség törölve!", type: "success" });
+        } catch (error) {
+            setToast({ message: error.response?.data?.message || error.message, type: "error" });
+        }
+    }
+
+    async function handleAddMealPlan() {
+        if (!selectedMealPlanId) return;
+        try {
+            await addMealPlanToRoom(roomId, selectedMealPlanId);
+            const res = await getRoomById(roomId);
+            setRoomMealPlans(res.room.mealPlans || []);
+            setSelectedMealPlanId("");
+            setToast({ message: "Étkezési csomag hozzáadva!", type: "success" });
+        } catch (error) {
+            setToast({ message: error.response?.data?.message || error.message, type: "error" });
+        }
+    }
+
+    async function handleRemoveMealPlan(mealPlanId) {
+        try {
+            await removeMealPlanFromRoom(roomId, mealPlanId);
+            setRoomMealPlans(prev => prev.filter(m => m.id !== mealPlanId));
+            setToast({ message: "Étkezési csomag eltávolítva!", type: "success" });
+        } catch (error) {
+            setToast({ message: error.response?.data?.message || error.message, type: "error" });
+        }
+    }
+
     async function handleUpdate() {
         setIsUploading(true);
         try {
-            // 1. Alap adatok + fő kép frissítése
             const formData = new FormData();
             formData.append("roomType", roomDetails.roomType);
             formData.append("roomPrice", roomDetails.roomPrice);
@@ -74,7 +150,6 @@ function EditRoomPage() {
             const result = await updateRoom(roomId, formData);
             if (result.status !== 200) throw new Error("Frissítés sikertelen.");
 
-            // 2. Új extra képek feltöltése
             if (newFiles.length > 0) {
                 for (const newFile of newFiles) {
                     await addImageToRoom(roomId, newFile);
@@ -167,13 +242,7 @@ function EditRoomPage() {
                                 <div className={style.uploadIcon}>➕</div>
                                 <p>Képek hozzáadása</p>
                             </div>
-                            <input
-                                type="file"
-                                className={style.uploadInput}
-                                onChange={handleNewImagesChange}
-                                multiple
-                                accept="image/*"
-                            />
+                            <input type="file" className={style.uploadInput} onChange={handleNewImagesChange} multiple accept="image/*" />
                         </div>
                     </div>
 
@@ -191,6 +260,89 @@ function EditRoomPage() {
                             <label htmlFor="roomDescription">Leírás</label>
                             <textarea name="roomDescription" id="roomDescription" value={roomDetails.roomDescription} onChange={handleChange} />
                         </div>
+                    </div>
+
+                    <div className={style.divider} />
+
+                    {/* FELSZERELTSÉG */}
+                    <div className={style.sectionLabel}>🛋️ Felszereltség</div>
+                    <div className={style.amenityAddRow}>
+                        <input
+                            type="text"
+                            placeholder="pl. 🛁"
+                            value={newAmenityIcon}
+                            onChange={e => setNewAmenityIcon(e.target.value)}
+                            className={style.iconInput}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Felszereltség neve..."
+                            value={newAmenityName}
+                            onChange={e => setNewAmenityName(e.target.value)}
+                            onKeyDown={e => e.key === "Enter" && handleAddAmenity()}
+                            className={style.amenityInput}
+                        />
+                        <button className={style.addAmenityBtn} onClick={handleAddAmenity}>
+                            Hozzáadás
+                        </button>
+                    </div>
+                    {amenities.length > 0 ? (
+                        <div className={style.amenityList}>
+                            {amenities.map(a => (
+                                <div key={a.id} className={style.amenityItem}>
+                                    <span className={style.amenityIcon}>{a.icon}</span>
+                                    <span className={style.amenityName}>{a.name}</span>
+                                    <button className={style.amenityDeleteBtn} onClick={() => handleDeleteAmenity(a.id)}>✕</button>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className={style.emptyHint}>Még nincs felszereltség ehhez a szobához.</p>
+                    )}
+
+                    <div className={style.divider} />
+
+                    {/* ÉTKEZÉSI CSOMAGOK */}
+                    <div className={style.sectionLabel}>🍽️ Étkezési csomagok</div>
+                    {roomMealPlans.length > 0 ? (
+                        <div className={style.amenityList}>
+                            {roomMealPlans.map(m => (
+                                <div key={m.id} className={style.amenityItem}>
+                                    <span className={style.amenityIcon}>🍽️</span>
+                                    <span className={style.amenityName}>
+                                        {m.name}
+                                        <span className={style.mealPlanPrice}> · +${m.pricePerNight}/éj</span>
+                                    </span>
+                                    <button className={style.amenityDeleteBtn} onClick={() => handleRemoveMealPlan(m.id)}>✕</button>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className={style.emptyHint}>Nincs étkezési csomag hozzárendelve.</p>
+                    )}
+                    <div className={style.mealPlanSetRow}>
+                        <select
+                            value={selectedMealPlanId}
+                            onChange={e => setSelectedMealPlanId(e.target.value)}
+                            className={style.mealPlanSelect}
+                        >
+                            <option value="">Válassz étkezési csomagot...</option>
+                            {mealPlans
+                                .filter(m => !roomMealPlans.find(rm => rm.id === m.id))
+                                .map(m => (
+                                    <option key={m.id} value={m.id}>
+                                        {m.name} – +${m.pricePerNight}/éj
+                                    </option>
+                                ))
+                            }
+                        </select>
+                        <button
+                            className={style.mealPlanSetBtn}
+                            onClick={handleAddMealPlan}
+                            disabled={!selectedMealPlanId}
+                        >
+                            Hozzáadás
+                        </button>
                     </div>
 
                     <div className={style.divider} />
@@ -213,7 +365,6 @@ function EditRoomPage() {
                         </div>
                         <button className={style.deleteButton} onClick={handleDelete}>Törlés</button>
                     </div>
-
                 </div>
             </div>
         </div>

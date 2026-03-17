@@ -3,6 +3,13 @@ import { getUserBookings, getUserProfile, cancelBooking } from "../../../service
 import { useState, useEffect } from "react";
 import Toast from "../../common/toast/Toast";
 
+const MEAL_TYPE_LABEL = {
+  BREAKFAST: "Csak reggeli",
+  HALF_BOARD: "Félpanzió",
+  ALL_INCLUSIVE: "All inclusive",
+  NONE: "Nincs étkezés",
+};
+
 function FindBookingPage() {
   const [bookings, setBookings] = useState([]);
   const [toast, setToast] = useState({ message: "", type: "error" });
@@ -33,6 +40,15 @@ function FindBookingPage() {
     }
   }
 
+  function calcTotal(booking) {
+    const oneDay = 24 * 60 * 60 * 1000;
+    const days = Math.round(Math.abs((new Date(booking.checkOutDate) - new Date(booking.checkInDate)) / oneDay)) + 1;
+    const roomPrice = booking.room?.roomPrice || 0;
+    const mealPrice = booking.selectedMealPlan?.pricePerNight || 0;
+    const servicesPrice = (booking.selectedServices || []).reduce((sum, s) => sum + (s.price || 0), 0);
+    return { days, total: days * (roomPrice + mealPrice + servicesPrice) };
+  }
+
   return (
     <div className={style.findBookingContainer}>
       <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "error" })} />
@@ -51,9 +67,10 @@ function FindBookingPage() {
       ) : (
         <div className={style.bookingList}>
           {bookings.map((booking) => {
-            const oneDay = 24 * 60 * 60 * 1000;
-            const days = Math.round(Math.abs((new Date(booking.checkOutDate) - new Date(booking.checkInDate)) / oneDay)) + 1;
-            const total = days * booking.room?.roomPrice;
+            const { days, total } = calcTotal(booking);
+            const mealPlan = booking.selectedMealPlan;
+            const amenities = booking.room?.amenities || [];
+            const services = booking.selectedServices || [];
 
             return (
               <div key={booking.id} className={style.bookingDetailsContainer}>
@@ -64,6 +81,8 @@ function FindBookingPage() {
                     <span className={style.confirmationBadge}>{booking.bookingConfirmationCode}</span>
                   </div>
                   <div className={style.divider} />
+
+                  {/* ALAP ADATOK */}
                   <div className={style.bookingGrid}>
                     <div className={style.bookingField}>
                       <span>Érkezés</span>
@@ -90,6 +109,53 @@ function FindBookingPage() {
                       <span>${total}</span>
                     </div>
                   </div>
+
+                  {/* FELSZERELTSÉG */}
+                  {amenities.length > 0 && (
+                    <>
+                      <div className={style.divider} />
+                      <div className={style.sectionLabel}>🛋️ Felszereltség</div>
+                      <div className={style.amenityRow}>
+                        {amenities.map(a => (
+                          <span key={a.id} className={style.amenityChip}>
+                            {a.icon} {a.name}
+                          </span>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  {/* KIVÁLASZTOTT ÉTKEZÉSI CSOMAG */}
+                  {mealPlan && (
+                    <>
+                      <div className={style.divider} />
+                      <div className={style.sectionLabel}>🍽️ Étkezési csomag</div>
+                      <div className={style.mealPlanRow}>
+                        <span className={style.mealPlanBadge}>
+                          {MEAL_TYPE_LABEL[mealPlan.type] || mealPlan.type}
+                        </span>
+                        <span className={style.mealPlanName}>{mealPlan.name}</span>
+                        <span className={style.mealPlanPrice}>+${mealPlan.pricePerNight}/éj</span>
+                      </div>
+                    </>
+                  )}
+
+                  {/* EXTRA SZOLGÁLTATÁSOK */}
+                  {services.length > 0 && (
+                    <>
+                      <div className={style.divider} />
+                      <div className={style.sectionLabel}>🏨 Extra szolgáltatások</div>
+                      <div className={style.servicesList}>
+                        {services.map(s => (
+                          <div key={s.id} className={style.serviceRow}>
+                            <span className={style.serviceName}>{s.name}</span>
+                            <span className={style.servicePrice}>+${s.price}/éj</span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
                   <div className={style.divider} />
                   <div className={style.cancelZone}>
                     <div className={style.cancelInfo}>

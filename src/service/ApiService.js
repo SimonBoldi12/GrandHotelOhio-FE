@@ -169,6 +169,11 @@ export const deleteAmenity = async (amenityId) => {
     return data;
 };
 
+export const deleteAmenityFromRoom = async (amenityId) => {
+    const { data } = await api.delete(`/rooms/amenity/delete/${amenityId}`);
+    return data;
+};
+
 // ── MEAL PLANS ──
 export const getAllMealPlans = async () => {
     const { data } = await api.get("/meal-plans/all");
@@ -194,8 +199,13 @@ export const deleteMealPlan = async (id) => {
     return data;
 };
 
-export const setRoomMealPlan = async (roomId, mealPlanId) => {
-    const { data } = await api.put(`/rooms/${roomId}/set-meal-plan/${mealPlanId}`);
+export const addMealPlanToRoom = async (roomId, mealPlanId) => {
+    const { data } = await api.post(`/rooms/${roomId}/meal-plan/${mealPlanId}`);
+    return data;
+};
+
+export const removeMealPlanFromRoom = async (roomId, mealPlanId) => {
+    const { data } = await api.delete(`/rooms/${roomId}/meal-plan/${mealPlanId}`);
     return data;
 };
 
@@ -223,7 +233,6 @@ export const getServicesByCategory = async (category) => {
     return data;
 };
 
-
 export const updateService = async (id, params) => {
     const { data } = await api.put(`/services/update/${id}`, null, { params });
     return data;
@@ -233,7 +242,6 @@ export const deleteService = async (id) => {
     const { data } = await api.delete(`/services/delete/${id}`);
     return data;
 };
-
 
 export const addServiceToBooking = async (bookingId, serviceId) => {
     const { data } = await api.post(`/bookings/${bookingId}/add-service/${serviceId}`);
@@ -264,8 +272,12 @@ export const deleteGalleryImage = async (id) => {
 };
 
 // ── BOOKINGS ──
-export const bookRoom = async (roomId, userId, booking) => {
-    const { data } = await api.post(`/bookings/book-room/${roomId}/${userId}`, booking);
+export const bookRoom = async (roomId, userId, booking, mealPlanId) => {
+    const { data } = await api.post(
+        `/bookings/book-room/${roomId}/${userId}`,
+        booking,
+        { params: mealPlanId ? { mealPlanId } : {} }
+    );
     return data;
 };
 

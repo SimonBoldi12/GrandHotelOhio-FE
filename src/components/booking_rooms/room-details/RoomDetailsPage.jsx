@@ -63,132 +63,87 @@ function RoomDetailsPage() {
   useEffect(() => {
     if (!checkInDate || !checkOutDate || !roomDetails) return;
     const oneDay = 24 * 60 * 60 * 1000;
-    const totalDays =
-      Math.round(
-        Math.abs((new Date(checkOutDate) - new Date(checkInDate)) / oneDay),
-      ) + 1;
+    const totalDays = Math.round(Math.abs((new Date(checkOutDate) - new Date(checkInDate)) / oneDay)) + 1;
     const mealPlanPrice = selectedMealPlan ? selectedMealPlan.pricePerNight : 0;
-    const servicesPrice = selectedServices.reduce(
-      (sum, s) => sum + (s.price || 0),
-      0,
-    );
-    setTotalPrice(
-      totalDays * (roomDetails.roomPrice + mealPlanPrice + servicesPrice),
-    );
+    const servicesPrice = selectedServices.reduce((sum, s) => sum + (s.price || 0), 0);
+    setTotalPrice(totalDays * (roomDetails.roomPrice + mealPlanPrice + servicesPrice));
     setTotalGuests(numOfAdults + numOfChildren);
-  }, [
-    checkInDate,
-    checkOutDate,
-    selectedMealPlan,
-    selectedServices,
-    numOfAdults,
-    numOfChildren,
-    roomDetails,
-  ]);
+  }, [checkInDate, checkOutDate, selectedMealPlan, selectedServices, numOfAdults, numOfChildren, roomDetails]);
 
   function toggleService(service) {
     setSelectedServices((prev) =>
       prev.find((s) => s.id === service.id)
         ? prev.filter((s) => s.id !== service.id)
-        : [...prev, service],
+        : [...prev, service]
     );
   }
 
-  const serviceExtraPrice = selectedServices.reduce(
-    (sum, s) => sum + (s.price || 0),
-    0,
-  );
+  const serviceExtraPrice = selectedServices.reduce((sum, s) => sum + (s.price || 0), 0);
 
   async function handleConfirmBooking() {
     if (!checkInDate || !checkOutDate) {
-      setToast({
-        message: "Kérem válassza ki a be- és kijelentkezési dátumot.",
-        type: "warning",
-      });
+      setToast({ message: "Kérem válassza ki a be- és kijelentkezési dátumot.", type: "warning" });
       return;
     }
-    if (
-      isNaN(numOfAdults) ||
-      numOfAdults < 1 ||
-      isNaN(numOfChildren) ||
-      numOfChildren < 0
-    ) {
-      setToast({
-        message: "Kérem válassza ki a felnőttek és gyermekek számát.",
-        type: "warning",
-      });
+    if (isNaN(numOfAdults) || numOfAdults < 1 || isNaN(numOfChildren) || numOfChildren < 0) {
+      setToast({ message: "Kérem válassza ki a felnőttek és gyermekek számát.", type: "warning" });
       return;
     }
     if (checkInDate > checkOutDate) {
-      setToast({
-        message:
-          "A kijelentkezési dátum nem lehet korábbi, mint a bejelentkezési dátum.",
-        type: "error",
-      });
+      setToast({ message: "A kijelentkezési dátum nem lehet korábbi, mint a bejelentkezési dátum.", type: "error" });
       return;
     }
     setTotalGuests(numOfAdults + numOfChildren);
   }
 
   async function acceptBooking() {
-    try {
-      const fmt = (d) =>
-        new Date(d.getTime() - d.getTimezoneOffset() * 60000)
-          .toISOString()
-          .split("T")[0];
-      const booking = {
-        checkInDate: fmt(new Date(checkInDate)),
-        checkOutDate: fmt(new Date(checkOutDate)),
-        numOfAdults,
-        numOfChildren,
-      };
-      const response = await bookRoom(roomId, userId, booking);
-      if (response.status === 200) {
-        if (selectedServices.length > 0) {
-          const { addServiceToBooking, getBookingByConfirmationCode } =
-            await import("../../../service/ApiService");
-          const bookingRes = await getBookingByConfirmationCode(
-            response.bookingConfirmationCode,
-          );
-          const bookingId = bookingRes.booking.id;
-          for (const s of selectedServices) {
-            await addServiceToBooking(bookingId, s.id);
-          }
-        }
-        setToast({
-          message: `Sikeres foglalás! Foglalási kód: ${response.bookingConfirmationCode}`,
-          type: "success",
-        });
-        setTimeout(() => navigate("/rooms"), 5000);
-      }
-    } catch (err) {
-      setToast({
-        message: err.response?.data?.message || err.message,
-        type: "error",
-      });
-    }
-  }
+  try {
+    const fmt = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split("T")[0];
+    const booking = {
+      checkInDate: fmt(new Date(checkInDate)),
+      checkOutDate: fmt(new Date(checkOutDate)),
+      numOfAdults,
+      numOfChildren,
+    };
 
-  if (isLoading)
-    return <div className={style.loading}>Szoba adatok betöltése...</div>;
+    const mealPlanId = selectedMealPlan ? selectedMealPlan.id : null;
+
+    const response = await bookRoom(roomId, userId, booking, mealPlanId);
+
+    if (response.status === 200) {
+      if (selectedServices.length > 0) {
+        const { addServiceToBooking, getBookingByConfirmationCode } = await import("../../../service/ApiService");
+        const bookingRes = await getBookingByConfirmationCode(response.bookingConfirmationCode);
+        const bookingId = bookingRes.booking.id;
+        for (const s of selectedServices) {
+          await addServiceToBooking(bookingId, s.id);
+        }
+      }
+      setToast({ message: `Sikeres foglalás! Foglalási kód: ${response.bookingConfirmationCode}`, type: "success" });
+      setTimeout(() => navigate("/rooms"), 5000);
+    }
+  } catch (err) {
+    setToast({ message: err.response?.data?.message || err.message, type: "error" });
+  }
+}
+
+  if (isLoading) return <div className={style.loading}>Szoba adatok betöltése...</div>;
   if (error) return <div className={style.error}>Hiba történt: {error}</div>;
 
-  const {
-    roomType: roomTypeName,
-    roomPrice,
-    roomPhotoUrl,
-    roomDescription,
-    imageUrls,
-  } = roomDetails;
+  const { roomType: roomTypeName, roomPrice, roomPhotoUrl, roomDescription, imageUrls } = roomDetails;
   const allImages = [roomPhotoUrl, ...(imageUrls || [])].filter(Boolean);
+  const roomMealPlans = roomDetails.mealPlans || [];
+
+  const MEAL_TYPE_LABEL = {
+    BREAKFAST: "Reggeli",
+    HALF_BOARD: "Félpanzió",
+    ALL_INCLUSIVE: "All inclusive",
+    NONE: "Alap",
+  };
 
   return (
     <div className={style.pageWrapper}>
-      <Toast
-        message={toast.message}
-        type={toast.type}
-        onClose={() => setToast({ message: "", type: "success" })}
-      />
+      <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "success" })} />
 
       <div className={style.roomDetailsContainer}>
         {/* HERO HEADER */}
@@ -202,10 +157,7 @@ function RoomDetailsPage() {
             </div>
           </div>
           <div className={style.heroActions}>
-            <button
-              className={style.bookNowButton}
-              onClick={() => setShowDatePicker(true)}
-            >
+            <button className={style.bookNowButton} onClick={() => setShowDatePicker(true)}>
               Foglalj most
             </button>
             <button className={style.goBackButton} onClick={() => navigate(-1)}>
@@ -216,7 +168,8 @@ function RoomDetailsPage() {
 
         {/* CONTENT GRID */}
         <div className={style.contentGrid}>
-          {/* BAL: CAROUSEL + LEÍRÁS + AMENITY */}
+
+          {/* BAL: CAROUSEL + LEÍRÁS + AMENITY + ÉTKEZÉS + SZOLGÁLTATÁSOK */}
           <div className={style.carouselCard}>
             <div className={style.carouselWrapper}>
               <span className={style.imageBadge}>{roomTypeName}</span>
@@ -230,6 +183,7 @@ function RoomDetailsPage() {
               </div>
             )}
 
+            {/* FELSZERELTSÉG */}
             {roomDetails.amenities && roomDetails.amenities.length > 0 && (
               <div className={style.amenitiesSection}>
                 <p className={style.descriptionLabel}>Felszereltség</p>
@@ -243,13 +197,12 @@ function RoomDetailsPage() {
                 </div>
               </div>
             )}
-            {/* ÉTKEZÉSI CSOMAG */}
-            {roomDetails.mealPlan && (
+
+            {/* ÉTKEZÉSI CSOMAGOK - több opcióból választhat */}
+            {roomMealPlans.length > 0 && (
               <div className={style.mealPlanSection}>
                 <p className={style.descriptionLabel}>Étkezési csomag</p>
-                <p className={style.servicesSubtitle}>
-                  Válassz étkezési csomagot a tartózkodásodhoz
-                </p>
+                <p className={style.servicesSubtitle}>Válassz étkezési csomagot a tartózkodásodhoz</p>
                 <div className={style.mealPlanGrid}>
                   {/* NINCS ÉTKEZÉS OPCIÓ */}
                   <div
@@ -259,43 +212,34 @@ function RoomDetailsPage() {
                     <div className={style.mealPlanInfo}>
                       <div className={style.mealPlanTop}>
                         <span className={style.mealPlanTypeBadge}>Alap</span>
-                        {selectedMealPlan === null && (
-                          <span className={style.serviceCheckmark}>✓</span>
-                        )}
+                        {selectedMealPlan === null && <span className={style.serviceCheckmark}>✓</span>}
                       </div>
                       <p className={style.mealPlanName}>Nincs étkezés</p>
                       <p className={style.mealPlanPrice}>+$0 / éjszaka</p>
                     </div>
                   </div>
 
-                  {/* ÉTKEZÉSI CSOMAG */}
-                  <div
-                    className={`${style.mealPlanCard} ${selectedMealPlan?.id === roomDetails.mealPlan.id ? style.mealPlanCardActive : ""}`}
-                    onClick={() => setSelectedMealPlan(roomDetails.mealPlan)}
-                  >
-                    <div className={style.mealPlanInfo}>
-                      <div className={style.mealPlanTop}>
-                        <span className={style.mealPlanTypeBadge}>
-                          {roomDetails.mealPlan.type === "BREAKFAST" &&
-                            "Reggeli"}
-                          {roomDetails.mealPlan.type === "HALF_BOARD" &&
-                            "Félpanzió"}
-                          {roomDetails.mealPlan.type === "ALL_INCLUSIVE" &&
-                            "All inclusive"}
-                          {roomDetails.mealPlan.type === "NONE" && "Alap"}
-                        </span>
-                        {selectedMealPlan?.id === roomDetails.mealPlan.id && (
-                          <span className={style.serviceCheckmark}>✓</span>
-                        )}
+                  {/* ELÉRHETŐ CSOMAGOK */}
+                  {roomMealPlans.map(plan => (
+                    <div
+                      key={plan.id}
+                      className={`${style.mealPlanCard} ${selectedMealPlan?.id === plan.id ? style.mealPlanCardActive : ""}`}
+                      onClick={() => setSelectedMealPlan(plan)}
+                    >
+                      <div className={style.mealPlanInfo}>
+                        <div className={style.mealPlanTop}>
+                          <span className={style.mealPlanTypeBadge}>
+                            {MEAL_TYPE_LABEL[plan.type] || plan.type}
+                          </span>
+                          {selectedMealPlan?.id === plan.id && (
+                            <span className={style.serviceCheckmark}>✓</span>
+                          )}
+                        </div>
+                        <p className={style.mealPlanName}>{plan.name}</p>
+                        <p className={style.mealPlanPrice}>+${plan.pricePerNight} / éjszaka</p>
                       </div>
-                      <p className={style.mealPlanName}>
-                        {roomDetails.mealPlan.name}
-                      </p>
-                      <p className={style.mealPlanPrice}>
-                        +${roomDetails.mealPlan.pricePerNight} / éjszaka
-                      </p>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -304,14 +248,10 @@ function RoomDetailsPage() {
             {availableServices.length > 0 && (
               <div className={style.servicesSection}>
                 <p className={style.descriptionLabel}>Extra szolgáltatások</p>
-                <p className={style.servicesSubtitle}>
-                  Válassz kiegészítő szolgáltatásokat a tartózkodásodhoz
-                </p>
+                <p className={style.servicesSubtitle}>Válassz kiegészítő szolgáltatásokat a tartózkodásodhoz</p>
                 <div className={style.servicesGrid}>
                   {availableServices.map((s) => {
-                    const isSelected = selectedServices.find(
-                      (sel) => sel.id === s.id,
-                    );
+                    const isSelected = selectedServices.find((sel) => sel.id === s.id);
                     return (
                       <div
                         key={s.id}
@@ -319,34 +259,21 @@ function RoomDetailsPage() {
                         onClick={() => toggleService(s)}
                       >
                         {s.photoUrl && (
-                          <img
-                            src={s.photoUrl}
-                            alt={s.name}
-                            className={style.serviceImg}
-                          />
+                          <img src={s.photoUrl} alt={s.name} className={style.serviceImg} />
                         )}
                         <div className={style.serviceInfo}>
                           <div className={style.serviceTop}>
-                            <span className={style.serviceCategoryBadge}>
-                              {s.category}
-                            </span>
-                            {isSelected && (
-                              <span className={style.serviceCheckmark}>✓</span>
-                            )}
+                            <span className={style.serviceCategoryBadge}>{s.category}</span>
+                            {isSelected && <span className={style.serviceCheckmark}>✓</span>}
                           </div>
                           <p className={style.serviceName}>{s.name}</p>
-                          {s.description && (
-                            <p className={style.serviceDesc}>{s.description}</p>
-                          )}
-                          <p className={style.servicePrice}>
-                            +${s.price} / éjszaka
-                          </p>
+                          {s.description && <p className={style.serviceDesc}>{s.description}</p>}
+                          <p className={style.servicePrice}>+${s.price} / éjszaka</p>
                         </div>
                       </div>
                     );
                   })}
                 </div>
-
                 {selectedServices.length > 0 && (
                   <div className={style.servicesSummary}>
                     <span>Kiválasztott szolgáltatások extra díja:</span>
@@ -407,25 +334,15 @@ function RoomDetailsPage() {
               <div className={style.guestContainer}>
                 <div className={style.guestDiv}>
                   <label>Felnőttek</label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={numOfAdults}
-                    onChange={(e) => setNumOfAdults(parseInt(e.target.value))}
-                  />
+                  <input type="number" min="1" value={numOfAdults} onChange={(e) => setNumOfAdults(parseInt(e.target.value))} />
                 </div>
                 <div className={style.guestDiv}>
                   <label>Gyerekek</label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={numOfChildren}
-                    onChange={(e) => setNumOfChildren(parseInt(e.target.value))}
-                  />
+                  <input type="number" min="0" value={numOfChildren} onChange={(e) => setNumOfChildren(parseInt(e.target.value))} />
                 </div>
               </div>
 
-              {roomDetails.mealPlan && selectedMealPlan && (
+              {selectedMealPlan && (
                 <>
                   <div className={style.divider} />
                   <div className={style.sectionHeader}>
@@ -444,9 +361,7 @@ function RoomDetailsPage() {
                   <div className={style.divider} />
                   <div className={style.sectionHeader}>
                     <span className={style.sectionIcon}>🏨</span>
-                    <span className={style.sectionLabel}>
-                      Extra szolgáltatások
-                    </span>
+                    <span className={style.sectionLabel}>Extra szolgáltatások</span>
                   </div>
                   <div className={style.selectedServicesList}>
                     {selectedServices.map((s) => (
@@ -459,39 +374,23 @@ function RoomDetailsPage() {
                 </>
               )}
 
-              <button
-                className={style.confirmBookingButton}
-                onClick={handleConfirmBooking}
-              >
+              <button className={style.confirmBookingButton} onClick={handleConfirmBooking}>
                 Foglalás megerősítése
               </button>
 
               {totalPrice > 0 && (
                 <div className={style.totalPriceContainer}>
                   <div className={style.totalPriceInfo}>
-                    <p>
-                      Összes vendég: <strong>{totalGuests} fő</strong>
-                    </p>
+                    <p>Összes vendég: <strong>{totalGuests} fő</strong></p>
                     {selectedMealPlan && (
-                      <p>
-                        {selectedMealPlan.name}:{" "}
-                        <strong>+${selectedMealPlan.pricePerNight}/éj</strong>
-                      </p>
+                      <p>{selectedMealPlan.name}: <strong>+${selectedMealPlan.pricePerNight}/éj</strong></p>
                     )}
                     {selectedServices.length > 0 && (
-                      <p>
-                        Extra szolgáltatások:{" "}
-                        <strong>+${serviceExtraPrice}/éj</strong>
-                      </p>
+                      <p>Extra szolgáltatások: <strong>+${serviceExtraPrice}/éj</strong></p>
                     )}
-                    <p>
-                      Végösszeg: <strong>${totalPrice}</strong>
-                    </p>
+                    <p>Végösszeg: <strong>${totalPrice}</strong></p>
                   </div>
-                  <button
-                    onClick={acceptBooking}
-                    className={style.acceptBookingButton}
-                  >
+                  <button onClick={acceptBooking} className={style.acceptBookingButton}>
                     Foglalás elfogadása ✓
                   </button>
                 </div>

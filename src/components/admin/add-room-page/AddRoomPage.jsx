@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import style from "./AddRoomPage.module.css";
 import { useEffect, useState } from "react";
-import { getRoomTypes, addRoom as addRoomApi, addImageToRoom, getAllMealPlans, addAmenityToRoom, setRoomMealPlan } from "../../../service/ApiService";
+import { getRoomTypes, addRoom as addRoomApi, addImageToRoom, getAllMealPlans, addAmenityToRoom, addMealPlanToRoom } from "../../../service/ApiService";
 import Toast from "../../common/toast/Toast";
 
 const AMENITY_PRESETS = [
@@ -29,7 +29,7 @@ function AddRoomPage() {
     const [newRoomType, setNewRoomType] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [mealPlans, setMealPlans] = useState([]);
-    const [selectedMealPlanId, setSelectedMealPlanId] = useState(null);
+    const [selectedMealPlanIds, setSelectedMealPlanIds] = useState([]);
     const [selectedAmenities, setSelectedAmenities] = useState([]);
     const [customAmenity, setCustomAmenity] = useState({ name: "", icon: "" });
 
@@ -81,6 +81,12 @@ function AddRoomPage() {
         );
     }
 
+    function toggleMealPlan(id) {
+        setSelectedMealPlanIds(prev =>
+            prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+        );
+    }
+
     function addCustomAmenity() {
         if (!customAmenity.name) return;
         if (selectedAmenities.find(a => a.name === customAmenity.name)) return;
@@ -107,23 +113,22 @@ function AddRoomPage() {
             if (result.status !== 200) throw new Error("Szoba létrehozása sikertelen.");
             const roomId = result.room?.id;
 
-            // Extra képek
             if (roomId && files.length > 1) {
                 for (const extraFile of files.slice(1)) {
                     await addImageToRoom(roomId, extraFile);
                 }
             }
 
-            // Amenity-k
             if (roomId && selectedAmenities.length > 0) {
                 for (const amenity of selectedAmenities) {
                     await addAmenityToRoom(roomId, amenity.name, amenity.icon);
                 }
             }
 
-            // Étkezési csomag
-            if (roomId && selectedMealPlanId) {
-                await setRoomMealPlan(roomId, selectedMealPlanId);
+            if (roomId && selectedMealPlanIds.length > 0) {
+                for (const mealPlanId of selectedMealPlanIds) {
+                    await addMealPlanToRoom(roomId, mealPlanId);
+                }
             }
 
             setToast({ message: "Szoba sikeresen hozzáadva!", type: "success" });
@@ -131,7 +136,7 @@ function AddRoomPage() {
             setFiles([]);
             setPreviews([]);
             setSelectedAmenities([]);
-            setSelectedMealPlanId(null);
+            setSelectedMealPlanIds([]);
             setTimeout(() => navigate("/admin/manage-rooms"), 2000);
         } catch (error) {
             setToast({ message: "Hiba a szoba hozzáadásakor: " + (error.response?.data?.message || error.message), type: "error" });
@@ -232,7 +237,6 @@ function AddRoomPage() {
                         ))}
                     </div>
 
-                    {/* EGYEDI AMENITY */}
                     <div className={style.customAmenityRow}>
                         <input
                             type="text"
@@ -265,29 +269,24 @@ function AddRoomPage() {
 
                     <div className={style.sectionDivider} />
 
-                    {/* ÉTKEZÉSI CSOMAG */}
-                    <div className={style.sectionTitle}>🍽️ Étkezési csomag</div>
-                    <p className={style.sectionSubtitle}>Válaszd ki az alapértelmezett étkezési csomagot (opcionális)</p>
+                    {/* ÉTKEZÉSI CSOMAGOK - több is választható */}
+                    <div className={style.sectionTitle}>🍽️ Étkezési csomagok</div>
+                    <p className={style.sectionSubtitle}>Válaszd ki mely étkezési csomagok legyenek elérhetők ehhez a szobához (több is)</p>
                     <div className={style.mealPlanGrid}>
-                        <button
-                            type="button"
-                            className={`${style.mealChip} ${selectedMealPlanId === null ? style.mealChipActive : ""}`}
-                            onClick={() => setSelectedMealPlanId(null)}
-                        >
-                            <span>Nincs étkezés</span>
-                            <span className={style.mealChipPrice}>+$0/éj</span>
-                        </button>
                         {mealPlans.map(plan => (
                             <button
                                 key={plan.id}
                                 type="button"
-                                className={`${style.mealChip} ${selectedMealPlanId === plan.id ? style.mealChipActive : ""}`}
-                                onClick={() => setSelectedMealPlanId(plan.id)}
+                                className={`${style.mealChip} ${selectedMealPlanIds.includes(plan.id) ? style.mealChipActive : ""}`}
+                                onClick={() => toggleMealPlan(plan.id)}
                             >
                                 <span>{plan.name}</span>
                                 <span className={style.mealChipPrice}>+${plan.pricePerNight}/éj</span>
                             </button>
                         ))}
+                        {mealPlans.length === 0 && (
+                            <p className={style.sectionSubtitle}>Még nincsenek étkezési csomagok. Hozz létre egyet a Szolgáltatások oldalon.</p>
+                        )}
                     </div>
 
                     <div className={style.sectionDivider} />
