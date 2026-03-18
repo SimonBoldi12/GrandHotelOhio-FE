@@ -62,13 +62,26 @@ function RoomDetailsPage() {
 
   useEffect(() => {
     if (!checkInDate || !checkOutDate || !roomDetails) return;
+
     const oneDay = 24 * 60 * 60 * 1000;
-    const totalDays = Math.round(Math.abs((new Date(checkOutDate) - new Date(checkInDate)) / oneDay)) + 1;
-    const mealPlanPrice = selectedMealPlan ? selectedMealPlan.pricePerNight : 0;
-    const servicesPrice = selectedServices.reduce((sum, s) => sum + (s.price || 0), 0);
-    setTotalPrice(totalDays * (roomDetails.roomPrice + mealPlanPrice + servicesPrice));
-    setTotalGuests(numOfAdults + numOfChildren);
-  }, [checkInDate, checkOutDate, selectedMealPlan, selectedServices, numOfAdults, numOfChildren, roomDetails]);
+    const timeDiff = new Date(checkOutDate).getTime() - new Date(checkInDate).getTime();
+    const nights = Math.ceil(timeDiff / oneDay);
+    const totalNights = nights > 0 ? nights : 0;
+
+    const guests = numOfAdults + numOfChildren;
+    
+    const roomTotal = roomDetails.roomPrice * totalNights;
+    
+    const mealPricePerNightPerPerson = selectedMealPlan ? selectedMealPlan.pricePerNight : 0;
+    const mealTotal = mealPricePerNightPerPerson * guests * totalNights;
+    
+    const dailyServicesTotal = selectedServices.reduce((sum, s) => sum + (s.price || 0), 0);
+    const servicesTotal = dailyServicesTotal * totalNights;
+
+    setTotalPrice(roomTotal + mealTotal + servicesTotal);
+    setTotalGuests(guests);
+}, [checkInDate, checkOutDate, selectedMealPlan, selectedServices, numOfAdults, numOfChildren, roomDetails]);
+
 
   function toggleService(service) {
     setSelectedServices((prev) =>
