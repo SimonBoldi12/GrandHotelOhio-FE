@@ -26,6 +26,7 @@ import {
 } from "../../../service/ApiService";
 import style from "./Navbar.module.css";
 import hotel_svg from "../../../assets/hotel-svg.svg";
+import logo from "../../../assets/images/GrandHotelOhio_logo.png";
 
 function getMonogramColors() {
   try {
@@ -112,8 +113,7 @@ function Navbar() {
             }}
           >
             <NavLink to="/home" className={style.brand}>
-              <img src={hotel_svg} alt="Hotel Logo" className={style.logo} />
-              GRAND HOTEL OHIO
+              <img src={logo} alt="Hotel Logo" className={style.logo} />
             </NavLink>
 
             {!isMobile && (
