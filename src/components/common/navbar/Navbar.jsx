@@ -23,6 +23,7 @@ import {
   logout,
   getLoggedInUserName,
   getLoggedInUserEmail,
+  isStaff,
 } from "../../../service/ApiService";
 import style from "./Navbar.module.css";
 import hotel_svg from "../../../assets/hotel-svg.svg";
@@ -68,6 +69,7 @@ function Monogram({ size = 32 }) {
 function Navbar() {
   const authenticated = isAuthenticated();
   const admin = isAdmin();
+  const staff = isStaff();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -95,7 +97,7 @@ function Navbar() {
     { to: "/services", label: "Szolgáltatások", show: true },
     { to: "/gallery", label: "Galéria", show: true },
     { to: "/find-booking", label: "Foglalásaim", show: authenticated },
-    { to: "/admin", label: "Admin", show: !!admin },
+    { to: "/admin", label: "Admin", show: !!admin || !!staff },
     { to: "/login", label: "Bejelentkezés", show: !authenticated },
     { to: "/register", label: "Regisztráció", show: !authenticated },
   ].filter((link) => link.show);
@@ -125,7 +127,7 @@ function Navbar() {
                 {authenticated && (
                   <NavLink to="/find-booking">Foglalásaim</NavLink>
                 )}
-                {admin && <NavLink to="/admin">Admin</NavLink>}
+                {admin || staff ? <NavLink to="/admin">Admin</NavLink> : null}
                 {!authenticated && <NavLink to="/login">Bejelentkezés</NavLink>}
                 {!authenticated && (
                   <NavLink

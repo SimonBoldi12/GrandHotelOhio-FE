@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import style from "./AdminPage.module.css";
 import { useEffect, useState } from "react";
-import { getUserProfile } from "../../../service/ApiService";
+import { getUserProfile, isAdmin } from "../../../service/ApiService";
 
 function AdminPage() {
     const [adminName, setAdminName] = useState("");
@@ -48,12 +48,14 @@ function AdminPage() {
                         <span className={style.cardArrow}>Megnyitás →</span>
                     </div>
 
-                    <div className={`${style.actionCard} ${style.users}`} onClick={() => navigate("/admin/manage-users")}>
-                        <div className={style.cardIcon}>👥</div>
-                        <h3 className={style.cardTitle}>Felhasználók kezelése</h3>
-                        <p className={style.cardDesc}>Felhasználók listázása, keresése és törlése.</p>
-                        <span className={style.cardArrow}>Megnyitás →</span>
-                    </div>
+                    {isAdmin() && (
+                        <div className={`${style.actionCard} ${style.users}`} onClick={() => navigate("/admin/manage-users")}>
+                            <div className={style.cardIcon}>👥</div>
+                            <h3 className={style.cardTitle}>Felhasználók kezelése</h3>
+                            <p className={style.cardDesc}>Felhasználók listázása, keresése és törlése.</p>
+                            <span className={style.cardArrow}>Megnyitás →</span>
+                        </div>
+                    )}
 
                     <div className={`${style.actionCard} ${style.services}`} onClick={() => navigate("/admin/manage-services")}>
                         <div className={style.cardIcon}>🏨</div>

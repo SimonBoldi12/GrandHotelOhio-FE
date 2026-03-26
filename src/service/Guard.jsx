@@ -1,6 +1,6 @@
 
 import { Navigate, useLocation } from "react-router-dom";
-import { isAuthenticated, isAdmin } from "./ApiService";
+import { isAuthenticated, isAdmin, isStaff } from "./ApiService";
 
 
 export const ProtectedRoute = ({element}) => {
@@ -17,7 +17,7 @@ export const ProtectedRoute = ({element}) => {
 export const AdminRoute = ({element}) => {
     const location = useLocation()
     
-    return isAdmin() ? (
+    return isAdmin() || isStaff() ? (
         element
     ):(
         <Navigate to={"/login"} replace state={{from: location}}/>
