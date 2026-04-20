@@ -5,9 +5,7 @@
   overflow-x: hidden;
 }
 
-/* ════════════════════════════════════════
-   HERO KEYFRAME-EK
-════════════════════════════════════════ */
+/* HERO KEYFRAME-EK */
 
 @keyframes heroLabelIn {
   from { opacity: 0; transform: translateY(14px); letter-spacing: 0.22em; }
@@ -35,11 +33,7 @@
   50%       { box-shadow: 0 8px 60px rgba(37, 99, 235, 0.6); }
 }
 
-/* ════════════════════════════════════════
-   SCROLL-REVEAL RENDSZER
-   Alap: láthatatlan + eltolva
-   .revealed: visszaáll eredeti helyére
-════════════════════════════════════════ */
+/* SCROLL-REVEAL RENDSZER */
 
 .reveal {
   opacity: 0;
@@ -49,7 +43,7 @@
     transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Irányok — honnan jön az elem */
+/* Irányok */
 .reveal--up    { transform: translateY(80px); }
 .reveal--down  { transform: translateY(-80px); }
 .reveal--left  { transform: translateX(-110px) rotate(-2deg); }
@@ -62,9 +56,7 @@
   transform: translate(0, 0) rotate(0deg) scale(1) !important;
 }
 
-/* ════════════════════════════════════════
-   HERO
-════════════════════════════════════════ */
+/* HERO */
 
 .headerBanner {
   background-image: url("../../assets/images/hotel.jpg");
@@ -171,9 +163,7 @@
 }
 .heroSecondaryBtn:hover { background: rgba(255,255,255,0.2); }
 
-/* ════════════════════════════════════════
-   CONTAINER
-════════════════════════════════════════ */
+/* CONTAINER */
 
 .container {
   max-width: 1200px;
@@ -181,9 +171,7 @@
   padding: 80px 24px;
 }
 
-/* ════════════════════════════════════════
-   FEATURES
-════════════════════════════════════════ */
+/* FEATURES */
 
 .sectionLabel {
   font-size: 0.75rem;
@@ -272,9 +260,7 @@
 
 .cardText { color: #64748b; font-size: 0.88rem; line-height: 1.6; }
 
-/* ════════════════════════════════════════
-   STATS
-════════════════════════════════════════ */
+/* STATS */
 
 .statsSection {
   display: grid;
@@ -348,15 +334,11 @@
   .statItem:nth-child(1) { border-bottom: 1px solid #e0e7ff; }
 }
 
-/* ════════════════════════════════════════
-   SEARCH
-════════════════════════════════════════ */
+/* SEARCH */
 
 .searchSection { margin-bottom: 80px; }
 
-/* ════════════════════════════════════════
-   ABOUT
-════════════════════════════════════════ */
+/* ABOUT */
 
 .aboutGrid {
   display: grid;
@@ -418,9 +400,7 @@
 .imageOffsetDown { margin-top: 20px; }
 .imageOffsetUp   { margin-top: -20px; }
 
-/* ════════════════════════════════════════
-   CTA
-════════════════════════════════════════ */
+/* CTA */
 
 .cta {
   position: relative;
@@ -483,14 +463,11 @@
 }
 .ctaBtn:hover { background: #f0f9ff; transform: translateY(-2px); }
 
-/* ════════════════════════════════════════
-   RESZPONZÍV
-════════════════════════════════════════ */
+/* RESZPONZÍV */
 
 @media (max-width: 900px) {
   .aboutGrid    { grid-template-columns: 1fr; gap: 40px; }
   .featuresGrid { grid-template-columns: 1fr; }
-  /* Mobilon oldalirányú animáció túl erős, átváltunk simább up-ra */
   .reveal--left, .reveal--right { transform: translateY(40px); }
 }
 

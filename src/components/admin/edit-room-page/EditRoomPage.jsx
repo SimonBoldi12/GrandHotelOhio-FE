@@ -36,7 +36,7 @@ function EditRoomPage() {
     const [newAmenityName, setNewAmenityName] = useState("");
     const [newAmenityIcon, setNewAmenityIcon] = useState("");
 
-    // Meal plan - most több lehet
+    // Meal plan
     const [mealPlans, setMealPlans] = useState([]);
     const [roomMealPlans, setRoomMealPlans] = useState([]);
     const [selectedMealPlanId, setSelectedMealPlanId] = useState("");

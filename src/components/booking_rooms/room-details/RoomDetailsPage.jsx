@@ -211,7 +211,7 @@ function RoomDetailsPage() {
               </div>
             )}
 
-            {/* ÉTKEZÉSI CSOMAGOK - több opcióból választhat */}
+            {/* ÉTKEZÉSI CSOMAGOK */}
             {roomMealPlans.length > 0 && (
               <div className={style.mealPlanSection}>
                 <p className={style.descriptionLabel}>Étkezési csomag</p>

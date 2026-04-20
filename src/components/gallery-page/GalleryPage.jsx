@@ -9,7 +9,7 @@ function GalleryPage() {
     const [filtered, setFiltered] = useState([]);
     const [activeCategory, setActiveCategory] = useState("Összes");
     const [isLoading, setIsLoading] = useState(true);
-    const [lightbox, setLightbox] = useState(null); // { src, caption }
+    const [lightbox, setLightbox] = useState(null); 
 
     useEffect(() => {
         async function fetchGallery() {
@@ -35,7 +35,7 @@ function GalleryPage() {
         }
     }
 
-    // ESC billentyűre zárja a lightbox-ot
+    
     useEffect(() => {
         function handleKey(e) {
             if (e.key === "Escape") setLightbox(null);

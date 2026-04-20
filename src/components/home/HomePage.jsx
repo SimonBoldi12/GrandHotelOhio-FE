@@ -29,7 +29,7 @@ function useReveal(direction = "up", delay = 0) {
     return ref;
 }
 
-// ── Számlálós stat hook — scroll-ra indul, easing-gel ─────────
+// ── Számlálós stat hook
 function useCounter(target, duration = 2000) {
     const ref = useRef(null);
     useEffect(() => {
