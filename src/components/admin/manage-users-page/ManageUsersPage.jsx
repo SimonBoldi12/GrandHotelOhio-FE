@@ -4,6 +4,8 @@ import Pagination from "../../common/pagination/Pagination";
 import style from "./ManageUsersPage.module.css";
 import Toast from "../../common/toast/Toast";
 import { useNavigate } from "react-router";
+import { useConfirm } from "../../../hooks/useConfirm";
+import ConfirmDialog from "../../common/confirm-dialog/ConfirmDialog";
 
 function ManageUsersPage() {
     const [users, setUsers] = useState([]);
@@ -13,6 +15,7 @@ function ManageUsersPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [usersPerPage] = useState(6);
     const navigate = useNavigate();
+    const { confirm, config } = useConfirm();
 
     useEffect(() => { fetchUsers(); }, []);
 
@@ -33,7 +36,14 @@ function ManageUsersPage() {
     }
 
     async function handleDelete(userId) {
-        if (!window.confirm("Biztosan törölni szeretnéd ezt a felhasználót?")) return;
+        const ok = await confirm({
+            title: "Felhasználó törlése",
+            message: `Biztosan törölni szeretnéd ${users.find((u) => u.id === userId)?.name || "az adott felhasználót"} fiókját? Ez a művelet visszafordíthatatlan!`,
+            confirmText: "Törlés",
+            cancelText: "Mégse",
+            confirmVariant: "danger",
+        });
+        if (!ok) return;
         try {
             await deleteUser(userId);
             setUsers(users.filter((u) => u.id !== userId));
@@ -127,6 +137,7 @@ function ManageUsersPage() {
                 </div>
 
             </div>
+            {config && <ConfirmDialog {...config} />}
         </div>
     );
 }

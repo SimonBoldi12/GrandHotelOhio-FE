@@ -3,7 +3,8 @@ import { useNavigate } from "react-router";
 import style from "./ManageGalleryPage.module.css";
 import Toast from "../../common/toast/Toast";
 import { getAllGallery, addGalleryImage, deleteGalleryImage } from "../../../service/ApiService";
-
+import { useConfirm } from "../../../hooks/useConfirm";
+import ConfirmDialog from "../../common/confirm-dialog/ConfirmDialog";
 const CATEGORIES = ["Szobák", "Étterem", "Wellness", "Medence", "Lobby", "Egyéb"];
 
 function ManageGalleryPage() {
@@ -16,6 +17,7 @@ function ManageGalleryPage() {
     const [form, setForm] = useState({ category: "Szobák", caption: "", photo: null, photoPreview: null });
     const [isUploading, setIsUploading] = useState(false);
     const [lightbox, setLightbox] = useState(null);
+    const { confirm, config } = useConfirm();
 
     useEffect(() => {
         fetchGallery();
@@ -81,7 +83,14 @@ function ManageGalleryPage() {
     }
 
     async function handleDelete(id) {
-        if (!window.confirm("Biztosan törölni szeretnéd ezt a képet?")) return;
+        const ok = await confirm({
+            title: "Kép törlése",
+            message: `Biztosan törölni szeretnéd ezt a képet? Ez a művelet visszafordíthatatlan!`,
+            confirmText: "Törlés",
+            cancelText: "Mégse",
+            confirmVariant: "danger",
+        });
+        if (!ok) return;
         try {
             await deleteGalleryImage(id);
             setToast({ message: "Kép törölve!", type: "success" });
@@ -235,6 +244,7 @@ function ManageGalleryPage() {
                     </div>
                 </div>
             )}
+            {config && <ConfirmDialog {...config} />}
         </div>
     );
 }

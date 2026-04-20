@@ -6,6 +6,8 @@ import {
     getAllMealPlans, addMealPlan, deleteMealPlan, updateMealPlan,
     getAllServices, addService, deleteService
 } from "../../../service/ApiService";
+import { useConfirm } from "../../../hooks/useConfirm";
+import ConfirmDialog from "../../common/confirm-dialog/ConfirmDialog";
 
 const MEAL_PLAN_TYPES = [
     { value: "NONE", label: "Nincs étkezés" },
@@ -31,6 +33,8 @@ function ManageServicesPage() {
     const [serviceForm, setServiceForm] = useState({
         category: "Wellness", name: "", description: "", price: "", photo: null, photoPreview: null
     });
+
+    const { confirm, config } = useConfirm();
 
     useEffect(() => {
         fetchMealPlans();
@@ -85,9 +89,14 @@ function ManageServicesPage() {
 
     async function handleDeleteMealPlan(id) {
     const meal = mealPlans.find(m => m.id === id);
-    if (!window.confirm(
-        `Biztosan törölni szeretnéd a "${meal?.name}" étkezési csomagot?\n\n⚠️ Figyelem: Ha ez a csomag hozzá van rendelve szobákhoz, azoknál az étkezési csomag törlődni fog!`
-    )) return;
+    const ok = await confirm({
+            title: "Étkezési csomag törlése",
+            message: `Biztosan törölni szeretnéd ${meal?.name || "az adott étkezési csomagot"}? Ez a művelet visszafordíthatatlan!`,
+            confirmText: "Törlés",
+            cancelText: "Mégse",
+            confirmVariant: "danger",
+        });
+        if (!ok) return;
     try {
         await deleteMealPlan(id);
         setToast({ message: "Étkezési csomag törölve!", type: "success" });
@@ -120,7 +129,14 @@ function ManageServicesPage() {
     }
 
     async function handleDeleteService(id) {
-        if (!window.confirm("Biztosan törölni szeretnéd?")) return;
+        const ok = await confirm({
+            title: "Szolgáltatás törlése",
+            message: `Biztosan törölni szeretnéd? Ez a művelet visszafordíthatatlan!`,
+            confirmText: "Törlés",
+            cancelText: "Mégse",
+            confirmVariant: "danger",
+        });
+        if (!ok) return;
         try {
             await deleteService(id);
             setToast({ message: "Szolgáltatás törölve!", type: "success" });
@@ -307,6 +323,7 @@ function ManageServicesPage() {
                     </div>
                 )}
             </div>
+            {config && <ConfirmDialog {...config} />}
         </div>
     );
 }

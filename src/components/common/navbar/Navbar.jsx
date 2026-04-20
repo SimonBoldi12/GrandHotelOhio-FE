@@ -28,6 +28,8 @@ import {
 import style from "./Navbar.module.css";
 import hotel_svg from "../../../assets/hotel-svg.svg";
 import logo from "../../../assets/images/GrandHotelOhio_logo.png";
+import { useConfirm } from "../../../hooks/useConfirm";
+import ConfirmDialog from "../confirm-dialog/ConfirmDialog";
 
 function getMonogramColors() {
   try {
@@ -83,13 +85,21 @@ function Navbar() {
   const toggleDrawer = (open) => () => setDrawerOpen(open);
   const navigate = useNavigate();
 
-  function handleLogout() {
-    const isLogout = window.confirm("Biztosan ki szeretnél lépni?");
-    if (isLogout) {
-      logout();
-      navigate("/home");
+  const { confirm, config } = useConfirm();
+
+  async function handleLogout() {
+        const ok = await confirm({
+            title: "Kijelentkezés",
+            message: "Biztosan ki szeretnél lépni a fiókodból?",
+            confirmText: "Kilépés",
+            cancelText: "Mégse",
+            confirmVariant: "warning",
+        });
+        if (ok) {
+            logout();
+            navigate("/home");
+        }
     }
-  }
 
   const navLinks = [
     { to: "/home", label: "Kezdőlap", show: true },
@@ -314,7 +324,9 @@ function Navbar() {
           </Drawer>
         </React.Fragment>
       </div>
+      {config && <ConfirmDialog {...config} />}
     </nav>
+    
   );
 }
 

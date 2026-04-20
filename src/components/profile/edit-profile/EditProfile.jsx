@@ -3,6 +3,8 @@ import style from "./EditProfile.module.css";
 import { deleteUser, getUserProfile } from "../../../service/ApiService";
 import { useEffect, useState } from "react";
 import Toast from "../../common/toast/Toast";
+import ConfirmDialog from "../../common/confirm-dialog/ConfirmDialog";
+import { useConfirm } from "../../../hooks/useConfirm";
 
 const BG_COLORS = [
   { value: "#0f172a", label: "Éjfekete" },
@@ -48,13 +50,13 @@ function EditProfile() {
   const [monogramBg, setMonogramBg] = useState("#6b7280");
   const [monogramText, setMonogramText] = useState("#ffffff");
   const navigate = useNavigate();
+  const { confirm, config } = useConfirm();
 
   useEffect(() => {
     async function fetchUserProfile() {
       try {
         const response = await getUserProfile();
         setUser(response.users);
-        // felhasználó specifikus kulcs
         const saved = localStorage.getItem(
           `monogramColors_${response.users.email}`,
         );
@@ -82,12 +84,14 @@ function EditProfile() {
   }
 
   async function handleDeleteProfile() {
-    if (
-      !window.confirm(
-        "Biztosan törölni szeretnéd a profilodat? Ez a művelet visszafordíthatatlan!",
-      )
-    )
-      return;
+    const ok = await confirm({
+            title: "Profil törlése",
+            message: `Biztosan törölni szeretnéd a profilodat? Ez a művelet visszafordíthatatlan!`,
+            confirmText: "Törlés",
+            cancelText: "Mégse",
+            confirmVariant: "danger",
+        });
+        if (!ok) return;
     try {
       await deleteUser(user.id);
       navigate("/register");
@@ -226,6 +230,7 @@ function EditProfile() {
           </div>
         </>
       )}
+      {config && <ConfirmDialog {...config} />}
     </div>
   );
 }

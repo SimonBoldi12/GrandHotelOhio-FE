@@ -15,7 +15,7 @@ function RoomResult({ roomSearchResults = [], adminView = false, dateParams = ""
                             <img className={style.roomListItemImage} src={room.roomPhotoUrl} alt={room.roomType} />
                             <div className={style.roomDetails}>
                                 <h3>{room.roomType}</h3>
-                                <p>Ár: {room.roomPrice} € / éjszaka</p>
+                                <p>Ár: {room.roomPrice} $ / éjszaka</p>
                                 <p>Leírás: {room.roomDescription}</p>
                             </div>
                             <div className={style.bookNowDiv}>

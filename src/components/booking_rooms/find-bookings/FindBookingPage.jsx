@@ -2,6 +2,8 @@ import style from "./FindBookingPage.module.css";
 import { getUserBookings, getUserProfile, cancelBooking } from "../../../service/ApiService";
 import { useState, useEffect } from "react";
 import Toast from "../../common/toast/Toast";
+import { useConfirm } from "../../../hooks/useConfirm";
+import ConfirmDialog from "../../common/confirm-dialog/ConfirmDialog";
 
 const MEAL_TYPE_LABEL = {
   BREAKFAST: "Csak reggeli",
@@ -13,6 +15,7 @@ const MEAL_TYPE_LABEL = {
 function FindBookingPage() {
   const [bookings, setBookings] = useState([]);
   const [toast, setToast] = useState({ message: "", type: "error" });
+  const { confirm, config } = useConfirm();
 
   useEffect(() => {
     async function fetchBookings() {
@@ -28,7 +31,14 @@ function FindBookingPage() {
   }, []);
 
   async function handleCancel(bookingId) {
-    if (!window.confirm("Biztosan törölni szeretnéd a foglalást? Ez a művelet visszafordíthatatlan!")) return;
+    const ok = await confirm({
+            title: "Foglalás törlése",
+            message: `Biztosan törölni szeretnéd a foglalást? Ez a művelet visszafordíthatatlan!`,
+            confirmText: "Törlés",
+            cancelText: "Mégse",
+            confirmVariant: "danger",
+        });
+        if (!ok) return;
     try {
       const response = await cancelBooking(bookingId);
       if (response.status === 200) {
@@ -172,6 +182,7 @@ function FindBookingPage() {
           })}
         </div>
       )}
+      {config && <ConfirmDialog {...config} />}
     </div>
   );
 }

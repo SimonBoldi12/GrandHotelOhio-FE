@@ -6,11 +6,14 @@ import {
   getBookingByConfirmationCode,
 } from "../../../service/ApiService";
 import Toast from "../../common/toast/Toast";
+import { useConfirm } from "../../../hooks/useConfirm";
+import ConfirmDialog from "../../common/confirm-dialog/ConfirmDialog";
 
 function EditBookingPage() {
   const navigate = useNavigate();
   const { bookingCode } = useParams();
   const [bookingDetails, setBookingDetails] = useState(null);
+  const { confirm, config } = useConfirm();
   const [toast, setToast] = useState({ message: "", type: "success" });
 
   useEffect(() => {
@@ -31,13 +34,15 @@ function EditBookingPage() {
   }, [bookingCode]);
 
   async function achieveBooking(bookingId) {
-    if (
-      !window.confirm(
-        "Biztosan törölni szeretnéd a foglalást? Ez a művelet visszafordíthatatlan!",
-      )
-    )
-      return;
-    try {
+      const ok = await confirm({
+            title: "Foglalás törlése",
+            message: `Biztosan törölni szeretnéd a foglalást? Ez a művelet visszafordíthatatlan!`,
+            confirmText: "Törlés",
+            cancelText: "Mégse",
+            confirmVariant: "danger",
+        });
+        if (!ok) return;
+      try {
       const response = await cancelBooking(bookingId);
       if (response.status === 200) {
         setToast({ message: "Foglalás sikeresen törölve!", type: "success" });
@@ -80,7 +85,6 @@ function EditBookingPage() {
     return days * (roomPrice + mealPrice + servicesPrice);
   }
 
-  console.log("Étkezési adatok:", bookingDetails?.selectedMealPlan);
 
   return (
     <div className={style.editBookingWrapper}>
@@ -321,6 +325,7 @@ function EditBookingPage() {
           </>
         )}
       </div>
+      {config && <ConfirmDialog {...config} />}
     </div>
   );
 }

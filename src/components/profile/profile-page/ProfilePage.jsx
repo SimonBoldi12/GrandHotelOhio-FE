@@ -3,11 +3,14 @@ import { useNavigate } from 'react-router';
 import { getUserBookings, getUserProfile, logout, cancelBooking } from '../../../service/ApiService';
 import style from './ProfilePage.module.css';
 import Toast from '../../common/toast/Toast';
+import { useConfirm } from '../../../hooks/useConfirm';
+import ConfirmDialog from '../../common/confirm-dialog/ConfirmDialog';
 
 function ProfilePage() {
     const [user, setUser] = useState(null);
     const [toast, setToast] = useState({ message: "", type: "error" });
     const navigate = useNavigate();
+    const { confirm, config } = useConfirm();
 
     useEffect(() => {
         async function fetchUserProfile() {
@@ -28,7 +31,14 @@ function ProfilePage() {
     }
 
     async function handleCancel(bookingId) {
-        if (!window.confirm("Biztosan törölni szeretnéd a foglalást? Ez a művelet visszafordíthatatlan!")) return;
+        const ok = await confirm({
+            title: "Foglalás törlése",
+            message: `Biztosan törölni szeretnéd a foglalást? Ez a művelet visszafordíthatatlan!`,
+            confirmText: "Törlés",
+            cancelText: "Mégse",
+            confirmVariant: "danger",
+        });
+        if (!ok) return;
         try {
             const response = await cancelBooking(bookingId);
             if (response.status === 200) {
@@ -130,6 +140,7 @@ function ProfilePage() {
                 </div>
 
             </div>
+            {config && <ConfirmDialog {...config} />}
         </div>
     );
 }

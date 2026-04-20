@@ -7,6 +7,8 @@ import {
     addMealPlanToRoom, removeMealPlanFromRoom
 } from "../../../service/ApiService";
 import Toast from "../../common/toast/Toast";
+import { useConfirm } from "../../../hooks/useConfirm";
+import ConfirmDialog from "../../common/confirm-dialog/ConfirmDialog";
 
 const MEAL_TYPE_LABEL = {
     BREAKFAST: "Csak reggeli",
@@ -38,6 +40,8 @@ function EditRoomPage() {
     const [mealPlans, setMealPlans] = useState([]);
     const [roomMealPlans, setRoomMealPlans] = useState([]);
     const [selectedMealPlanId, setSelectedMealPlanId] = useState("");
+
+    const { confirm, config } = useConfirm();
 
     useEffect(() => {
         async function fetchData() {
@@ -166,7 +170,14 @@ function EditRoomPage() {
     }
 
     async function handleDelete() {
-        if (!window.confirm("Biztosan törölni szeretnéd a szobát? Ez a művelet visszafordíthatatlan!")) return;
+        const ok = await confirm({
+            title: "Szoba törlése",
+            message: `Biztosan törölni szeretnéd? Ez a művelet visszafordíthatatlan!`,
+            confirmText: "Törlés",
+            cancelText: "Mégse",
+            confirmVariant: "danger",
+        });
+        if (!ok) return;
         try {
             const result = await deleteRoom(roomId);
             if (result.status === 200) {
@@ -367,6 +378,7 @@ function EditRoomPage() {
                     </div>
                 </div>
             </div>
+            {config && <ConfirmDialog {...config} />}
         </div>
     );
 }
