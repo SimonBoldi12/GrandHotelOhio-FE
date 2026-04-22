@@ -24,7 +24,7 @@ function FindBookingPage() {
         const response = await getUserBookings(profile.users.id);
         setBookings(response.users.bookings || []);
       } catch (error) {
-        setToast({ message: error.response?.data?.message || error.message, type: "error" });
+        setToast({ message: "Hiba a foglalások lekérésekor." || error.message, type: "error" });
       }
     }
     fetchBookings();
@@ -46,7 +46,7 @@ function FindBookingPage() {
         setToast({ message: "Foglalás sikeresen törölve!", type: "success" });
       }
     } catch (error) {
-      setToast({ message: error.response?.data?.message || error.message, type: "error" });
+      setToast({ message: "Hiba a foglalás törlésekor." || error.message, type: "error" });
     }
   }
 

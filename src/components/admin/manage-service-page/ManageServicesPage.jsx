@@ -46,7 +46,7 @@ function ManageServicesPage() {
             const res = await getAllMealPlans();
             setMealPlans(res.mealPlanList || []);
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba az étkezési csomagok lekérésekor." || err.message, type: "error" });
         }
     }
 
@@ -55,7 +55,7 @@ function ManageServicesPage() {
             const res = await getAllServices();
             setServices(res.serviceList || []);
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba a szolgáltatások lekérésekor." || err.message, type: "error" });
         }
     }
 
@@ -71,7 +71,7 @@ function ManageServicesPage() {
             setMealForm({ type: "BREAKFAST", name: "", pricePerNight: "" });
             fetchMealPlans();
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba az étkezési csomag hozzáadása során." || err.message, type: "error" });
         }
     }
 
@@ -83,7 +83,7 @@ function ManageServicesPage() {
             setEditingMeal(null);
             fetchMealPlans();
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba az étkezési csomag frissítése során." || err.message, type: "error" });
         }
     }
 
@@ -102,7 +102,7 @@ function ManageServicesPage() {
         setToast({ message: "Étkezési csomag törölve!", type: "success" });
         fetchMealPlans();
     } catch (err) {
-        setToast({ message: err.response?.data?.message || err.message, type: "error" });
+        setToast({ message: "Hiba az étkezési csomag törlésekor." || err.message, type: "error" });
     }
     }
 
@@ -124,7 +124,7 @@ function ManageServicesPage() {
             setServiceForm({ category: "Wellness", name: "", description: "", price: "", photo: null, photoPreview: null });
             fetchServices();
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba a szolgáltatás hozzáadása során." || err.message, type: "error" });
         }
     }
 
@@ -142,7 +142,7 @@ function ManageServicesPage() {
             setToast({ message: "Szolgáltatás törölve!", type: "success" });
             fetchServices();
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba a szolgáltatás törlésekor." || err.message, type: "error" });
         }
     }
 

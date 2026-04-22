@@ -19,7 +19,7 @@ function ProfilePage() {
                 const userPlusBookings = await getUserBookings(response.users.id);
                 setUser(userPlusBookings.users);
             } catch (err) {
-                setToast({ message: err.response?.data?.message || err.message, type: "error" });
+                setToast({ message: "Hiba a profil adatok lekérésekor." || err.message, type: "error" });
             }
         }
         fetchUserProfile();
@@ -49,7 +49,7 @@ function ProfilePage() {
                 setToast({ message: "Foglalás sikeresen törölve!", type: "success" });
             }
         } catch (error) {
-            setToast({ message: error.response?.data?.message || error.message, type: "error" });
+            setToast({ message: "Hiba a foglalás törlésekor." || error.message, type: "error" });
         }
     }
 

@@ -25,7 +25,7 @@ function RoomSearch({ handleSearchResult }) {
         const types = await getRoomTypes();
         setRoomTypes(types);
       } catch (error) {
-        console.error("Error fetching room types:", error.message);
+        console.error("Hiba a szobatípusok lekérésekor:", error.message);
       }
     };
     fetchRoomTypes();

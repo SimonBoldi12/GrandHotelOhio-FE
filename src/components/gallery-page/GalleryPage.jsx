@@ -18,7 +18,7 @@ function GalleryPage() {
                 setImages(res.galleryList || []);
                 setFiltered(res.galleryList || []);
             } catch (err) {
-                console.error(err);
+                console.error("Hiba a galéria lekérésekor:", err.message);
             } finally {
                 setIsLoading(false);
             }

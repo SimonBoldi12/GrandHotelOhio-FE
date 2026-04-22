@@ -44,7 +44,7 @@ function RoomDetailsPage() {
         const servicesRes = await getAllServices();
         setAvailableServices(servicesRes.serviceList || []);
       } catch (err) {
-        setError(err.response?.data?.message || err.message);
+        setError("Hiba a szolgáltatások lekérésekor." || err.message);
       } finally {
         setIsLoading(false);
       }
@@ -136,7 +136,7 @@ function RoomDetailsPage() {
       setTimeout(() => navigate("/rooms"), 5000);
     }
   } catch (err) {
-    setToast({ message: err.response?.data?.message || err.message, type: "error" });
+    setToast({ message: "Hiba a foglalás során." || err.message, type: "error" });
   }
 }
 

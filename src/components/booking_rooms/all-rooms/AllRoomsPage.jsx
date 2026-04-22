@@ -33,7 +33,7 @@ function AllRoomsPage() {
                 setRooms(allRooms);
                 setFilteredRooms(allRooms);
             } catch (error) {
-                console.error("Error fetching rooms:", error.message);
+                console.error("Hiba a szobák lekérésekor:", error.message);
             }
         };
 
@@ -42,7 +42,7 @@ function AllRoomsPage() {
                 const types = await getRoomTypes();
                 setRoomTypes(types);
             } catch (error) {
-                console.error("Error fetching room types:", error.message);
+                console.error("Hiba a szobatípusok lekérésekor:", error.message);
             }
         };
 

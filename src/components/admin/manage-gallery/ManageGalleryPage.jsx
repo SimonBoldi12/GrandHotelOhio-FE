@@ -39,7 +39,7 @@ function ManageGalleryPage() {
             setImages(list);
             setFiltered(list);
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba a képek lekérésekor." || err.message, type: "error" });
         } finally {
             setIsLoading(false);
         }
@@ -76,7 +76,7 @@ function ManageGalleryPage() {
             setForm({ category: "Szobák", caption: "", photo: null, photoPreview: null });
             fetchGallery();
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba a kép feltöltésekor." || err.message, type: "error" });
         } finally {
             setIsUploading(false);
         }
@@ -96,7 +96,7 @@ function ManageGalleryPage() {
             setToast({ message: "Kép törölve!", type: "success" });
             fetchGallery();
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba a kép törlésekor." || err.message, type: "error" });
         }
     }
 

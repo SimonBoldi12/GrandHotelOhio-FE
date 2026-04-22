@@ -17,7 +17,7 @@ function ServicePage() {
                 setServices(res.serviceList || []);
                 setFiltered(res.serviceList || []);
             } catch (err) {
-                console.error(err);
+                console.error("Hiba a szolgáltatások lekérésekor:", err.message);
             } finally {
                 setIsLoading(false);
             }

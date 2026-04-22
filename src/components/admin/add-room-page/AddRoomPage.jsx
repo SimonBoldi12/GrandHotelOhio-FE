@@ -3,6 +3,8 @@ import style from "./AddRoomPage.module.css";
 import { useEffect, useState } from "react";
 import { getRoomTypes, addRoom as addRoomApi, addImageToRoom, getAllMealPlans, addAmenityToRoom, addMealPlanToRoom } from "../../../service/ApiService";
 import Toast from "../../common/toast/Toast";
+import { useConfirm } from "../../../hooks/useConfirm";
+import ConfirmDialog from "../../common/confirm-dialog/ConfirmDialog";
 
 const AMENITY_PRESETS = [
     { name: "WiFi", icon: "📶" },
@@ -32,6 +34,7 @@ function AddRoomPage() {
     const [selectedMealPlanIds, setSelectedMealPlanIds] = useState([]);
     const [selectedAmenities, setSelectedAmenities] = useState([]);
     const [customAmenity, setCustomAmenity] = useState({ name: "", icon: "" });
+    const { confirm, config } = useConfirm();
 
     useEffect(() => {
         async function fetchData() {
@@ -40,7 +43,7 @@ function AddRoomPage() {
                 setRoomTypes(types);
                 setMealPlans(mealRes.mealPlanList || []);
             } catch (error) {
-                console.error("Error fetching data:", error.message);
+                console.error("Hiba a adatok lekérésekor:", error.message);
             }
         }
         fetchData();
@@ -99,7 +102,14 @@ function AddRoomPage() {
             setToast({ message: "Kérem töltse ki az összes mezőt.", type: "warning" });
             return;
         }
-        if (!window.confirm("Biztosan hozzá szeretnéd adni a szobát?")) return;
+        const ok = await confirm({
+            title: "Szoba hozzáadása",
+            message: `Biztosan hozzá szeretnéd adni a szobát?`,
+            confirmText: "Igen",
+            cancelText: "Mégse",
+            confirmVariant: "success",
+        });
+        if (!ok) return;
 
         setIsUploading(true);
         try {
@@ -301,6 +311,7 @@ function AddRoomPage() {
 
                 </div>
             </div>
+            {config && <ConfirmDialog {...config} />}
         </div>
     );
 }

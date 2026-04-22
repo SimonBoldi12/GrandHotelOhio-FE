@@ -67,7 +67,7 @@ function EditProfile() {
         }
       } catch (err) {
         setToast({
-          message: err.response?.data?.message || err.message,
+          message: "Hiba a profil adatok lekérésekor." || err.message,
           type: "error",
         });
       }
@@ -97,7 +97,7 @@ function EditProfile() {
       navigate("/register");
     } catch (error) {
       setToast({
-        message: error.response?.data?.message || error.message,
+        message: "Hiba a profil törlésekor." || error.message,
         type: "error",
       });
     }

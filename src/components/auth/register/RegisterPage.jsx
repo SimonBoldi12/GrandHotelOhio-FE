@@ -31,7 +31,7 @@ function RegisterPage() {
                 setTimeout(() => navigate("/login"), 3000);
             }
         } catch (error) {
-            setToast({ message: error.response?.data?.message || error.message, type: "error" });
+            setToast({ message: "Hiba a regisztráció során." || error.message, type: "error" });
         }
     }
 

@@ -106,7 +106,7 @@ function EditRoomPage() {
             const res = await getRoomById(roomId);
             setAmenities(res.room.amenities || []);
         } catch (error) {
-            setToast({ message: error.response?.data?.message || error.message, type: "error" });
+            setToast({ message: "Hiba a felszereltség hozzáadása során." || error.message, type: "error" });
         }
     }
 
@@ -116,7 +116,7 @@ function EditRoomPage() {
             setAmenities(prev => prev.filter(a => a.id !== amenityId));
             setToast({ message: "Felszereltség törölve!", type: "success" });
         } catch (error) {
-            setToast({ message: error.response?.data?.message || error.message, type: "error" });
+            setToast({ message: "Hiba a felszereltség törlésekor." || error.message, type: "error" });
         }
     }
 
@@ -129,7 +129,7 @@ function EditRoomPage() {
             setSelectedMealPlanId("");
             setToast({ message: "Étkezési csomag hozzáadva!", type: "success" });
         } catch (error) {
-            setToast({ message: error.response?.data?.message || error.message, type: "error" });
+            setToast({ message: "Hiba az étkezési csomag hozzáadása során." || error.message, type: "error" });
         }
     }
 
@@ -139,7 +139,7 @@ function EditRoomPage() {
             setRoomMealPlans(prev => prev.filter(m => m.id !== mealPlanId));
             setToast({ message: "Étkezési csomag eltávolítva!", type: "success" });
         } catch (error) {
-            setToast({ message: error.response?.data?.message || error.message, type: "error" });
+            setToast({ message: "Hiba az étkezési csomag eltávolítása során." || error.message, type: "error" });
         }
     }
 

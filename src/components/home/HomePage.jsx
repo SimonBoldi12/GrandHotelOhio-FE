@@ -6,7 +6,7 @@ import RoomResult from "../common/room-result/RoomResult";
 import { useNavigate } from "react-router";
 import { isAuthenticated } from "../../service/ApiService";
 
-// ── Irányított scroll-reveal hook ──────────────────────────────
+// Irányított scroll-reveal hook
 function useReveal(direction = "up", delay = 0) {
     const ref = useRef(null);
     useEffect(() => {
@@ -43,7 +43,6 @@ function useCounter(target, duration = 2000) {
                 function step(ts) {
                     if (!start) start = ts;
                     const progress = Math.min((ts - start) / duration, 1);
-                    // Ease out cubic
                     const ease = 1 - Math.pow(1 - progress, 3);
                     el.textContent = Math.round(ease * target);
                     if (progress < 1) requestAnimationFrame(step);

@@ -31,7 +31,7 @@ function ManageUsersPage() {
             const response = await getAllUsers();
             setUsers(response.userList || response.users || []);
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba a felhasználók lekérésekor." || err.message, type: "error" });
         }
     }
 
@@ -49,7 +49,7 @@ function ManageUsersPage() {
             setUsers(users.filter((u) => u.id !== userId));
             setToast({ message: "Felhasználó sikeresen törölve!", type: "success" });
         } catch (err) {
-            setToast({ message: err.response?.data?.message || err.message, type: "error" });
+            setToast({ message: "Hiba a felhasználó törlésekor." || err.message, type: "error" });
         }
     }
 
