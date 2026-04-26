@@ -106,6 +106,10 @@ function RoomDetailsPage() {
       setToast({ message: "A kijelentkezési dátum nem lehet korábbi, mint a bejelentkezési dátum.", type: "error" });
       return;
     }
+    if (checkInDate < new Date().setHours(0, 0, 0, 0)) {
+      setToast({ message: "A bejelentkezési dátum nem lehet a múltban.", type: "error" });
+      return;
+}
     setTotalGuests(numOfAdults + numOfChildren);
   }
 
@@ -319,6 +323,7 @@ function RoomDetailsPage() {
                     placeholderText="Válasszon dátumot"
                     dateFormat="dd/MM/yyyy"
                     locale={hu}
+                    minDate={new Date()}
                   />
                 </div>
                 <div className={style.dateField}>

@@ -104,6 +104,7 @@ function RoomSearch({ handleSearchResult }) {
             placeholderText="Érkezés dátuma"
             className={style.dateInput}
             locale={hu}
+            minDate={new Date()}
           />
         </div>
 
