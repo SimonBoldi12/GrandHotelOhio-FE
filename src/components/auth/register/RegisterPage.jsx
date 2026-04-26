@@ -23,6 +23,11 @@ function RegisterPage() {
             setToast({ message: "Kérem töltse ki az összes mezőt.", type: "warning" });
             return;
         }
+        const phoneRegex = /^[+]?[\d\s\-()]{7,15}$/;
+        if (!phoneRegex.test(phoneNumber)) {
+            setToast({ message: "Kérem adjon meg érvényes telefonszámot.", type: "warning" });
+            return;
+        }
         try {
             const response = await registerUser(formData);
             if (response.status === 200) {
@@ -45,7 +50,7 @@ function RegisterPage() {
                     <input className={style.input} type="text" name="firstName" placeholder="Keresztnév" value={formData.firstName} onChange={handleInputChange} required />
                     <input className={style.input} type="email" name="email" placeholder="Email cím" value={formData.email} onChange={handleInputChange} required />
                     <input className={style.input} type="password" name="password" placeholder="Jelszó" value={formData.password} onChange={handleInputChange} required />
-                    <input className={style.input} type="text" name="phoneNumber" placeholder="Telefonszám" value={formData.phoneNumber} onChange={handleInputChange} required />
+                    <input className={style.input} type="tel" name="phoneNumber" placeholder="Telefonszám (+36 30 123 4567)" value={formData.phoneNumber} onChange={handleInputChange} required />
                     <button type="submit" className={style.registerButton}>Regisztrálok</button>
                 </form>
                 <p className={style.loginLink}>
