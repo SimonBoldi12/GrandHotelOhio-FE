@@ -124,7 +124,6 @@ function RoomDetailsPage() {
     };
 
     const mealPlanId = selectedMealPlan ? selectedMealPlan.id : null;
-
     const response = await bookRoom(roomId, userId, booking, mealPlanId);
 
     if (response.status === 200) {
@@ -140,7 +139,20 @@ function RoomDetailsPage() {
       setTimeout(() => navigate("/rooms"), 5000);
     }
   } catch (err) {
-    setToast({ message: "Hiba a foglalás során." || err.message, type: "error" });
+    const status = err.response?.status;
+    const serverMessage = err.response?.data?.message;
+
+    if (status === 409 || serverMessage?.toLowerCase().includes("foglalt") || serverMessage?.toLowerCase().includes("unavailable") || serverMessage?.toLowerCase().includes("already booked")) {
+      setToast({ 
+        message: "Ez a szoba a megadott időszakra már foglalt. Kérem válasszon másik dátumot.", 
+        type: "error" 
+      });
+    } else {
+      setToast({ 
+        message: serverMessage || "Hiba a foglalás során.", 
+        type: "error" 
+      });
+    }
   }
 }
 
