@@ -105,6 +105,7 @@ function RoomSearch({ handleSearchResult }) {
             className={style.dateInput}
             locale={hu}
             minDate={new Date()}
+            portalId="root"   
           />
         </div>
 
@@ -121,6 +122,8 @@ function RoomSearch({ handleSearchResult }) {
             placeholderText="Távozás dátuma"
             className={style.dateInput}
             locale={hu}
+            minDate={new Date()}
+            portalId="root"   
           />
         </div>
 

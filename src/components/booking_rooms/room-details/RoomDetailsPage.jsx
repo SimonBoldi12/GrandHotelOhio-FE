@@ -339,6 +339,7 @@ function RoomDetailsPage() {
                     placeholderText="Válasszon dátumot"
                     dateFormat="dd/MM/yyyy"
                     locale={hu}
+                    minDate={new Date()}
                   />
                 </div>
               </div>
