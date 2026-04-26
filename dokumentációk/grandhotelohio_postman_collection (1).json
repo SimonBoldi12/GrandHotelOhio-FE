@@ -1,0 +1,1358 @@
+{
+  "info": {
+    "_postman_id": "27ff6fc0-d09e-4b12-a28c-7fa4753eaa89",
+    "name": "grandhotelohio",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49818558"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Sikeres regisztráció – státuszkód 200 vagy 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"firstName\": \"Simon\",\n    \"lastName\": \"Péter\",\n    \"email\": \"speti04@gmail.com\",\n    \"phoneNumber\": \"+1234567890\",\n    \"password\": \"1234\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "localhost:8080/auth/register",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Sikeres bejelentkezés – státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tartalmaz JWT tokent\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('token');",
+                  "});",
+                  "pm.test(\"A válasz tartalmaz szerepkört (role)\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('role');",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "    var json = pm.response.json();",
+                  "    if (json.token) {",
+                  "        pm.collectionVariables.set('authToken', json.token);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"boss@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "localhost:8080/auth/login",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "getAllUsers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/users/all",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["users", "all"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getUserById",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tartalmaz felhasználói adatokat\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('id');",
+                  "    pm.expect(json).to.have.property('email');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/users/get-by-id/3",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["users", "get-by-id", "3"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getLoggedInUserInfo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tartalmaz email mezőt\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('email');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/users/get-logged-in-profile-info",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["users", "get-logged-in-profile-info"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getUserBookingsHistory",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú (foglalások listája)\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/users/get-user-bookings/2",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["users", "get-user-bookings", "2"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteUser",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz jelzi a sikeres törlést\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTUyODgyOCwiZXhwIjoxNzcyMTMzNjI4fQ.4kk1l5thY4WFmT_-np8LbOYXoOY-Fb8g8zuXMFgeftvIsfOs62o6SJQxocuH1fSB0knA92AFcG-dzG7pmCEVhQ", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/users/delete/3",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["users", "delete", "3"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rooms",
+      "item": [
+        {
+          "name": "addRoom",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200 vagy 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "photo", "type": "file", "src": "/C:/Users/simib/Pictures/Screenshots/Képernyőkép 2025-12-03 162134.png" },
+                { "key": "roomType", "value": "King", "type": "text" },
+                { "key": "roomPrice", "value": "400", "type": "text" },
+                { "key": "roomDescription", "value": "Kiara es bence kuro szoba", "type": "text" }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/rooms/add",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "add"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getAllRooms",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/rooms/all",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "all"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getRoomTypes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú (szobatípusok)\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/rooms/types",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "types"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getRoomById",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tartalmazza a szoba adatait\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('id');",
+                  "    pm.expect(json).to.have.property('roomType');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/rooms/room-by-id/1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "room-by-id", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getAllAvailableRooms",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/rooms/all-available-rooms",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "all-available-rooms"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getAvailableRoomsByDateAndType",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú (szűrt szobák)\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/rooms/available-rooms-by-date-and-type?checkInDate=2026-06-01&checkOutDate=2026-06-10&roomType=King",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "available-rooms-by-date-and-type"],
+              "query": [
+                { "key": "checkInDate", "value": "2026-06-01" },
+                { "key": "checkOutDate", "value": "2026-06-10" },
+                { "key": "roomType", "value": "King" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updateRoomById",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "photo", "type": "file", "src": "/C:/Users/simib/Pictures/family.jpg" },
+                { "key": "roomType", "value": "Family", "type": "text" },
+                { "key": "roomPrice", "value": "499", "type": "text" },
+                { "key": "roomDescription", "value": "family house", "type": "text" }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/rooms/update/3",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "update", "3"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteRoom",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz jelzi a sikeres törlést\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/rooms/delete/1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "delete", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "addImageToRoom",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200 vagy 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "photo", "type": "file", "src": "/C:/Users/simib/Pictures/room_extra.jpg" }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/rooms/1/add-image",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "1", "add-image"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "addAmenityToRoom",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200 vagy 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"WiFi\",\n    \"icon\": \"wifi-icon\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "localhost:8080/rooms/1/add-amenity",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "1", "add-amenity"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteAmenity",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz jelzi a sikeres törlést\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/rooms/amenity/delete/1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "amenity", "delete", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "addMealPlanToRoom",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200 vagy 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/rooms/1/meal-plan/1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "1", "meal-plan", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "removeMealPlanFromRoom",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz jelzi az eltávolítás sikerességét\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/rooms/1/meal-plan/1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["rooms", "1", "meal-plan", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "addBooking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200 vagy 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "pm.test(\"A válasz tartalmaz visszaigazolási kódot\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('bookingConfirmationCode');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrcmlzdG9mQmVuY2VAb3V0bG9vay5jb20iLCJpYXQiOjE3NzE0OTYwNTIsImV4cCI6MTc3MjEwMDg1Mn0.t74VPebd1SD3nBOm7yw8vW9VBA0mVjFRO8I-IBejU0f94f91wR5usxqha7FFC2Uw9XbQdoNkXFLp3HLQQYYR5Q", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"checkInDate\":\"2026-04-15\",\r\n    \"checkOutDate\":\"2026-04-25\",\r\n    \"numOfAdults\":\"2\",\r\n    \"numOfChildren\":\"3\"\r\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "localhost:8080/bookings/book-room/2/2",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["bookings", "book-room", "2", "2"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getAllBookings",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/bookings/all",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["bookings", "all"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getBookingByConfirmationCode",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tartalmazza a foglalás adatait\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('bookingConfirmationCode');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/bookings/get-by-confirmation-code/1I22H44OVJ",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["bookings", "get-by-confirmation-code", "1I22H44OVJ"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cancelBooking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz jelzi a sikeres lemondást\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/bookings/cancel/4",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["bookings", "cancel", "4"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "addServiceToBooking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200 vagy 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/bookings/1/add-service/1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["bookings", "1", "add-service", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "item": [
+        {
+          "name": "getAllServices",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/services/all",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["services", "all"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getServicesByCategory",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú (kategória szerinti szűrés)\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/services/category/SPA",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["services", "category", "SPA"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "addService",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200 vagy 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "category", "value": "SPA", "type": "text" },
+                { "key": "name", "value": "Masszázs", "type": "text" },
+                { "key": "description", "value": "Relaxáló teljes testes masszázs", "type": "text" },
+                { "key": "price", "value": "15000", "type": "text" },
+                { "key": "photo", "type": "file", "src": "/C:/Users/simib/Pictures/spa.jpg" }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/services/add",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["services", "add"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteService",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz jelzi a sikeres törlést\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/services/delete/1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["services", "delete", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "item": [
+        {
+          "name": "getAllGalleryImages",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/gallery/all",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["gallery", "all"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getGalleryImagesByCategory",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú (kategória szerinti szűrés)\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/gallery/category/ROOMS",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["gallery", "category", "ROOMS"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "addGalleryImage",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200 vagy 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "category", "value": "ROOMS", "type": "text" },
+                { "key": "caption", "value": "Szálloda előcsarnoka", "type": "text" },
+                { "key": "photo", "type": "file", "src": "/C:/Users/simib/Pictures/lobby.jpg" }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/gallery/add",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["gallery", "add"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteGalleryImage",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz jelzi a sikeres törlést\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/gallery/delete/1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["gallery", "delete", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "MealPlans",
+      "item": [
+        {
+          "name": "getAllMealPlans",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz tömb típusú\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/meal-plans/all",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["meal-plans", "all"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "addMealPlan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200 vagy 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"FULL_BOARD\",\n    \"name\": \"Teljes panzió\",\n    \"pricePerNight\": 8500\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "localhost:8080/meal-plans/add",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["meal-plans", "add"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updateMealPlan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz JSON formátumú\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Frissített teljes panzió\",\n    \"pricePerNight\": 9000\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "localhost:8080/meal-plans/update/1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["meal-plans", "update", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteMealPlan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Státuszkód 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"A válasz jelzi a sikeres törlést\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib3NzQGdtYWlsLmNvbSIsImlhdCI6MTc3MTQxNzg0MCwiZXhwIjoxNzcyMDIyNjQwfQ.fNG-3f8lRjYh24gIQ21bsZrPl6tyF5URhzjQOIDYItRDaipsTSGBYHbXmLnQWNeko1fbq5r6LnOaTd2i0oBwqw", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/meal-plans/delete/1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["meal-plans", "delete", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
